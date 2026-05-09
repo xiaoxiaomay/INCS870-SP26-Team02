@@ -36,7 +36,9 @@ class FinancialPipeline:
 
         """爬虫启动时：初始化模型和数据库连接"""
         spider.logger.info("Initializing Embedding Model and DB connection...")
-        self.model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+        from core.config_loader import get_pinned_revision
+        _mn = 'sentence-transformers/all-MiniLM-L6-v2'
+        self.model = SentenceTransformer(_mn, revision=get_pinned_revision(_mn))
 
         # 3. 传入解包后的参数
         try:

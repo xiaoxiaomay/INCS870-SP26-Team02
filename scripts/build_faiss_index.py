@@ -1,9 +1,15 @@
 # scripts/build_faiss_index.py
-import os, json, pickle
+import os, json, pickle, sys
+from pathlib import Path
 from tqdm import tqdm
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from core.config_loader import get_pinned_revision
 
 CORPUS_PATH = "data/processed/public_corpus.jsonl"
 INDEX_DIR = "data/index"
@@ -23,7 +29,7 @@ def iter_jsonl(path):
 
 def main():
     os.makedirs(INDEX_DIR, exist_ok=True)
-    model = SentenceTransformer(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME, revision=get_pinned_revision(MODEL_NAME))
 
     meta_list = []
     texts = []

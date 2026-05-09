@@ -4,7 +4,7 @@ import uuid
 import numpy as np
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from core.config_loader import get_db_params, use_postgres
+from core.config_loader import get_db_params, use_postgres, get_pinned_revision
 from sentence_transformers import SentenceTransformer
 
 from dotenv import load_dotenv
@@ -26,7 +26,8 @@ class SentinelEngine:
         # 2. 初始化嵌入模型 (Embedding)
         emb_cfg = self.cfg.get("embedding", {})
         model_name = emb_cfg.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-        self.embed_model = SentenceTransformer(model_name)
+        revision = emb_cfg.get("revision") or get_pinned_revision(model_name)
+        self.embed_model = SentenceTransformer(model_name, revision=revision)
 
         # 3. 初始化 PostgreSQL 连接 (公开语料) — skip if USE_POSTGRES=false
         self.db_conn = None
@@ -240,7 +241,7 @@ class SentinelEngine:
         })
 
         # --- 生成回答 (LLM) ---
-        model_name = os.getenv("OPENAI_MODEL") or self.cfg.get("openai_model", "gpt-4o-mini")
+        model_name = os.getenv("OPENAI_MODEL") or self.cfg.get("openai_model", "gpt-4o-mini-2024-07-18")
         grounding_cfg = self.cfg.get("grounding", {}) or {}
         grounding_threshold = float(grounding_cfg.get("threshold", 0.55))
         grounding_action = str(grounding_cfg.get("action", "redact")).lower()

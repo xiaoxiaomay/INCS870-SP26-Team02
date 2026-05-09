@@ -49,9 +49,12 @@ def main():
     # Embed and compute centroid
     from sentence_transformers import SentenceTransformer
     from scripts.prompt_monitor import compute_centroid, save_centroid
+    from core.config_loader import get_pinned_revision
 
-    emb_model_name = cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    model = SentenceTransformer(emb_model_name)
+    emb_cfg = cfg.get("embedding", {})
+    emb_model_name = emb_cfg.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    revision = emb_cfg.get("revision") or get_pinned_revision(emb_model_name)
+    model = SentenceTransformer(emb_model_name, revision=revision)
 
     centroid_data = compute_centroid(model, prompts)
 

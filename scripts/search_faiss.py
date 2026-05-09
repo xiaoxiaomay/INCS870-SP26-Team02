@@ -1,8 +1,14 @@
 """Debug utility for FAISS index inspection — search secrets and public corpus indexes interactively."""
 import os, pickle, sys
+from pathlib import Path
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from core.config_loader import get_pinned_revision
 
 INDEX_DIR = "data/index"
 INDEX_PATH = os.path.join(INDEX_DIR, "finder.faiss")
@@ -13,7 +19,7 @@ def main():
     query = " ".join(sys.argv[1:]).strip() if len(sys.argv) > 1 else "MSFT segment breakdown"
     topk = 5
 
-    model = SentenceTransformer(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME, revision=get_pinned_revision(MODEL_NAME))
     index = faiss.read_index(INDEX_PATH)
 
     with open(META_PATH, "rb") as f:

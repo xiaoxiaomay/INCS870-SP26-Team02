@@ -185,15 +185,17 @@ def main():
 
     print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
+    from core.config_loader import get_pinned_revision
     emb_cfg = cfg.get("embedding", {})
     model_name_emb = emb_cfg.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    embed_model = SentenceTransformer(model_name_emb)
+    revision = emb_cfg.get("revision") or get_pinned_revision(model_name_emb)
+    embed_model = SentenceTransformer(model_name_emb, revision=revision)
 
     print("Loading FAISS index...")
     paths = cfg.get("paths", {})
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model", "gpt-4o-mini")
+    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model", "gpt-4o-mini-2024-07-18")
 
     # Limit queries if requested
     test_cases = bypass_cases

@@ -31,7 +31,7 @@ if str(REPO_ROOT) not in sys.path:
 # ----------------------------------
 
 from core.audit import HashChainWriter
-from core.config_loader import get_db_params, use_postgres
+from core.config_loader import get_db_params, use_postgres, get_pinned_revision
 from scripts.leakage_scan import split_sentences, load_faiss_index, scan_text
 
 try:
@@ -569,7 +569,8 @@ def main():
         t_load = time.time()
         try:
             from sentence_transformers import SentenceTransformer  # keep inside try
-            embed_model = SentenceTransformer(st_model_name)
+            revision = emb_cfg.get("revision") or get_pinned_revision(st_model_name)
+            embed_model = SentenceTransformer(st_model_name, revision=revision)
         except Exception as e:
             err_msg = (
                 "Embedding backend failed to load. This is usually a broken PyTorch install on macOS.\n"
@@ -912,7 +913,7 @@ def main():
                 "llm_called": False,
             })
 
-            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
             t3 = time.time()
             raw_answer = call_llm(prompt, model_name=model_name)
             t_llm = time.time() - t3
@@ -1014,7 +1015,7 @@ def main():
             # =========================================================
             # LLM call
             # =========================================================
-            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
             t3 = time.time()
             raw_answer = call_llm(prompt, model_name=model_name)
             t_llm = time.time() - t3

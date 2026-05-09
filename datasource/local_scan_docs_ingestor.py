@@ -63,12 +63,15 @@ if __name__ == "__main__":
         ingestion_task_dao = IngestionTaskDaoImpl(session)
 
         # 3. 准备 Service 所需的配置与模型
+        from core.config_loader import get_pinned_revision
         configs = get_engine_configs()
         embed_cfg = configs.get("embedding", {})
-        
+
         # 加载模型 (只需加载一次)
         logger.info(f"[*] Loading transformer model: {embed_cfg.get('model_name')}")
-        model = SentenceTransformer(embed_cfg.get('model_name'))
+        _mn = embed_cfg.get('model_name')
+        _rev = embed_cfg.get('revision') or get_pinned_revision(_mn)
+        model = SentenceTransformer(_mn, revision=_rev)
 
         # 初始化切分器
         text_splitter = RecursiveCharacterTextSplitter(

@@ -164,9 +164,11 @@ def main():
 
     print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
+    from core.config_loader import get_pinned_revision
     emb_cfg = cfg.get("embedding", {})
     model_name = emb_cfg.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    embed_model = SentenceTransformer(model_name)
+    revision = emb_cfg.get("revision") or get_pinned_revision(model_name)
+    embed_model = SentenceTransformer(model_name, revision=revision)
 
     # Build medical FAISS index
     secrets_path = str(REPO_ROOT / "data" / "medical" / "medical_secrets.jsonl")

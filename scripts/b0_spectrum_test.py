@@ -57,13 +57,16 @@ def main():
     with open(config_path) as f:
         cfg = yaml.safe_load(f) or {}
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
     paths = cfg.get("paths", {})
 
     print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
-    emb_name = cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    embed_model = SentenceTransformer(emb_name)
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    emb_name = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(emb_name)
+    embed_model = SentenceTransformer(emb_name, revision=_rev)
 
     print("Loading secret index...")
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])

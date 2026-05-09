@@ -247,7 +247,7 @@ def run_single_query(query, cfg, embed_model, sec_index, sec_meta, db_conn):
         # ---- LLM Call ----
         prompt = build_prompt(query, docs,
                               max_chars_per_doc=int(rag_cfg.get("max_context_chars_per_doc", 1200)))
-        model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+        model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
         raw_answer = call_llm(prompt, model_name)
         result["llm_raw_answer"] = raw_answer
 
@@ -301,9 +301,11 @@ def main():
     # Load models and indexes
     print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
-    embed_model = SentenceTransformer(
-        cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    )
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    _mn = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(_mn)
+    embed_model = SentenceTransformer(_mn, revision=_rev)
 
     paths = cfg.get("paths", {})
     print("Loading FAISS secret index...")

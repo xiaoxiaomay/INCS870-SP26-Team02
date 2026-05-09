@@ -7,6 +7,11 @@ import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
+import sys
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from core.config_loader import get_pinned_revision
 
 SECRETS_PATH = Path("data/secrets/secrets.jsonl")
 OUT_DIR = Path("data/index")
@@ -49,7 +54,7 @@ def main():
         meta.append(s)
 
     print(f"Loaded secrets: {len(texts)}")
-    model = SentenceTransformer(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME, revision=get_pinned_revision(MODEL_NAME))
 
     # Encode
     emb = model.encode(

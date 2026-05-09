@@ -46,6 +46,7 @@ def main():
     args = ap.parse_args()
 
     from sentence_transformers import SentenceTransformer
+    from core.config_loader import get_pinned_revision
 
     # Load data
     secrets = load_jsonl(SECRETS_PATH)
@@ -60,7 +61,8 @@ def main():
         return
 
     # Embed
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    _mn = "sentence-transformers/all-MiniLM-L6-v2"
+    model = SentenceTransformer(_mn, revision=get_pinned_revision(_mn))
 
     secret_texts = [f"{s.get('title', '')}\n{s.get('text', '')}".strip() for s in l3_secrets]
     public_texts = [f"{p.get('title', '')}\n{p.get('text', '')}".strip() for p in public]

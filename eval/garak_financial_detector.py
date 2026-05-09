@@ -44,7 +44,11 @@ class FinancialLeakageDetector(Detector):
     def _ensure_loaded(self):
         if self._model is None:
             from sentence_transformers import SentenceTransformer
-            self._model = SentenceTransformer("all-MiniLM-L6-v2")
+            from core.config_loader import get_pinned_revision
+            model_name = "sentence-transformers/all-MiniLM-L6-v2"
+            self._model = SentenceTransformer(
+                model_name, revision=get_pinned_revision(model_name)
+            )
             self._index, self._meta = load_faiss_index(
                 "data/index/secrets.faiss", "data/index/secrets_meta.pkl"
             )

@@ -1,7 +1,10 @@
 embedding:
   model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  # HF commit hash pinned for reproducibility (item 1.0b).
+  # See REPRODUCIBILITY.md and core/config_loader.py:PINNED_REVISIONS.
+  revision: "c9745ed1d9f207416be6d2e6f8de32d1f16199bf"
 
-openai_model: "gpt-4o-mini"
+openai_model: "gpt-4o-mini-2024-07-18"  # dated snapshot pinned for reproducibility (item 1.0b)
 
 gate_0_decode:
   enabled: true

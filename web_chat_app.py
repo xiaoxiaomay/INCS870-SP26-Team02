@@ -18,7 +18,7 @@ from datasource.dao.implementation.chat_history_dao_impl import ChatHistoryDaoIm
 from utils.db_conn_management import db_conn_manager
 
 load_dotenv()   # 加载 .env 文件中的环境变量 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+llm = ChatOpenAI(model="gpt-4o-mini-2024-07-18", temperature=0)  # dated snapshot pinned (item 1.0b)
 
 # --- 1. CSS 样式 (保持你原有的美化逻辑) ---
 st.markdown("""

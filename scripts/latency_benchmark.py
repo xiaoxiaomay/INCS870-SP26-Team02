@@ -131,7 +131,7 @@ def run_pipeline_timed(query, cfg, embed_model, pub_index, pub_meta, sec_index, 
     # --- LLM call ---
     prompt = build_prompt(query=query, docs=docs,
                           max_chars_per_doc=int(rag_cfg.get("max_context_chars_per_doc", 1200)))
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
     t3 = time.perf_counter()
     raw_answer = call_llm(prompt, model_name=model_name)
     timings["llm_call"] = (time.perf_counter() - t3) * 1000
@@ -173,8 +173,11 @@ def main():
 
     print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
-    emb_name = cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    embed_model = SentenceTransformer(emb_name)
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    emb_name = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(emb_name)
+    embed_model = SentenceTransformer(emb_name, revision=_rev)
 
     print("Loading FAISS indexes...")
     paths = cfg.get("paths", {})

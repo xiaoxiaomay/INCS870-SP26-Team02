@@ -113,9 +113,10 @@ def benchmark_model(
     Returns dict with discrimination gap and timing metrics.
     """
     from sentence_transformers import SentenceTransformer
+    from core.config_loader import get_pinned_revision
 
     print(f"  Loading {model_name}...")
-    model = SentenceTransformer(model_id)
+    model = SentenceTransformer(model_id, revision=get_pinned_revision(model_id))
     dim = model.get_sentence_embedding_dimension()
 
     secret_texts = [s.get("text") or s.get("title") or "" for s in secrets]

@@ -17,15 +17,18 @@ def init_kb_service():
     初始化核心 Service，模型和数据库连接仅在此加载一次
     """
     session = db_conn_manager.get_session()
+    from core.config_loader import get_pinned_revision
     configs = get_engine_configs()
     embed_cfg = configs.get("embedding", {})
-    
+
     # 初始化 DAO 层
     fc_dao = FinancialCorpusDaoImpl(session)
     it_dao = IngestionTaskDaoImpl(session)
-    
+
     # 加载 Embedding 模型
-    model = SentenceTransformer(embed_cfg.get('model_name'))
+    _model_name = embed_cfg.get('model_name')
+    _revision = embed_cfg.get('revision') or get_pinned_revision(_model_name)
+    model = SentenceTransformer(_model_name, revision=_revision)
     
     # 配置文本切分器
     text_splitter = RecursiveCharacterTextSplitter(

@@ -190,16 +190,18 @@ def run_b0_baseline(cfg: dict, config_path: str):
         print("No attack prompts found.")
         return
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini"
+    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
 
     # Load embedding model + secret index for leakage detection
     from sentence_transformers import SentenceTransformer
     from scripts.leakage_scan import load_faiss_index
 
     paths = cfg.get("paths", {})
-    embed_model = SentenceTransformer(
-        cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    )
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    _mn = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(_mn)
+    embed_model = SentenceTransformer(_mn, revision=_rev)
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
     leak_cfg = cfg.get("leakage", {}) or {}
@@ -285,9 +287,11 @@ def run_comparison(cfg: dict, config_path: str):
     from scripts.leakage_scan import load_faiss_index
 
     paths = cfg.get("paths", {})
-    embed_model = SentenceTransformer(
-        cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    )
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    _mn = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(_mn)
+    embed_model = SentenceTransformer(_mn, revision=_rev)
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
     leak_cfg = cfg.get("leakage", {}) or {}
@@ -525,9 +529,11 @@ def run_threshold_sweep(cfg: dict, config_path: str):
     from scripts.leakage_scan import load_faiss_index
 
     paths = cfg.get("paths", {})
-    embed_model = SentenceTransformer(
-        cfg.get("embedding", {}).get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
-    )
+    from core.config_loader import get_pinned_revision
+    _ec = cfg.get("embedding", {})
+    _mn = _ec.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
+    _rev = _ec.get("revision") or get_pinned_revision(_mn)
+    embed_model = SentenceTransformer(_mn, revision=_rev)
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
     # Threshold grid
