@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Per-Gate Latency Benchmark (milliseconds)}
+\label{tab:latency}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Component} & \textbf{Min} & \textbf{P50} & \textbf{P95} & \textbf{P99} & \textbf{Max} \\
+\midrule
+  Gate 0 Decode & 0.01 & 0.01 & 0.03 & 2.09 & 2.09 \\
+  Gate 0a (Regex) & 0.01 & 0.02 & 0.05 & 1.49 & 1.49 \\
+  Gate 0b (Hard-block) & 0.00 & 0.01 & 0.02 & 0.15 & 0.15 \\
+  Gate 0 (Merged) & 0.02 & 0.03 & 0.07 & 0.08 & 0.08 \\
+  Gate 1 (Embedding) & 6.33 & 14.82 & 39.76 & 942.11 & 942.11 \\
+  Embedding Only & 4.00 & 11.42 & 21.48 & 24.16 & 24.16 \\
+  FAISS Search & 0.00 & 0.01 & 0.14 & 0.14 & 0.14 \\
+  Leakage Scan & 7.85 & 15.58 & 23.03 & 88.37 & 88.37 \\
+  End-to-End (Gates) & 16.06 & 28.75 & 36.86 & 43.74 & 43.74 \\
+\bottomrule
+\end{tabular}
+\end{table}

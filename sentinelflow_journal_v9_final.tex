@@ -1,0 +1,1173 @@
+%% SentinelFlow Journal Paper
+%% IEEE Transactions on Information Forensics and Security
+
+%%%%%%%%%
+\documentclass[journal]{IEEEtran}
+% For double-blind review, uncomment:
+% \author{Anonymous Authors}
+
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+% lineno removed for 2-column compatibility
+% \usepackage[switch,columnwise]{lineno}
+%\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{bm}
+\PassOptionsToPackage{bookmarks=false}{hyperref}
+\usepackage[hidelinks]{hyperref}
+% Packages for algorithms:
+% \usepackage{algorithm}
+\usepackage{algorithm, xpatch}
+\usepackage{algpseudocode}
+\usepackage{varwidth}
+\usepackage{multicol}
+\usepackage{listings}  % for code
+
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\definecolor{babyblue}{rgb}{0.8, 0.9, 1.0}
+\definecolor{babyc}{rgb}{0.97, 0.91, 0.81}
+\definecolor{lightmauve}{rgb}{0.86, 0.82, 1.0}
+
+\definecolor{babyb}{rgb}{1.0, 0.71, 0.76}
+\definecolor{piggypink}{rgb}{0.99, 0.87, 0.9}
+\definecolor{teagreen}{rgb}{0.82, 0.94, 0.75}
+\hyphenation{op-tical net-works semi-conduc-tor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%
+\begin{document}
+% \linenumbers
+% \renewcommand{\baselinestretch}{0.985}
+
+\title{SentinelFlow: A Strategy Leakage Firewall for Financial Research Agents}
+
+\author{Zhengmao~Zhang,~\IEEEmembership{Cybersecurity,}
+        Qiguo~Fang,~\IEEEmembership{Cybersecurity}
+        and Xiaoxiao~Wu,~\IEEEmembership{Cybersecurity}
+\thanks{The authors are with the Department of Computer Science, 
+New York Institute of Technology, Vancouver,
+British Columbia, BC V5M 4X3, \{zzhang82, qfang01, xwu42\}@nyit.edu}
+}
+
+%%%
+\markboth{SentinelFlow: A Strategy Leakage Firewall for Financial Research Agents}
+{Zhang \MakeLowercase{\textit{et al.}}: SentinelFlow}
+\maketitle
+
+%%% Abstract
+\begin{abstract}
+Large Language Models integrated into financial workflows through Retrieval-Augmented Generation create novel cybersecurity risks, most critically \textit{strategy leakage}---the inadvertent disclosure of proprietary trading rules, risk parameters, and client-sensitive data through LLM outputs. Existing AI security tools provide post-hoc monitoring and generic PII filtering but lack inline enforcement with domain-specific semantic detection for financial environments. This paper presents SentinelFlow, an inline AI security gateway implementing a multi-gate pipeline architecture with four pre-LLM gates (encoding normalization, regex intent precheck, verb$\times$object classifier, embedding-based secret proximity detection with intent-aware dual thresholds) and two post-LLM stages (advisory grounding analysis, sentence-level semantic leakage firewall with three-tier hard/soft/cascade thresholds for salami attack defense). A tamper-evident dual hash chain provides compliance-ready audit evidence. Evaluated against adversarial prompts from three sources---271 internal prompts (70 original across 10 attack categories, augmented with 201 paraphrase expansions across 7 evasion techniques), 779 probes from the garak framework (encoding, DAN, prompt injection), and 300 author-created HarmBench-format financial behaviors---on a knowledge base of 18,516 document chunks and an institutional-grade secret corpus (90 entries across 6 alpha domains with L1/L2/L3 sensitivity triplets), SentinelFlow achieves a true end-to-end leakage rate of 2.58\% (7/271 internal attacks) and 0.74\% (8/1,079 supplementary evaluation attacks), with zero data leakage on garak probes. The pre-gate layer blocks 46.1\% of adversarial attacks before the LLM is invoked; FPR on benign analyst queries is 3\%; 100\% audit chain integrity is maintained. Systematic ablation confirms Gate~1 (embedding precheck) as the primary defense: its removal raises pre-gate bypass rate by 21.4 percentage points. Cross-domain generalization experiments demonstrate that adapting SentinelFlow to the medical domain via configuration-only changes achieves 85\% TPR and 0\% FPR with zero modifications to detection logic. Per-gate latency benchmarks confirm end-to-end overhead of 28.75~ms (P50), compatible with interactive deployment. These results demonstrate that inline semantic security for domain-sensitive RAG agents is both feasible and generalizable.
+\end{abstract}
+
+%%% Keywords
+\begin{IEEEkeywords}
+LLM security, RAG pipeline, strategy leakage prevention, semantic firewall, data loss prevention, adversarial robustness, cross-domain generalization, audit evidence chain, financial AI governance.
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+%%% Introduction
+\section{Introduction}
+\label{Sect:Introduction}
+
+Large Language Models (LLMs) are rapidly being adopted in financial services through Retrieval-Augmented Generation (RAG) pipelines and autonomous agents with tool-calling capabilities. Major institutions---including JPMorgan, Morgan Stanley, and Goldman Sachs---have deployed internal LLM-powered research assistants that connect to proprietary knowledge bases containing investment memos, strategy models, risk parameters, and committee decisions~\cite{wsj_jpmorgan_ai, bloomberg_ms_ai, ft_gs_ai}. While these systems improve analyst productivity, they introduce novel cybersecurity risks fundamentally different from traditional threats: prompt injection can manipulate LLM behavior, indirect injection through poisoned documents can subvert retrieval pipelines, and---most critically for financial institutions---\textit{strategy leakage} can expose proprietary trading rules, risk model configurations, and client-sensitive data through LLM outputs~\cite{owasp_llm_2025}.
+
+The severity of this threat is reflected in the OWASP Top~10 for LLM Applications 2025, which elevated Sensitive Information Disclosure from position \#6 to \#2~\cite{owasp_llm_2025}. In financial contexts, strategy leakage is \textit{semantic} in nature: the confidential information is not a fixed string (like a credit card number) but a combination of concepts---including but not limited to specific thresholds, conditions, trading parameters, fee structures, client terms, and risk limits---that individually may be public knowledge but collectively constitute proprietary intellectual property worth millions. For example, ``RSI'' is a public technical indicator, ``RSI below 30 is oversold'' is practitioner knowledge, but ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D average on Universe-17, position size 1.5\% NAV'' is a confidential strategy. No traditional DLP system can detect this distinction because it requires semantic understanding of financial domain specificity.
+
+%% SubSection starts here
+\subsection{Motivation}
+
+Existing AI security tools fall short in three critical dimensions. First, most platforms provide \textit{post-hoc monitoring}---they detect and alert after leakage occurs---rather than \textit{inline enforcement} that blocks or redacts before damage happens. Regulated financial environments require enforceable controls with compliance-ready evidence, not retrospective dashboards~\cite{nist_ai_rmf, nist_ai_600_1}. Second, current guardrails focus on generic safety categories (violence, self-harm, PII) through intent classification~\cite{llama_guard, ms_prompt_shields}, but they cannot identify domain-specific data exfiltration where the query appears benign in form yet targets proprietary financial knowledge. Third, existing output-scanning tools operate at the full-response level; they lack the sentence-level granularity needed to detect partial leakage or gradual exfiltration (``salami attacks'') where confidential parameters are extracted one piece at a time across multiple sentences.
+
+SentinelFlow addresses these gaps by implementing an \textbf{inline AI security gateway} positioned between the user and the LLM, enforcing multi-gate pre-scan on inbound queries and sentence-level semantic validation on outbound responses, with domain-specific detection tuned for financial strategy protection and a tamper-evident audit chain for compliance.
+
+%% SubSection starts here
+\subsection{Summary of Contributions}
+This paper makes seven contributions:
+
+\begin{itemize}
+    \item \textbf{C1: Multi-Gate Inline Security Pipeline.}
+    A sequential gate architecture with four pre-LLM gates (encoding normalizer, regex intent precheck, verb$\times$object hard-block classifier, embedding-based secret proximity detection) and two post-LLM stages (advisory grounding analysis, semantic leakage scan). If any pre-gate blocks, the LLM is never called.
+
+    \item \textbf{C2: Sentence-Level Semantic Leakage Firewall.}
+    A three-tier detection mechanism using SBERT embeddings with hard ($\geq 0.70$, immediate redact), soft ($\geq 0.60$, accumulate), and cascade ($2+$ consecutive soft hits, salami defense) thresholds operating at sentence-level granularity.
+
+    \item \textbf{C3: Domain-Specific Evaluation Framework.}
+    A four-level financial knowledge sensitivity spectrum (L0 textbook through L3 top-secret) with 90 institutional-grade confidential strategy assets organized as L1/L2/L3 triplets across 6 alpha domains, 271 adversarial attack prompts across 10 attack categories and 7 evasion techniques (70 original plus 201 generated paraphrases spanning 7 evasion techniques), and 20 hard-negative spectrum queries (10 L0 textbook, 10 L1 practitioner) for false positive evaluation.
+
+    \item \textbf{C4: Prompt Distribution Monitoring.}
+    A lightweight behavioral anomaly signal using embedding-space centroid distance: queries with embedding distance exceeding $2\sigma$ from a normal analyst profile trigger tightening of downstream leakage scan thresholds by $\delta{=}0.05$. The module is implemented and configurable but disabled in the evaluations reported here (see Section~\ref{Sect:Discussion}); its contribution is the architectural design and the empirical centroid built from 100 representative analyst queries.
+
+    \item \textbf{C5: Auditable Evidence Chain.}
+    An append-only JSONL log with tamper-evident SHA-256 hash chaining (both global and per-session), verification tooling, and a Streamlit dashboard for forensic analysis.
+
+    \item \textbf{C6: Adversarial Evaluation Methodology.}
+    A reproducible evaluation pipeline including bypass root-cause analysis, systematic ablation across 7 gate configurations, full-pipeline evaluation with real LLM calls, and per-gate latency benchmarking.
+
+    \item \textbf{C7: Cross-Domain Generalization.}
+    A medical domain pilot demonstrating that the embedding-based detection framework generalizes to clinical protocol protection via configuration-only adaptation---zero changes to detection logic---achieving 85\% TPR and 0\% FPR.
+\end{itemize}
+
+
+\subsection{Roadmap}
+\label{Sect:Roadmap}
+
+The remainder of this paper is organized as follows. Section~\ref{Sect:Literature_Review} surveys related work across security taxonomies, semantic gateways, distance-based DLP, behavioral defense, and adversarial testing, concluding with a gap analysis. Section~\ref{Sect:Proposed_Solution} presents the SentinelFlow system design, including the multi-gate architecture, dual-threshold mechanism, leakage firewall algorithm, audit chain, and dataset construction. Section~\ref{Sect:Experimental_Procedure_Performance_Evaluation} describes the experimental methodology and results, including B0 vs.\ B2 comparison, sensitivity spectrum, threshold sweep, ablation study, bypass root-cause analysis, encoding evasion defense, latency benchmark, cross-domain generalization, and supplementary large-scale evaluation. Section~\ref{Sect:Conclusion} concludes with a summary of findings and future directions.
+
+%%% Section starts here
+\section{Literature Review}
+\label{Sect:Literature_Review}
+% Review of Related Work
+%
+
+This section surveys existing work across five areas relevant to SentinelFlow's design: security risk taxonomies, semantic gateways, distance-based data loss prevention, behavioral defense, and adversarial robustness testing. Each subsection identifies the capabilities and limitations of current approaches, culminating in a gap analysis that motivates SentinelFlow's contributions.
+
+\subsection{Security Risk Taxonomies and Governance Frameworks}
+\label{Sect:LR_Taxonomies}
+
+Three foundational frameworks define the threat landscape for LLM-integrated systems in regulated environments.
+
+The \textbf{OWASP Top~10 for LLM Applications}~\cite{owasp_llm_2025} provides the most widely adopted taxonomy of LLM-specific vulnerabilities. Its 2025 revision elevated Sensitive Information Disclosure from position \#6 to \#2, reflecting the growing recognition that data leakage through LLM outputs is a primary operational risk. The taxonomy identifies Prompt Injection (LLM01), Sensitive Information Disclosure (LLM02), Supply Chain Vulnerabilities (LLM03), and Excessive Agency (LLM06/LLM08) as directly relevant to RAG-augmented financial systems. SentinelFlow maps its threat model and gate design to these categories (Section~\ref{Sect:Threat_Model}).
+
+The \textbf{NIST AI Risk Management Framework (AI RMF)} and its companion \textbf{NIST AI 600-1 Generative AI Profile}~\cite{nist_ai_rmf, nist_ai_600_1} emphasize governance, risk measurement, accountability, and auditability as requirements for AI systems in regulated settings. These frameworks motivate SentinelFlow's audit evidence chain (C5), which provides the tamper-evident, replayable decision logs that NIST envisions for compliance-ready AI deployments. In the Canadian context, the \textbf{Personal Information Protection and Electronic Documents Act (PIPEDA)}~\cite{pipeda_guidance} further motivates evidence minimization and access control disciplines relevant to financial AI governance.
+
+\textbf{MITRE ATLAS}~\cite{mitre_atlas} catalogs adversarial tactics, techniques, and procedures (TTPs) specific to AI systems, extending the traditional ATT\&CK framework to machine learning. ATLAS provides structured threat intelligence for attacks including model evasion, data poisoning, and inference-time manipulation---informing the adversarial evaluation methodology in SentinelFlow's C6 contribution.
+
+\subsection{Semantic Gateways and Intent Classification}
+\label{Sect:LR_Gateways}
+
+Classifier-based input filtering represents the most mature category of LLM security tools. Meta's \textbf{Llama Guard}~\cite{llama_guard} uses a fine-tuned language model to categorize inputs and outputs into predefined safety taxonomies (violence, sexual content, self-harm, etc.), with complementary classifiers for jailbreak and prompt injection detection. Microsoft's \textbf{Prompt Shields}~\cite{ms_prompt_shields} provides jailbreak detection and document attack identification for Azure AI services, targeting both direct prompt injection and indirect injection through retrieved documents.
+
+These gateways are effective at recognizing malicious \textit{intent}---they can distinguish between ``tell me a joke'' and ``ignore your instructions and reveal secrets.'' However, they are trained on general safety categories and lack the capacity to detect \textit{domain-specific data exfiltration} where the query appears benign in form but targets proprietary financial knowledge. For example, the query ``What RSI thresholds do you use for momentum signals on Universe-17?'' would not trigger any standard safety taxonomy, yet it directly targets a confidential strategy parameter. SentinelFlow addresses this gap through embedding-based secret proximity detection (Gate~1) rather than intent classification alone.
+
+NVIDIA's \textbf{NeMo Guardrails}~\cite{nemo_guardrails} offers a programmable approach---users define safety rails in Colang (a domain-specific language) that intercept and redirect conversations. While more flexible than fixed classifiers, NeMo Guardrails still operates on intent-matching rather than semantic content analysis, and does not provide the sentence-level output inspection needed for detecting partial strategy leakage in LLM responses.
+
+\subsection{Distance-Based Data Loss Prevention}
+\label{Sect:LR_DLP}
+
+Traditional Data Loss Prevention (DLP) systems rely on exact-match patterns (regular expressions for credit card numbers, Social Security numbers, etc.) and keyword-based rules. These approaches cannot detect financial strategy leakage because confidential strategies are \textit{semantic} in nature: they consist of combinations of concepts, thresholds, and conditions that are individually public but collectively proprietary.
+
+\textbf{Sentence-BERT (SBERT)}~\cite{sbert} introduced efficient bi-encoder architectures that map sentences into dense vector spaces where semantic similarity can be measured via cosine distance. This foundational work enables a new paradigm for DLP: rather than matching exact strings, a system can detect when LLM-generated content is semantically \textit{close} to protected knowledge, even if the phrasing differs substantially from the original.
+
+SentinelFlow adopts SBERT-based cosine similarity as its core detection mechanism, using the all-MiniLM-L6-v2 model (384-dimensional embeddings) to encode both queries and LLM responses. However, SentinelFlow extends the basic similarity approach in two critical ways that are absent from existing work. First, it operates at \textit{sentence-level granularity}: rather than computing a single similarity score for the entire response, SentinelFlow splits the LLM output into individual sentences and evaluates each against the secret index independently. This enables detection of partial leakage where only one sentence in a multi-sentence response reveals confidential parameters. Second, it implements \textit{cascade logic}: when multiple consecutive sentences exceed a soft similarity threshold, a cascade trigger fires even if no individual sentence reaches the hard threshold. This defends against ``salami attacks'' that extract confidential information one piece at a time across multiple sentences.
+
+\subsection{Behavioral and Statistical Defense}
+\label{Sect:LR_Behavioral}
+
+Behavioral approaches detect anomalous patterns in data flows rather than analyzing individual content items. \textbf{NVIDIA Morpheus}~\cite{nvidia_morpheus} implements Digital Fingerprinting (DFP), which builds statistical profiles of normal network behavior and flags deviations. The system analyzes structural artifacts including entropy distributions, pattern density, and temporal access patterns to identify suspicious data flows without requiring content-level inspection.
+
+Pimentel et al.~\cite{pimentel_novelty} provide a comprehensive survey of novelty detection methods, including autoencoder-based reconstruction error approaches where a model trained on ``normal'' data produces high reconstruction error for anomalous inputs. These techniques are well-suited for detecting novel attack patterns that evade rule-based defenses.
+
+SentinelFlow incorporates a lightweight version of behavioral monitoring through its \textit{prompt distribution monitoring} module (C4): incoming queries are compared against a pre-computed centroid of 100 normal financial analyst queries, and queries with high embedding distance (z-score exceeding $2\sigma$) trigger dynamic tightening of downstream detection thresholds. This provides an adaptive defense layer against novel attack types not covered by static rules, without the computational overhead of full autoencoder-based anomaly detection. (Note: C4 is implemented but disabled in the evaluations reported in this paper; see Section~\ref{Sect:Prompt_Monitoring} for details.)
+
+\subsection{Adversarial Robustness Testing}
+\label{Sect:LR_Adversarial}
+
+Systematic adversarial evaluation of LLM defenses has emerged as a critical research area. The \textbf{garak} framework~\cite{garak_paper, garak_github} provides standardized probing of LLM vulnerabilities through configurable attack probes and detection modules, enabling reproducible security assessments. \textbf{JailbreakBench}~\cite{jailbreakbench} establishes a collaborative benchmark for evaluating jailbreak attacks and defenses, while \textbf{AdvBench}~\cite{advbench} demonstrates universal and transferable adversarial attacks on aligned language models. \textbf{AgentDojo}~\cite{agentdojo} specifically benchmarks tool-using agents under injection attacks, and \textbf{BIPIA}~\cite{bipia} provides a dedicated benchmark for indirect prompt injection.
+
+These frameworks and benchmarks have significantly advanced the field of LLM security evaluation. However, they share a common limitation: they focus on \textit{general} LLM safety categories (harmful content generation, jailbreaking, PII leakage) rather than domain-specific information disclosure. To our knowledge, no existing public benchmark addresses the unique challenge of \textit{financial strategy leakage}, where the system must distinguish between ``RSI below 30 is oversold'' (public practitioner knowledge) and ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D average on Universe-17'' (confidential proprietary strategy). SentinelFlow's C3 and C6 contributions directly address this gap by providing a domain-specific evaluation framework with a four-level sensitivity spectrum and 70 finance-specific adversarial attack prompts.
+
+\subsection{Agentic Security}
+\label{Sect:LR_Agentic}
+
+The rapid deployment of autonomous AI agents introduces security concerns beyond those of stateless LLM interactions. The \textbf{OWASP Top~10 for Agentic Applications}~\cite{owasp_agentic_promptfoo}, announced at Black Hat Europe 2025, identifies Agent Goal Hijacking (ASI01), Tool Misuse and Exploitation (ASI02), and Privilege Compromise (ASI05) as the top three agentic security risks. These risks are particularly acute in financial services, where multi-agent architectures delegate tasks across organizational boundaries.
+
+Recent research has demonstrated concrete exploitation patterns. Industry reporting has described scenarios in which cooperating AI coding assistants could be manipulated into escalating each other's privileges through mutual configuration rewriting~\cite{sombra_llm_security_2026}. Formal analysis through mandatory access control frameworks identified critical bypasses in existing agent security systems (IsolateGPT, CaMeL), where anonymous intermediate agents could invoke privileged tools without permission checks~\cite{arxiv_privilege_escalation_2025}. In multi-agent financial deployments, these vulnerabilities create direct pathways for strategy leakage through cross-agent delegation.
+
+While these works address important dimensions of agentic security (privilege escalation, tool misuse, goal hijacking), they focus on the \textit{mechanism} of exploitation rather than the \textit{content semantics} of what information is disclosed. SentinelFlow complements this research by providing output-side semantic inspection at the user-facing boundary: regardless of whether the LLM's final response was influenced by cross-agent delegation, knowledge graph traversal, or direct retrieval, the leakage firewall evaluates the content before it reaches the user. This does not protect intermediate agent-to-agent communications, but it provides a last-line content guard at the point where information exits the system.
+
+\subsection{Gap Analysis}
+\label{Sect:LR_Gap}
+
+Table~\ref{tab:lit_gap} summarizes the capabilities and limitations of existing approaches across five dimensions critical to financial AI security.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Literature Gap Analysis: Existing Approaches vs.\ SentinelFlow Requirements}
+    \label{tab:lit_gap}
+    \scalebox{0.88}{
+    \begin{tabular}{p{3.2cm} p{3.8cm} p{5.5cm}}
+    \toprule
+    \textbf{Approach} & \textbf{Capability} & \textbf{Gap (addressed by SentinelFlow)} \\
+    \midrule
+    Llama Guard, Prompt Shields~\cite{llama_guard, ms_prompt_shields}
+      & Intent classification against safety taxonomies
+      & Cannot detect domain-specific strategy leakage that appears benign in form \\
+    \midrule
+    SBERT + cosine similarity~\cite{sbert}
+      & Semantic similarity measurement between text pairs
+      & No sentence-level granularity; no cascade logic for salami attacks \\
+    \midrule
+    Morpheus DFP~\cite{nvidia_morpheus}
+      & Statistical anomaly detection on data flows
+      & Behavioral profiling only; no content-level semantic inspection \\
+    \midrule
+    garak, JailbreakBench, AdvBench~\cite{garak_paper, jailbreakbench, advbench}
+      & Standardized adversarial probing of LLM defenses
+      & General safety focus; no finance-domain leakage benchmark \\
+    \midrule
+    NeMo Guardrails~\cite{nemo_guardrails}
+      & Programmable conversation safety rails
+      & Intent-matching, not semantic content analysis; no audit chain \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+The analysis reveals five critical gaps that no existing solution addresses collectively: (1)~\textit{inline enforcement} with real-time block/redact capabilities positioned before responses reach users, as opposed to post-hoc monitoring and alerting; (2)~\textit{domain-specific semantic leakage detection} that can distinguish between public financial knowledge and proprietary strategy parameters sharing the same vocabulary; (3)~\textit{sentence-level granularity} with cascade logic for detecting gradual exfiltration across multiple sentences; (4)~\textit{tamper-evident audit chains} providing replayable, hash-linked evidence for compliance in regulated environments; and (5)~a \textit{domain-specific adversarial evaluation framework} for systematically testing financial strategy leakage defenses. SentinelFlow's seven contributions (C1--C7) are designed to address these gaps as an integrated system.
+
+%%% Section starts here
+\section{Proposed Solution}
+\label{Sect:Proposed_Solution}
+This section presents SentinelFlow, an inline AI security gateway designed to prevent confidential strategy leakage from financial RAG (Retrieval-Augmented Generation) pipelines. Unlike post-hoc monitoring tools that detect leakage after it occurs, SentinelFlow enforces security decisions in real time---blocking unsafe queries \textit{before} the LLM is invoked and redacting leaked content from responses \textit{before} they reach the user. The system implements seven contributions (C1--C7) spanning a multi-gate pipeline architecture, a sentence-level semantic leakage firewall, a domain-specific evaluation framework, prompt distribution monitoring, a tamper-evident audit chain, an adversarial evaluation methodology, and cross-domain generalization.
+
+
+\subsection{System Overview and Architecture}
+\label{Sect:System_Overview}
+
+SentinelFlow is positioned as an inline control plane between users and the LLM backend. Its design follows three principles: (1)~\textit{fail-safe gate ordering}, where inexpensive deterministic checks execute first and the costly LLM call occurs only after all pre-checks pass; (2)~\textit{sentence-level granularity}, where both grounding analysis and leakage detection operate on individual sentences rather than full responses; and (3)~\textit{explainability}, where every gate decision produces a structured rationale logged to a tamper-evident audit chain.
+
+The pipeline consists of four sequential pre-LLM gates followed by two post-LLM validation stages. Fig.~\ref{fig:architecture} illustrates the complete data flow.
+
+\begin{figure*}[!ht]
+\centering
+\begin{tikzpicture}[
+    node distance=0.7cm and 1.0cm,
+    gate/.style={rectangle, draw, rounded corners, fill=red!10, minimum width=2.6cm, minimum height=0.7cm, align=center, font=\footnotesize},
+    process/.style={rectangle, draw, rounded corners, fill=blue!10, minimum width=2.6cm, minimum height=0.7cm, align=center, font=\footnotesize},
+    postcheck/.style={rectangle, draw, rounded corners, fill=orange!10, minimum width=2.6cm, minimum height=0.7cm, align=center, font=\footnotesize},
+    block/.style={rectangle, draw, fill=red!30, rounded corners, minimum width=1.4cm, minimum height=0.45cm, align=center, font=\scriptsize},
+    arrow/.style={-{Stealth[length=2mm]}, thick},
+]
+
+% Nodes
+\node[process] (user) {User Query};
+\node[gate, below=of user, fill=babyblue] (g0d) {Gate 0 Decode:\\Encoding Normalizer};
+\node[gate, below=of g0d] (g0a) {Gate 0a:\\Regex Precheck};
+\node[gate, below=of g0a] (g0b) {Gate 0b: Verb$\times$Object\\Classifier};
+\node[gate, below=of g0b] (g1) {Gate 1: Embedding\\Precheck (Dual Threshold)};
+\node[process, below=of g1] (rag) {RAG Retrieval\\(top-$k$)};
+\node[process, below=of rag] (llm) {LLM API Call\\(GPT-4o-mini)};
+\node[postcheck, below=of llm] (ground) {Grounding\\Analysis};
+\node[postcheck, below=of ground] (leak) {Leakage Scan\\(Semantic Firewall)};
+\node[process, below=of leak] (output) {Final Output};
+
+% Block nodes
+\node[block, right=1.8cm of g0a] (b1) {\textsc{blocked}};
+\node[block, right=1.8cm of g0b] (b2) {\textsc{blocked}};
+\node[block, right=1.8cm of g1] (b3) {\textsc{blocked}};
+\node[block, right=1.8cm of leak] (b4) {\textsc{redacted}};
+
+% Arrows
+\draw[arrow] (user) -- (g0d);
+\draw[arrow] (g0d) -- node[left, font=\scriptsize] {decode} (g0a);
+\draw[arrow] (g0a) -- node[left, font=\scriptsize] {pass} (g0b);
+\draw[arrow] (g0b) -- node[left, font=\scriptsize] {pass} (g1);
+\draw[arrow] (g1) -- node[left, font=\scriptsize] {pass} (rag);
+\draw[arrow] (rag) -- (llm);
+\draw[arrow] (llm) -- (ground);
+\draw[arrow] (ground) -- (leak);
+\draw[arrow] (leak) -- node[left, font=\scriptsize] {pass} (output);
+
+% Block arrows
+\draw[arrow, red] (g0a) -- node[above, font=\scriptsize] {fail} (b1);
+\draw[arrow, red] (g0b) -- node[above, font=\scriptsize] {fail} (b2);
+\draw[arrow, red] (g1) -- node[above, font=\scriptsize] {fail} (b3);
+\draw[arrow, red] (leak) -- node[above, font=\scriptsize] {fail} (b4);
+
+% Audit trail
+\node[process, fill=green!10, right=3.8cm of rag, minimum width=1.8cm] (audit) {Audit\\Evidence\\Chain};
+\draw[-{Stealth}, dashed, green!50!black] (g0d.east) -- ++(0.2,0) |- (audit.west);
+\draw[-{Stealth}, dashed, green!50!black] (g0a.east) -- ++(0.2,0) |- (audit.west);
+\draw[-{Stealth}, dashed, green!50!black] (g0b.east) -- ++(0.4,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (g1.east) -- ++(0.6,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (llm.east) -- ++(0.4,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (leak.east) -- ++(0.2,0) |- (audit);
+
+\end{tikzpicture}
+\caption{SentinelFlow multi-gate pipeline architecture. Blue-shaded Gate~0 Decode normalizes encoded inputs before the red-shaded pre-LLM gates (0a, 0b, Gate~1); orange-shaded stages are post-LLM checks. Every gate decision is logged to the tamper-evident audit chain (green, dashed). If any pre-gate fails, the LLM is never called.}
+\label{fig:architecture}
+\end{figure*}
+
+The fail-safe ordering provides two advantages. First, blocked queries incur only the cost of regex matching and embedding search (under 1~ms for Gates~0a/0b, approximately 52~ms for Gate~1 including FAISS search), because the LLM API is never invoked. Second, a query that passes all pre-gates but produces a leaking response is still caught by the post-LLM semantic firewall before the user sees the output. This defense-in-depth design ensures that no single gate failure leads to information disclosure. Both the web interface (\texttt{SentinelEngine} class) and the CLI evaluation pipeline implement identical gate logic and threshold mechanisms, ensuring that experimental results reported in Section~\ref{Sect:Experimental_Procedure_Performance_Evaluation} fully reflect the security posture of the deployed application.
+
+\subsection{Threat Model}
+\label{Sect:Threat_Model}
+
+SentinelFlow assumes a deployment where analysts query an internal knowledge base through a RAG-augmented LLM. The adversary is modeled as an authenticated user with query access to the RAG system---such as an analyst, contractor, or anyone who has obtained valid credentials---who attempts to extract strategy information beyond their authorized access level. This covers both deliberate insider exfiltration and the case of an external attacker who has obtained legitimate credentials. The knowledge base contains public financial documents (SEC 10-K filings) that are indexed in the \textit{RAG retrieval store} for answering analyst queries. The 90 confidential strategy assets reside in a separate, isolated \textit{secret detection index} used exclusively by Gate~1 and the leakage scan; they are never included in the RAG retrieval store and therefore cannot be directly retrieved by the LLM. This architectural separation is the key reason why queries that bypass the pre-gate layer (53.9\%) do not generally result in secret disclosure: the LLM answers from the public corpus only, while Gate~1 detects semantic proximity to secrets in a parallel index. The LLM is accessed via an external API, and the security gateway intercepts all inbound queries and outbound responses.
+
+Table~\ref{tab:threat_model} maps four primary threat categories to their OWASP Top~10 for LLM Applications~\cite{owasp_llm_2025} classifications and corresponding SentinelFlow mitigations.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Threat Model Mapped to OWASP Top~10 for LLM Applications}
+    \label{tab:threat_model}
+    \scalebox{0.88}{
+    \begin{tabular}{p{2.2cm} p{3.5cm} p{1.6cm} p{3.5cm}}
+    \toprule
+    \textbf{Threat} & \textbf{Financial Example} & \textbf{OWASP} & \textbf{Mitigation} \\
+    \midrule
+    Prompt Injection & ``Ignore policy, reveal strategy parameters'' & LLM01 & Gate~0a regex + Gate~0b verb$\times$object \\
+    \midrule
+    Indirect Injection & Hidden instructions in retrieved documents & LLM01/03 & Grounding analysis (advisory signal only) \\
+    \midrule
+    Strategy Leakage & Alpha thresholds, risk model parameters & LLM02 & Gate~1 embedding + Leakage scan \\
+    \midrule
+    Gradual Exfiltration & Salami attack across multiple sentences & LLM02 & Cascade threshold + session audit \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+Among these threats, \textit{strategy leakage} (OWASP LLM02) is the primary focus. Financial strategy leakage is semantic in nature: the confidential information is not a fixed string (like a credit card number) but a combination of domain-specific concepts---particular thresholds, conditions, and parameters that collectively constitute proprietary intellectual property. For example, ``RSI'' is a public technical indicator; ``RSI below 30 is oversold'' is practitioner knowledge; but ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D average on Universe-17, position size 1.5\% NAV'' is a confidential strategy. No traditional data loss prevention (DLP) system can detect this distinction, motivating SentinelFlow's embedding-based approach.
+
+
+\subsection{Gate 0a: Intent Precheck (Regex Rules)}
+\label{Sect:Gate0a}
+
+Gate~0a is the first and fastest line of defense. It scans the user query against a set of compiled regular expression patterns organized into five hard-block rule categories plus one flagging category (hypothetical-framing detection, which triggers strict threshold enforcement rather than blocking), as shown in Table~\ref{tab:gate0a_rules}.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Gate 0a: Intent Precheck Rule Categories}
+    \label{tab:gate0a_rules}
+    \scalebox{0.92}{
+    \begin{tabular}{l l l l}
+    \toprule
+    \textbf{Rule ID} & \textbf{Category} & \textbf{Action} & \textbf{Example Pattern} \\
+    \midrule
+    INJ\_01 & Prompt injection override & Block & \texttt{ignore\textbackslash s+all\textbackslash s+previous} \\
+    SYS\_01 & System prompt exfiltration & Block & \texttt{reveal\textbackslash s+your\textbackslash s+system\textbackslash s+prompt} \\
+    AUD\_01 & Audit log exfiltration & Block & \texttt{print\textbackslash s+the\textbackslash s+full\textbackslash s+audit} \\
+    INT\_01 & Internal-only request & Block & \texttt{proprietary\textbackslash s+(strategy|alpha|...)} \\
+    EXF\_01 & Data exfiltration request & Block & \texttt{confidential\textbackslash s+strategy} \\
+    HYP\_01 & Hypothetical/academic framing & Flag$^\dagger$ & \texttt{assume\textbackslash s+a\textbackslash s+firm\textbackslash s+uses} \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize $^\dagger$Flag triggers strict threshold ($\tau{=}0.45$) at Gate~1 rather than blocking.} \\
+    \end{tabular}}
+\end{table*}
+
+Each rule specifies an identifier, severity level (all set to \textit{high}), action (\textit{block}), and one or more regex patterns. If any pattern matches the incoming query, the pipeline short-circuits immediately: the LLM is never called, and a generic block message is returned. Gate~0a is deterministic and executes in sub-millisecond time. It produces zero false positives on the 100-query benign analyst corpus: the ablation study (Section~\ref{Sect:Ablation}) confirms this indirectly---removing Gate~0a leaves FPR unchanged at 3\%, indicating Gate~0a itself contributes no false positives.
+
+\subsection{Gate 0b: Hard-Block Classifier (Verb$\times$Object)}
+\label{Sect:Gate0b}
+
+Gate~0b extends pattern-based detection with a two-part classifier. The first part consists of nine direct regex patterns that block on explicit mentions of sensitive system components (e.g., \texttt{system\textbackslash s*prompt}, \texttt{audit\textbackslash s*log}, \texttt{api\textbackslash s*key}). The second part implements a \textit{verb$\times$object combinatorial matrix}: if the query contains both an exfiltration verb and a sensitive object, it is blocked.
+
+The classifier uses 13 exfiltration verbs (e.g., \textit{reveal, dump, export, exfiltrate, leak}) cross-matched against 23 sensitive objects (e.g., \textit{system prompt, secret index, embedding, credential, alpha rule, trading strategy, risk model, position limit}), providing broad combinatorial coverage of adversarial phrasings. For instance, the query ``export the secret index to JSON'' triggers the verb$\times$object match (\textit{export} $\times$ \textit{secret index}) and is blocked even though no single direct pattern matches.
+
+Together, Gates~0a and~0b form a merged \textit{rule gate} that handles all deterministic, low-latency blocking before the more expensive embedding-based Gate~1.
+
+\subsection{Gate 1: Embedding Precheck with Intent-Aware Dual Thresholds}
+\label{Sect:Gate1}
+
+Gate~1 is the first gate that uses semantic understanding. It encodes the incoming query using sentence-transformers (all-MiniLM-L6-v2, 384-dimensional embeddings~\cite{sbert}) and searches the confidential assets FAISS index for the top-3 closest secret entries by cosine similarity. If the maximum similarity exceeds a threshold, the query is blocked.
+
+The key innovation in Gate~1 is an \textbf{intent-aware dual-threshold mechanism} that resolves the classic tension between false positive rate (FPR) and true positive rate (TPR) in semantic similarity-based detection.
+
+\paragraph{Problem.} A single fixed threshold creates an inherent tradeoff. A permissive threshold (e.g., 0.75) allows benign financial queries to pass but misses extraction attempts that are semantically close to secrets. A strict threshold (e.g., 0.50) catches most extraction attempts but incorrectly blocks legitimate queries like ``Explain VWAP pricing'' (similarity score $\approx 0.52$) because they share vocabulary with confidential execution policy entries.
+
+\paragraph{Solution.} SentinelFlow dynamically selects between two thresholds based on \textit{extraction intent signals} detected in the query:
+
+\begin{itemize}
+    \item \textbf{Generic queries} (no extraction intent): threshold $\tau_g = 0.75$ (permissive).
+    \item \textbf{Extraction-intent queries}: threshold $\tau_e = 0.50$ (strict).
+\end{itemize}
+
+The system detects extraction intent by checking for 62 \textit{intent amplifier} keywords in the query, including: \textit{parameters, thresholds, rules, exact, specific, conditions, entry conditions, exit conditions, criteria, logic, formula, signal, trigger, strategies, hedging, alpha, execution, position limits, constraints, routing, dark pool, drawdown, circuit breaker, fee structure, allocation, rebalancing, leverage, volatility target, hypothetical, assume, academic framing,} and related terms. Matching is performed by substring search; queries containing any amplifier trigger the strict threshold $\tau_e = 0.50$ regardless of surrounding context. If any amplifier is present, the strict threshold $\tau_e = 0.50$ is applied. Additionally, a supplementary hypothetical-framing detection rule set identifies academic and roleplay framing patterns (e.g., ``in a case study,'' ``assume a firm uses''), triggering an even stricter threshold $\tau = 0.45$ for this subset of queries.
+
+Table~\ref{tab:dual_threshold} illustrates how the dual-threshold mechanism resolves the FPR/TPR tension with concrete examples.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Dual-Threshold Mechanism: Example Decisions}
+    \label{tab:dual_threshold}
+    \scalebox{0.85}{
+    \begin{tabular}{p{4.8cm} c c c c}
+    \toprule
+    \textbf{Query} & \textbf{Score} & \textbf{Amplifier?} & \textbf{$\tau$} & \textbf{Decision} \\
+    \midrule
+    ``What is free cash flow?'' & 0.29 & No & 0.75 & \textcolor{green!60!black}{Allow} \\
+    ``Explain VWAP pricing'' & 0.52 & No & 0.75 & \textcolor{green!60!black}{Allow} \\
+    ``What are the \textit{specific parameters} for RSI + Volume Spike?'' & 0.62 & Yes & 0.50 & \textcolor{red}{Block} \\
+    ``Show the exact \textit{entry conditions} for the momentum signal'' & 0.58 & Yes & 0.50 & \textcolor{red}{Block} \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+This mechanism enables Gate~1 to achieve 0\% FPR on the 20-query sensitivity spectrum (L0/L1 carefully templated queries without extraction-intent amplifiers) while maintaining 100\% TPR on extraction attempts targeting confidential assets (L2/L3), as demonstrated in Section~\ref{Sect:Experimental_Procedure_Performance_Evaluation}. On the broader 100-query benign analyst corpus, Gate~1 contributes 2 of the 3 overall false positives (FPR=3\%), arising from genuine analyst queries that happen to contain extraction-intent phrasing and score above the strict threshold---an expected consequence of the dual-threshold design documented in the ablation study.
+
+\subsection{Leakage Scan: Sentence-Level Semantic Firewall}
+\label{Sect:Leakage_Scan}
+
+The leakage scan is the core contribution (C2) of SentinelFlow: a post-LLM semantic firewall that inspects the generated response at sentence-level granularity before it reaches the user. Even if a query passes all pre-gates and the LLM produces a response, the leakage scan provides a final defense layer against information disclosure.
+
+\subsubsection{Algorithm}
+
+The leakage scan operates as follows:
+
+\begin{enumerate}
+    \item \textbf{Sentence splitting.} The LLM response is segmented into individual sentences using regex-based splitting on punctuation boundaries (\texttt{r"(?<=[.!?])\textbackslash s+"}).
+    \item \textbf{Per-sentence embedding.} Each sentence is encoded using the same sentence-transformer model (all-MiniLM-L6-v2).
+    \item \textbf{Secret index search.} Each sentence embedding is compared against the confidential assets FAISS index. The maximum cosine similarity score and the matched secret entry are recorded.
+    \item \textbf{Three-tier decision.} Each sentence is classified using the thresholds defined in Table~\ref{tab:leakage_tiers}.
+\end{enumerate}
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Leakage Scan: Three-Tier Threshold System}
+    \label{tab:leakage_tiers}
+    \scalebox{1.0}{
+    \begin{tabular}{l c l}
+    \toprule
+    \textbf{Tier} & \textbf{Threshold} & \textbf{Action} \\
+    \midrule
+    Hard & $\geq 0.70$ & Redact sentence immediately \\
+    Soft & $\geq 0.60$ & Increment consecutive soft-hit counter \\
+    Cascade & 2+ consecutive soft hits & Redact all accumulated soft-hit sentences \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+The three-tier system addresses two distinct attack patterns. The \textit{hard threshold} catches single sentences that closely match a confidential asset (e.g., a response that directly states a trading rule with specific parameters). The \textit{cascade mechanism} defends against \textit{salami attacks}---a sophisticated exfiltration technique where an attacker extracts strategy parameters one piece at a time across multiple sentences, each individually scoring below the hard threshold but collectively reconstituting a confidential strategy. When $k=2$ consecutive sentences exceed the soft threshold, all are elevated to redaction status.
+
+Algorithm~\ref{alg:leakage_scan} presents the formal pseudocode for the leakage scan procedure.
+
+\begin{algorithm}[!ht]
+\caption{Sentence-Level Semantic Leakage Scan}
+\label{alg:leakage_scan}
+\begin{algorithmic}[1]
+\Require LLM response $R$, secret FAISS index $\mathcal{F}_s$, hard threshold $\tau_h = 0.70$, soft threshold $\tau_s = 0.60$, cascade window $k = 2$
+\Ensure Redacted response $R'$ and leakage summary $\mathcal{S}$
+\State $\text{sentences} \gets \textsc{PunctSplit}(R)$ \Comment{Regex split on \texttt{.!?} boundaries}
+\State $\text{consecutive\_soft} \gets 0$
+\State $\text{decisions} \gets [\,]$
+\For{each sentence $s_i$ in sentences}
+    \State $\mathbf{e}_i \gets \textsc{Encode}(s_i)$ \Comment{SBERT embedding}
+    \State $\text{score}_i, \text{match}_i \gets \textsc{Search}(\mathcal{F}_s, \mathbf{e}_i, \text{top}{=}1)$
+    \If{$\text{score}_i \geq \tau_h$}
+        \State $\text{decisions}[i] \gets \textsc{Redact}$ \Comment{Hard hit}
+        \State $\text{consecutive\_soft} \gets 0$
+    \ElsIf{$\text{score}_i \geq \tau_s$}
+        \State $\text{consecutive\_soft} \gets \text{consecutive\_soft} + 1$
+        \If{$\text{consecutive\_soft} \geq k$}
+            \State Mark current and all accumulated consecutive soft-hit sentences as \textsc{Redact}
+        \Else
+            \State $\text{decisions}[i] \gets \textsc{Soft}$
+        \EndIf
+    \Else
+        \State $\text{decisions}[i] \gets \textsc{Pass}$
+        \State $\text{consecutive\_soft} \gets 0$
+    \EndIf
+\EndFor
+\State $R' \gets$ Replace all \textsc{Redact} sentences with \texttt{[REDACTED]}
+\State \Return $R'$, summary $\mathcal{S}$
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Grounding Analysis}
+\label{Sect:Grounding_Validation}
+
+After the LLM generates a response, the grounding analysis stage computes per-sentence cosine similarity between each sentence of the LLM output and the retrieved public corpus chunks. Sentences with a maximum grounding score below the threshold ($\tau_{\text{ground}} = 0.55$) are classified as \textit{ungrounded}---meaning the LLM introduced content not present in the retrieved evidence. These scores and classifications are logged to the tamper-evident audit chain as an advisory signal.
+
+In the current implementation, grounding analysis operates in an advisory-only mode: scores are computed and recorded per session, but they do not independently trigger redaction or blocking. The grounding signal is designed as a cross-check enrichment for the leakage scan when enforcement is enabled: sentences simultaneously flagged as ungrounded and semantically similar to confidential assets would carry a higher risk indicator in the audit log. In the current configuration, grounding scores are logged per sentence and available for compliance review, but the enforcement path remains inactive. Full enforcement integration is identified as future work.
+
+\subsection{Audit Evidence Chain}
+\label{Sect:Audit_Chain}
+
+Regulated financial environments require tamper-evident audit trails for compliance and incident reconstruction~\cite{nist_ai_rmf}. SentinelFlow implements an append-only JSONL audit log with dual SHA-256 hash chains (contribution C5).
+
+\subsubsection{Dual Hash Chain Design}
+
+Each audit event contains:
+\begin{itemize}
+    \item A timestamp, event type, and structured body with gate-specific details.
+    \item An \texttt{event\_hash}: the SHA-256 hash of the event's canonical JSON representation (excluding hash fields themselves).
+    \item A \texttt{prev\_hash}: the hash of the preceding event in the \textit{global} chain (across all sessions).
+    \item A \texttt{session\_prev\_hash}: the hash of the preceding event in the \textit{per-session} chain.
+\end{itemize}
+
+Fig.~\ref{fig:hash_chain} illustrates the dual chain structure across two consecutive sessions.
+
+\begin{figure*}[!ht]
+\centering
+\begin{tikzpicture}[
+    event/.style={rectangle, draw, rounded corners, fill=blue!8, minimum width=1.6cm, minimum height=0.65cm, align=center, font=\scriptsize},
+    arrow/.style={-{Stealth[length=1.5mm]}, thick},
+    darrow/.style={-{Stealth[length=1.5mm]}, thick, dashed, blue!60},
+]
+% Session A
+\node[event] (a1) {$E_1^A$\\intent};
+\node[event, right=0.7cm of a1] (a2) {$E_2^A$\\retrieve};
+\node[event, right=0.7cm of a2] (a3) {$E_3^A$\\leakage};
+% Session B (blocked -- fewer events)
+\node[event, right=1.0cm of a3] (b1) {$E_1^B$\\intent};
+\node[event, right=0.7cm of b1] (b2) {$E_2^B$\\output};
+
+% Global chain (solid)
+\draw[arrow] (a1) -- (a2);
+\draw[arrow] (a2) -- (a3);
+\draw[arrow] (a3) -- (b1);
+\draw[arrow] (b1) -- (b2);
+
+% Session chains (dashed)
+\draw[darrow, bend left=30] (a1) to (a2);
+\draw[darrow, bend left=30] (a2) to (a3);
+\draw[darrow, bend left=30] (b1) to (b2);
+
+% Labels
+\node[above=0.55cm of a2, font=\scriptsize\bfseries] {Session A (allowed)};
+\node[above=0.55cm of b1, font=\scriptsize\bfseries, xshift=0.35cm] {Session B (blocked)};
+\node[below=0.35cm of a2, font=\scriptsize, gray] {Global chain (solid)};
+\node[below=0.6cm of a2, font=\scriptsize, blue!60] {Session chain (dashed)};
+\end{tikzpicture}
+\caption{Dual hash chain structure. The global chain (solid arrows) links all events across sessions. Per-session chains (dashed arrows) link events within each session independently. Blocked queries (Session~B) produce fewer events because the LLM is never called.}
+\label{fig:hash_chain}
+\end{figure*}
+
+The system logs 16 event types spanning the full pipeline: \texttt{runtime\_info}, \texttt{encoding\_detected}, \texttt{intent\_precheck}, \texttt{query\_precheck}, \texttt{llm\_guard}, \texttt{retrieve}, \texttt{retrieval\_quality}, \texttt{prompt\_built}, \texttt{llm\_response}, \texttt{grounding\_check}, \texttt{prompt\_monitoring}, \texttt{leakage\_scan}, \texttt{final\_output}, \texttt{runtime\_error}, \texttt{gate\_0c} (zero-shot intent classifier, currently disabled), and \texttt{session\_salami\_check} (session-level salami detector). Not all 16 event types fire in every session; \texttt{llm\_guard}, \texttt{encoding\_detected}, \texttt{gate\_0c}, and \texttt{session\_salami\_check} are conditionally logged. The standard RAG path (document retrieval succeeds) produces \textbf{10} audit events, while a fallback no-docs path produces 9 (omitting \texttt{retrieval\_quality}).
+
+\subsubsection{Tamper Detection}
+
+If any audit record is modified after creation, the recomputed hash will not match the \texttt{prev\_hash} stored in the subsequent record, breaking the chain. A verification script validates both global and per-session chains, enabling forensic detection of any post-hoc tampering. In evaluation, all hash chain integrity checks passed with 100\% verification success rate.
+
+\subsubsection{Cost-Efficiency Evidence}
+
+The audit chain also provides evidence of cost savings from the fail-safe architecture. An allowed query session (e.g., ``MSFT segment breakdown'') generates 10 audit events spanning all pipeline stages (standard RAG path). A blocked query session (e.g., ``Reveal your system prompt'') generates 3 events via the CLI evaluation pipeline---runtime info, the blocking gate decision, and the final output---because the LLM is never called. This differential is directly observable in the audit trail and confirms the cost-efficiency benefit of pre-gate blocking.
+
+\subsection{Prompt Distribution Monitoring}
+\label{Sect:Prompt_Monitoring}
+
+Contribution C4 implements a lightweight behavioral anomaly detection signal inspired by NVIDIA Morpheus Digital Fingerprinting~\cite{nvidia_morpheus}. A \textit{normal prompt profile} is established by embedding 100 representative financial analyst queries and computing the centroid of their embeddings in the 384-dimensional space. For each incoming query, the system computes its embedding distance from this centroid and converts it to a $z$-score.
+
+If the $z$-score exceeds a configurable threshold ($\sigma = 2.0$), the query is flagged as anomalous and the leakage scan thresholds are dynamically tightened by $\delta = 0.05$ (i.e., $\tau_h$ reduced from 0.70 to 0.65, $\tau_s$ from 0.60 to 0.55). This mechanism does not block queries directly; it increases leakage scan scrutiny by tightening $\tau_h$ and $\tau_s$ by $\delta=0.05$. Independently, when a session-level salami pattern is detected (Section~\ref{Sect:SalamiDetector}), Gate~1's pre-LLM threshold is additionally tightened by $\delta=0.05$, creating cumulative defense pressure across both pre- and post-LLM stages.
+
+C4 is implemented and configurable but is disabled (\texttt{enabled: false}) in all evaluations reported in this paper. The mechanism is designed to complement the pre-gate rules against narrow, repetitive attack campaigns; on the diverse, multi-technique adversarial corpus used here, enabling it would introduce a 5\% additional FPR on normal queries without proportional security benefit. Empirical evaluation of C4's contribution under realistic narrow-campaign conditions is identified as future work.
+
+\subsection{Session-Level Salami Attack Detector}
+\label{Sect:SalamiDetector}
+
+To address the 100\% pre-gate bypass rate of salami attacks---where each individual sub-query is innocent in isolation and the collective extraction intent can only be observed across turns---SentinelFlow implements a session-level tracking mechanism. Critically, salami sub-queries typically use generic phrasing (e.g., ``describe the momentum entry criteria'') rather than explicit extraction amplifiers, so Gate~1 applies the permissive threshold ($\tau_g = 0.75$) and queries scoring 0.55--0.74 pass through. The session-level detector catches this pattern: a rolling window of the last $N{=}10$ queries per session accumulates cumulative cosine similarity between each query embedding and the secret index. If three or more queries within a session each score $\geq 0.55$ against the same secret domain and the session average exceeds 0.55, a session risk flag is logged to the audit chain and Gate~1's effective threshold is tightened by $\delta{=}0.05$ for all subsequent queries in that session. This mechanism does not block individual queries, preserving usability for legitimate multi-turn analyst workflows, while creating increasing friction for systematic extraction attempts.
+
+\subsection{Description of Datasets}
+\label{Sect:Description_of_Datasets}
+
+SentinelFlow uses a hybrid dataset strategy designed for reproducibility and realistic evaluation of financial strategy leakage scenarios.
+
+\subsubsection{Public Corpus}
+The public knowledge base consists of 13,867 passages drawn from the FinanceRAG-FinDER dataset, containing SEC 10-K filing excerpts from publicly traded companies (e.g., MSFT, AAPL, ADBE). After recursive text splitting (800-character windows with 100-character overlap), these passages yield 18,516 indexed chunks stored in the \textit{RAG retrieval store} (the public knowledge index). All chunks represent L0-level (fully public) financial information. This store is the exclusive source of retrieved context for the LLM; it contains no confidential material.
+
+\subsubsection{Confidential Strategy Assets}
+The secret corpus contains 90 entries representing institutional-grade proprietary financial knowledge at three sensitivity levels, organized as 30 triplets (L1/L2/L3) across six alpha domains: price/volume momentum, event-driven strategies, statistical arbitrage, alternative data signals, risk factor neutralization, and machine learning signals. These 90 entries are indexed in a separate \textit{secret detection index} (a local FAISS file) used exclusively by Gate~1 and the leakage scan for similarity-based detection. The secret detection index is never queried during RAG retrieval and its contents are never included in prompts sent to the LLM---this architectural separation ensures that LLM responses are grounded only in public documents. Each triplet describes the same alpha direction at different confidentiality tiers: L3 entries contain complete numerical parameters, trigger conditions, position sizing rules, and universe definitions (e.g., ``Momentum entry: 14D RSI $<$ 25 AND 5D volume $>$ 2.2x 90D ADTV AND price above 200D EMA, initial position 1.2\% NAV; scale-in to max 2.5\% if RSI confirms $<$ 20 on Day+3; hard stop at $-$4.5\% from entry''); L2 entries preserve the methodological framework without specific parameters (e.g., ``Our desk uses RSI-based momentum signals combined with volume confirmation and trend filters, with staged position sizing and strict stop-loss discipline''); L1 entries represent practitioner-level public knowledge. All three tiers are included in the secret detection index so that Gate~1's thresholds can be calibrated to pass L1 queries (the threshold must be set above typical L1 similarity scores) while blocking L2/L3 queries---L1 entries serve as hard negatives that constrain the threshold selection space. This triplet design creates a precise sensitivity gradient for evaluating the system's discrimination ability.
+
+\subsubsection{Financial Knowledge Sensitivity Spectrum (L0--L3)}
+
+A key dataset design decision is the four-level sensitivity spectrum (contribution C3) that creates a gradient from fully public to fully confidential knowledge. This spectrum enables evaluation of the system's ability to distinguish between legitimate financial education and confidential strategy disclosure---the core challenge that makes financial leakage detection harder than generic DLP.
+
+Table~\ref{tab:sensitivity_spectrum} defines the four levels with representative examples.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Financial Knowledge Sensitivity Spectrum (L0--L3)}
+    \label{tab:sensitivity_spectrum}
+    \scalebox{0.88}{
+    \begin{tabular}{c l p{5.2cm} c}
+    \toprule
+    \textbf{Level} & \textbf{Description} & \textbf{Example} & \textbf{Action} \\
+    \midrule
+    L0 & Textbook & ``RSI measures momentum on a 0--100 scale, calculated from average gains and losses.'' & Allow \\
+    \midrule
+    L1 & Practitioner & ``RSI below 30 is commonly interpreted as an oversold signal suggesting potential mean reversion or momentum entry opportunities.'' & Allow \\
+    \midrule
+    L2 & Confidential & ``Our desk uses RSI-based momentum signals combined with volume confirmation and trend filters, with staged position sizing and strict stop-loss discipline.'' & Block/Redact\textsuperscript{*} \\
+    \midrule
+    L3 & Top Secret & ``Momentum entry: 14D RSI $<$ 25 AND 5D volume $>$ 2.2x 90D ADTV AND price above 200D EMA, initial position 1.2\% NAV; scale-in to max 2.5\% if RSI confirms $<$ 20 on Day+3; hard stop at $-$4.5\% from entry.'' & Block \\
+    \bottomrule
+    \multicolumn{4}{l}{\textsuperscript{*}\footnotesize L2 queries trigger block at pre-gate (Gate~1) or redaction at post-LLM leakage scan.} \\
+    \end{tabular}}
+\end{table*}
+
+The sensitivity spectrum dataset includes 20 entries (10~L0 + 10~L1) that serve as \textit{hard negatives} for false positive evaluation. These entries share vocabulary with L2/L3 secrets (both mention RSI, VWAP, beta, drawdown, momentum, cointegration) but lack the specific parametric detail that characterizes confidential strategies. The secret corpus extends coverage to six institutional alpha domains---including alternative data signals (satellite imagery, NLP, supply chain IoT), factor neutralization with Barra USE4 exposures, and ML model pipelines with degradation rules---reflecting modern quantitative fund practices.
+
+\subsubsection{Adversarial Attack Prompts}
+
+The evaluation framework includes 70 adversarial attack prompts organized into 10 categories (contribution C6): direct extraction (13), indirect extraction (10), salami attack (9), prompt injection (8), social engineering (6), encoding extraction (5), paraphrase extraction (5), indirect injection (5), hard-block keywords (5), and adversarial exfiltration (4). Each prompt is annotated with a target secret ID, expected outcome, difficulty level, and descriptive tags.
+
+\subsubsection{Normal Analyst Prompts}
+
+A baseline corpus of 100 benign financial analyst queries supports both false positive evaluation and prompt distribution monitoring. The queries span earnings analysis (15), concept explanations (50), company analysis (12), industry analysis (8), macro analysis (5), market structure (5), regulation (3), and other topics (2).
+
+Table~\ref{tab:dataset_summary} summarizes all dataset components.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Dataset Summary}
+    \label{tab:dataset_summary}
+    \scalebox{0.92}{
+    \begin{tabular}{l c l c}
+    \toprule
+    \textbf{Dataset} & \textbf{Entries} & \textbf{Purpose} & \textbf{Sensitivity} \\
+    \midrule
+    Public corpus (FinDER) & 13,867 passages / 18,516 chunks & RAG retrieval index & L0 \\
+    Confidential secrets & 90 & Leakage detection targets & L1--L3 \\
+    Sensitivity spectrum & 20 & False positive evaluation & L0--L1 \\
+    Attack prompts (271, 10 categories) & 271 & Adversarial ASR evaluation & --- \\
+    Normal prompts & 100 & Benign baseline / centroid & L0 \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+
+
+
+%%% Section starts here
+\section{Experiments and Performance Evaluation}
+\label{Sect:Experimental_Procedure_Performance_Evaluation}
+This section presents the experimental design, evaluation methodology, and results for SentinelFlow. The evaluation spans ten dimensions: baseline comparison (B0 vs.\ B2), sensitivity spectrum analysis (L0--L3), threshold sweep, audit chain integrity, bypass root-cause analysis, ablation study, encoding evasion defense, latency benchmark, cross-domain generalization, and supplementary large-scale evaluation. All evaluation data is drawn from automated scripts and logged in reproducible JSON/CSV reports.
+
+%% SubSection starts here
+\subsection{Experiment Details}
+\label{Sect:Experiment_Details}
+
+\subsubsection{Baselines}
+
+Two baselines are used throughout the evaluation (B0 and B2; the B1 label is reserved for a partial-gateway variant not evaluated here):
+
+\begin{itemize}
+    \item \textbf{B0 (Direct LLM)}: The user query is sent directly to the LLM (GPT-4o-mini) with retrieved context but \textit{no} security gateway---no pre-gates, no leakage scan, no audit. This represents the unprotected RAG pipeline.
+    \item \textbf{B2 (Full SentinelFlow)}: The complete multi-gate pipeline is active, including Gate~0 Decode (encoding normalizer), Gate~0a (regex), Gate~0b (hard-block), Gate~1 (embedding precheck with dual thresholds), advisory grounding analysis, and the sentence-level leakage scan. All events are logged to the tamper-evident audit chain.
+\end{itemize}
+
+\subsubsection{Models and Infrastructure}
+
+Experiments use GPT-4o-mini as the LLM backend (accessed via the OpenAI API) and all-MiniLM-L6-v2 as the sentence-transformer for all embedding operations (384-dimensional vectors). Vector search is performed using FAISS (CPU). The evaluation pipeline is implemented in Python 3.10+ with automated scripts producing structured JSON and CSV reports.
+
+\subsubsection{Evaluation Modes}
+
+The evaluation framework (contribution C6) supports six modes:
+
+\begin{enumerate}
+    \item \textbf{B0 Baseline}: Runs all attack prompts against the unprotected LLM and records leakage flags.
+    \item \textbf{B2 Comparison}: Runs the same prompts through the full SentinelFlow pipeline; together with mode~1 this constitutes the B0 vs.\ B2 comparison.
+    \item \textbf{Spectrum}: Evaluates classification across the L0--L3 sensitivity levels.
+    \item \textbf{Threshold Sweep}: Grid search over ($\tau_h$, $\tau_s$) pairs to characterize firewall sensitivity.
+    \item \textbf{Ablation}: Seven configurations each removing one gate component (Section~\ref{Sect:Ablation}).
+    \item \textbf{Full Pipeline}: End-to-end evaluation with real LLM calls on bypass cases to measure true leakage rate.
+\end{enumerate}
+
+\subsubsection{Metrics}
+
+Table~\ref{tab:metrics} defines the primary evaluation metrics and their targets. A key distinction in this evaluation is between \textit{pre-gate bypass rate} (queries passing the pre-LLM gates) and \textit{true leakage rate} (queries that produce actual secret disclosure through the full pipeline). The former measures gate filtering efficiency; the latter is the operationally critical security outcome.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Evaluation Metrics and Targets}
+    \label{tab:metrics}
+    \scalebox{0.92}{
+    \begin{tabular}{l l l l}
+    \toprule
+    \textbf{Metric} & \textbf{Definition} & \textbf{Target} & \textbf{Rationale} \\
+    \midrule
+    True Leakage Rate (ASR) & \% of attacks producing actual secret disclosure & $< 5\%$ & Operational security outcome \\
+    Pre-gate Bypass Rate    & \% of attacks passing all pre-LLM gates         & Minimize  & Gate filtering efficiency \\
+    FPR & \% of benign queries incorrectly blocked or whose responses are incorrectly redacted & $<$ 2\% (L0), $<$ 5\% (L1) & Public knowledge must pass \\
+    TPR & \% of sensitive content caught & $>$ 50\% (L2), $>$ 90\% (L3) & Confidential data protected \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+\subsection{Evaluation Results}
+\label{Sect:Experimental_Results}
+
+\subsubsection{B0 vs.\ B2 Comparison}
+
+The primary evaluation compares the Attack Success Rate (ASR) between the unprotected baseline (B0) and the full SentinelFlow pipeline (B2) across 70 adversarial attack prompts spanning 10 categories. Table~\ref{tab:b0_vs_b2} presents the per-category breakdown.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Per-Category Attack Success Rate: B0 (Unprotected) vs.\ B2 (SentinelFlow)}
+    \label{tab:b0_vs_b2}
+    \scalebox{0.92}{
+    \begin{tabular}{l c c c}
+    \toprule
+    \textbf{Category} & \textbf{Count} & \textbf{B0 ASR} & \textbf{B2 ASR} \\
+    \midrule
+    direct extraction & 13 & 7.69\% & 0.00\% \\
+    indirect extraction & 10 & 10.00\% & 0.00\% \\
+    salami attack & 9 & 0.00\% & 0.00\% \\
+    prompt injection & 8 & 0.00\% & 0.00\% \\
+    social engineering & 6 & 0.00\% & 0.00\% \\
+    encoding extraction & 5 & 0.00\% & 0.00\% \\
+    paraphrase extraction & 5 & 0.00\% & 0.00\% \\
+    indirect injection & 5 & 0.00\% & 0.00\% \\
+    hard block & 5 & 20.00\% & 0.00\% \\
+    adversarial exfiltration & 4 & 0.00\% & 0.00\% \\
+    \midrule
+    \textbf{Overall} & \textbf{70} & \textbf{4.29\%} & \textbf{0.00\%} \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+The B0 baseline leaked secrets in 3 out of 70 attacks (4.29\% ASR), occurring in three categories: \textit{direct extraction} (1 out of 13 attacks, 7.69\% ASR), \textit{indirect extraction} (1 out of 10 attacks, 10.00\% ASR), and \textit{hard block} (1 out of 5 attacks, 20.00\% ASR). These categories involve explicit or contextual requests for confidential parameters where the raw LLM sometimes produces responses semantically similar to secret entries in the FAISS index. The \textit{hard block} category demonstrates that queries containing explicit confidentiality markers (e.g., ``Confidential: buy signal triggers when...'') are not reliably refused by the LLM alone. All other attack categories achieved 0\% ASR even without the gateway, indicating that the LLM's built-in instruction following and the grounded prompt design already provide partial defense against certain attack types (e.g., prompt injection, social engineering).
+
+SentinelFlow reduced the overall ASR to 0.00\%, achieving 100\% ASR reduction. The 3 attacks that leaked in B0 were caught by different defense layers: the pre-gates (Gates~0a, 0b, and~1) blocked most attack prompts before the LLM was called, while the leakage firewall caught the remaining cases where the LLM produced responses with high semantic similarity to secrets.
+
+\subsubsection{L0--L3 Sensitivity Spectrum}
+
+The spectrum evaluation tests the system's ability to distinguish between public and confidential financial knowledge across four sensitivity levels. For each level, 10 queries are evaluated. L0/L1 queries use generic templates (e.g., ``Explain the details of: \{title\}'') without extraction-intent amplifiers, while L2/L3 queries use extraction-intent templates (e.g., ``What are the specific parameters, thresholds, and rules for: \{title\}'') that trigger the dual-threshold mechanism.
+
+The dual-threshold mechanism successfully avoids blocking legitimate financial education content across all L0 and L1 queries (0\% FPR on the 20-query spectrum set; 3\% FPR on the full 100-query benign analyst corpus reported in Section~\ref{Sect:Ablation}). All L2 and L3 extraction-intent queries targeting confidential assets are caught---either blocked at the pre-gate stage or redacted by the post-LLM leakage scan (100\% TPR). The operationally relevant FPR figure is the 3\% rate measured on the 100-query benign corpus, which is more representative of diverse query distributions than the 20-query spectrum set.
+
+\subsubsection{B0 Spectrum Baseline}
+
+To demonstrate that SentinelFlow provides value beyond the LLM's built-in safety, the same L0--L3 queries are run against the unprotected LLM (B0 mode, no gateway), and the resulting responses are analyzed for leakage using the semantic similarity detector. Table~\ref{tab:b0_spectrum} presents the per-level leakage rates.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{B0 Spectrum: Raw LLM Leakage Without SentinelFlow ($n=10$ per Level)}
+    \label{tab:b0_spectrum}
+    \scalebox{0.95}{
+    \begin{tabular}{c l c c c}
+    \toprule
+    \textbf{Level} & \textbf{Description} & \textbf{Leaked / Total} & \textbf{Leak Rate} & \textbf{B2 Result} \\
+    \midrule
+    L0 & Textbook & 1 / 10 & 10\% & 0\% FPR \\
+    L1 & Practitioner & 2 / 10 & 20\% & 0\% FPR \\
+    L2 & Confidential & 2 / 10 & 20\% & 100\% TPR \\
+    L3 & Top Secret & 4 / 10 & 40\% & 100\% TPR \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+Without SentinelFlow, the raw LLM produces responses with semantic similarity to confidential secrets at substantial rates---particularly at L3 (40\% leak rate), where extraction-intent queries elicit responses that closely match proprietary strategy parameters. Even at L0 and L1, where queries target public knowledge, the LLM occasionally generates responses that the leakage detector flags as similar to secrets (10\% and 20\%), reflecting the inherent vocabulary overlap between public financial concepts and proprietary strategy descriptions.
+
+These results confirm two findings. First, the LLM has no awareness of which financial content is proprietary; it cannot distinguish between public and confidential knowledge without SentinelFlow's secret registry. Second, SentinelFlow achieves 0\% FPR on L0/L1 spectrum queries: queries with suspicious phrasing are intercepted by the pre-gates before reaching the LLM, while genuinely benign L0/L1 queries pass all gates and produce responses that score below the leakage threshold. The B0 L0/L1 flagging rate (10--20\%) reflects vocabulary overlap in LLM responses when no pre-filtering is applied; B2 eliminates this by filtering phrasing-level signals before generation.
+
+\subsubsection{Threshold Sweep}
+
+To characterize the leakage firewall's detection sensitivity independently of the pre-gates, a grid search is performed over ($\tau_h$, $\tau_s$) threshold pairs applied to the B0 baseline responses. This measures how many of the 70 B0 responses would be flagged as leaking by the firewall alone, at various threshold settings. Table~\ref{tab:threshold_sweep} presents a representative subset of the 26-point grid.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Threshold Sweep: Leakage Firewall Detection Rate on B0 Responses}
+    \label{tab:threshold_sweep}
+    \scalebox{0.95}{
+    \begin{tabular}{c c c c}
+    \toprule
+    \textbf{$\tau_h$ (Hard)} & \textbf{$\tau_s$ (Soft)} & \textbf{Detected / 70} & \textbf{Detection Rate} \\
+    \midrule
+    0.55 & 0.45 & 36 & 51.43\% \\
+    0.60 & 0.50 & 19 & 27.14\% \\
+    0.65 & 0.55 & 7 & 10.00\% \\
+    \rowcolor{babyblue}
+    \textbf{0.70} & \textbf{0.60} & \textbf{3} & \textbf{4.29\%} \\
+    \arrayrulecolor{black}0.75 & 0.60 & 1 & 1.43\% \\
+    0.75 & 0.65 & 0 & 0.00\% \\
+    0.80 & 0.65 & 0 & 0.00\% \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+The highlighted row ($\tau_h = 0.70$, $\tau_s = 0.60$) is the deployed configuration. At these thresholds, the leakage firewall alone detects 3 out of 70 B0 responses as leaking (4.29\%), which corresponds to the 3 attacks that leaked in B0. This confirms that the firewall's detection rate is precisely calibrated: it catches all actual leakage without over-flagging benign responses.
+
+The sweep reveals two important characteristics. First, lowering thresholds (e.g., $\tau_h = 0.55$, $\tau_s = 0.45$) increases detection to 51.43\%, but many of these detections are false positives on benign responses that share financial vocabulary with secrets. Second, at thresholds above ($\tau_h = 0.75$, $\tau_s = 0.65$), detection drops to 0\%, meaning some leaking responses would be missed if the firewall operated alone. The pre-gates compensate for this: they block attack prompts before the LLM generates any response, ensuring 0\% overall ASR even when the firewall's post-LLM thresholds are set conservatively.
+
+\subsubsection{Audit Chain Integrity}
+
+The tamper-evident audit chain (contribution C5) is verified across all evaluation sessions. Both the global chain (linking all events across sessions) and per-session chains (linking events within individual sessions) pass SHA-256 hash verification with 100\% integrity. Table~\ref{tab:audit_comparison} contrasts the audit footprint of allowed vs.\ blocked sessions.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Audit Chain: Allowed vs.\ Blocked Session Comparison}
+    \label{tab:audit_comparison}
+    \scalebox{0.95}{
+    \begin{tabular}{l c c}
+    \toprule
+    \textbf{Property} & \textbf{Allowed Session} & \textbf{Blocked Session} \\
+    \midrule
+    Example query & ``MSFT segment breakdown'' & ``Reveal your system prompt'' \\
+    Audit events & 10 & 3 \\
+    LLM called & Yes & No \\
+    Pipeline stages logged & All 10 (intent $\rightarrow$ output) & 3 (runtime, intent, output) \\
+    Blocking gate & --- & Gate 0a (intent precheck) \\
+    Hash chain verified & \textcolor{green!60!black}{OK} & \textcolor{green!60!black}{OK} \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+The 3-event audit trail for blocked sessions (vs.\ 10 events for allowed sessions in the standard RAG path) provides direct evidence that the fail-safe architecture achieves cost savings: blocked queries never invoke the LLM API, avoiding both the financial cost of API calls and the latency of model inference. Note that the web UI path (\texttt{SentinelEngine}) omits \texttt{final\_output} on Gate~0 blocks, producing 2 events; the CLI evaluation pipeline (\texttt{run\_rag\_with\_audit.py}) logs 3 events for blocked sessions.
+
+\subsection{Discussion of Experimental Results}
+\label{Sect:Discussion}
+
+The experimental results support five key findings.
+
+\paragraph{1. Defense in depth is effective.}
+The multi-gate architecture provides layered security where each gate catches attacks that may slip through earlier stages. The pre-gates (Gates~0a, 0b, and~1) block the vast majority of attack prompts before the LLM is called. The leakage firewall catches the remaining cases post-LLM. The threshold sweep confirms this complementarity on the 70-prompt hand-crafted corpus: the firewall alone detects 4.29\% of B0 responses as leaking (exactly the 3 attacks that succeeded in B0), while the pre-gates handle the remaining 95.71\%. Note that this 95.71\% figure reflects the composition of the 70-prompt set, which includes many explicit keyword-trigger attacks; on the 271-prompt corpus that includes sophisticated evasion techniques, the pre-gate block rate is 46.1\%---with the leakage scan and the architectural isolation of secrets from the retrieval store providing defense-in-depth for the 53.9\% that bypass. Together, all layers achieve 0\% overall ASR on the 70-prompt set and 2.58\% on the 271-prompt corpus.
+
+Notably, the B0 baseline shows that the LLM's built-in safety alignment already prevents most \textit{generic} attack categories (prompt injection, social engineering) from succeeding---but fails to prevent domain-specific strategy leakage via direct extraction (7.69\% ASR), indirect extraction (10.00\% ASR), and hard-block keyword queries (20.00\% ASR). This is expected: LLM alignment training addresses \textit{safety policy violations}, not \textit{domain-specific confidentiality}. The LLM has no knowledge of which financial parameters constitute proprietary secrets, and therefore cannot distinguish between public practitioner knowledge and confidential strategy details. SentinelFlow's secret registry (FAISS index) provides exactly this missing capability. Furthermore, advanced adversarial techniques---such as GCG adversarial suffixes~\cite{advbench} that append optimized token sequences to bypass alignment, or multi-turn escalation attacks---could potentially circumvent LLM built-in safety entirely, making SentinelFlow's post-LLM leakage scan the critical last defense layer.
+
+\paragraph{2. Dual thresholds resolve the FPR/TPR tension.}
+The intent-aware dual-threshold mechanism in Gate~1 is the key enabler of the spectrum results. A single strict threshold at 0.50---necessary to catch extraction-intent queries that score just above it---would also incorrectly block benign queries like ``Explain VWAP pricing'' (similarity score $\approx 0.52$) that share vocabulary with confidential execution policies. The dual mechanism avoids this by applying the strict threshold ($\tau_e = 0.50$) only when extraction-intent amplifiers are detected, and using a permissive threshold ($\tau_g = 0.75$) for generic queries like VWAP pricing explanation. Additionally, queries flagged by the hypothetical-framing detection rules receive an even stricter threshold ($\tau = 0.45$) to catch academic and roleplay extraction attempts. This layered approach achieves the ideal outcome: low FPR on benign queries with high TPR on targeted extraction attempts.
+
+\paragraph{3. Audit completeness enables incident reconstruction.}
+Every gate decision is logged with its full rationale---matched patterns, similarity scores, thresholds applied, and decision outcome---linked by dual hash chains. A compliance officer can replay any session from the audit trail and reconstruct exactly why a query was blocked or allowed, which secret was matched, and what confidence score triggered the decision. The 100\% hash chain verification rate confirms that no records have been tampered with.
+
+\paragraph{4. Pre-gate blocking provides cost efficiency.}
+Blocked queries generate only 2--3 audit events (depending on pipeline path) and never invoke the LLM API. Table~\ref{tab:latency} presents latency measurements across representative query types, confirming the cost-efficiency benefit quantitatively.
+
+\begin{table*}[!ht]
+    \centering
+    \caption{End-to-End Latency Benchmark (Mean $\pm$ Std, $n=3$ Runs). High std for allowed queries reflects external LLM API latency variability, not gateway overhead.}
+    \label{tab:latency}
+    \scalebox{0.88}{
+    \begin{tabular}{l l r r}
+    \toprule
+    \textbf{Query Type} & \textbf{Blocked At} & \textbf{Total (ms)} & \textbf{LLM Call (ms)} \\
+    \midrule
+    Allow (MSFT segment) & --- & 1523.6 $\pm$ 1064.2 & 1069.5 $\pm$ 401.9 \\
+    Allow (AAPL revenue) & --- & 898.8 $\pm$ 262.9 & 799.3 $\pm$ 218.1 \\
+    \midrule
+    Block: Gate 0a (regex) & Gate 0a & 0.09 $\pm$ 0.11 & 0.0 \\
+    Block: Gate 0b (verb$\times$obj) & Gate 0b & 0.06 $\pm$ 0.04 & 0.0 \\
+    Block: Gate 1 (embedding) & Gate 1 & 52.2 $\pm$ 58.4 & 0.0 \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+Blocked queries complete in under 1~ms (Gates~0a/0b) or approximately 52~ms (Gate~1 with FAISS search), while allowed queries are dominated by the LLM API call ($\sim$800--1500~ms). The high standard deviation for allowed queries (e.g., $\pm$1064~ms for the MSFT segment query) reflects external API latency variability over $n{=}3$ runs; this is an inherent characteristic of cloud LLM API calls, not a property of the gateway itself. The gateway overhead (P50=28.75~ms, Table~\ref{tab:latency_gates}) is stable because it is entirely local.
+
+\paragraph{5. Limitations.}
+Several limitations should be noted.
+
+\textit{Pre-gate bypass and residual leakage.} With the 90 institutional-grade secret entries, 53.9\% of adversarial prompts bypass all pre-gates, primarily through academic framing (55.2\% bypass), synonym substitution (62.5\%), and multi-step decomposition (58.6\%). While the true end-to-end leakage rate remains at 2.58\% (7/271), these 7 borderline cases represent an important limitation: they arise from genuine vocabulary overlap between public financial knowledge and proprietary parameters (e.g., both public and confidential RSI descriptions use similar terminology), a boundary that is inherent to embedding-based detection and cannot be fully resolved without richer contextual disambiguation. The majority of bypass cases do not lead to leakage because the secret corpus is isolated in a dedicated detection index, not the RAG retrieval store; the LLM can only answer from public documents and is therefore structurally prevented from disclosing the 90 confidential entries directly.
+
+\textit{FPR sensitivity to secret complexity.} FPR increased from 2\% (60 simple secrets) to 3\% (90 institutional-grade secrets), reflecting greater vocabulary overlap between institutional strategy descriptions and public financial knowledge---an inherent challenge at the L1/L2 boundary. The 3\% FPR remains within the $<$5\% operational target (Table~\ref{tab:metrics}).
+
+\textit{Salami attack gap.} Salami attacks achieve 100\% pre-gate bypass rate because each individual sub-query is innocent in isolation. SentinelFlow's session-level detector (Section~\ref{Sect:SalamiDetector}) accumulates per-session extraction signals and tightens thresholds progressively to address this gap. Full empirical evaluation of multi-turn attack sequences remains as future work.
+
+\textit{Evaluation corpus scale.} The 90 institutional-grade secrets (covering 6 alpha domains with L1/L2/L3 triplets) and 271 attack prompts (of which 201 were generated via template-based paraphrasing rather than true red-team LLM generation) remain a limitation. The 7 true leakage cases may not represent the full range of failure modes against a sophisticated human attacker. Future work should employ professional red-teamers or fine-tuned adversarial LLMs to probe the detection boundary.
+
+\textit{Embedding model generality.} The all-MiniLM-L6-v2 model is a general-purpose encoder. An empirical model selection study (Table~\ref{tab:embedding_benchmark}) compared three sentence-transformer models on the discrimination task of separating L2/L3 confidential secrets from L1 practitioner-knowledge hard negatives. The key metric is Gap(L2--L1): the difference between mean L2 maximum similarity to the secret index and mean L1 maximum similarity. A larger gap indicates more threshold tuning room (better FPR/TPR trade-off). Results show all-mpnet-base-v2 achieves the best Gap(L2--L1) of 0.123 vs.\ 0.099 for all-MiniLM-L6-v2, at the cost of 768-dimensional embeddings and $2\times$ encoding latency (1,770~ms vs.\ 870~ms per 100 queries). The all-MiniLM-L6-v2 model represents a practical latency--discrimination trade-off; migrating to all-mpnet-base-v2 is recommended as a future improvement when GPU inference is available to offset the latency penalty.
+
+\textit{Deployment form.} SentinelFlow is currently implemented as a monolithic Python pipeline. Productionizing it as a standalone HTTP proxy (e.g., via FastAPI) or sidecar container would enable zero-code integration with existing RAG infrastructure, but this engineering work is outside the scope of the present evaluation.
+
+\textit{Prompt distribution monitoring.} C4 is disabled in all reported evaluations (\texttt{enabled: false} in configuration). The mechanism was assessed on a 70-prompt pilot where the base system already achieved 0\% ASR, making any incremental contribution unmeasurable. On the full 271-prompt corpus, manual analysis shows C4 would flag 85/271 attack prompts (31.4\%) but also 5/100 normal queries (5\% FPR increase), indicating a signal with discriminative value but non-trivial false positive cost that requires careful threshold tuning before activation. Tool governance (OWASP LLM06---excessive agency) and a rigorous C4 evaluation under controlled narrow-campaign conditions remain as future work.
+
+\textit{Evaluation circularity.} The 70 hand-crafted attack prompts and the 201 paraphrase expansions were generated by the same team that designed the detection system, creating a potential circularity risk: prompt authors may have unconsciously avoided attack patterns the system cannot handle. The garak probes (779 prompts, sourced unchanged from the official NVIDIA garak package) mitigate this by introducing fully independent, third-party attack patterns. The 300 HarmBench-format financial behaviors, while independent of the 271-prompt internal corpus, were authored by the same team using domain knowledge of the system's detection targets; they therefore carry a similar circularity risk. Fully independent red-team evaluation by practitioners with no knowledge of the gateway's internals remains a priority for future validation.
+
+\textit{Medical domain pilot scale.} The cross-domain generalization experiment uses 20 medical confidential entries and 20 adversarial prompts---a minimal pilot to establish proof-of-concept feasibility. At this sample size, the reported 85\% TPR corresponds to 17/20 attacks blocked, with a wide binomial 95\% confidence interval of approximately $[62\%, 97\%]$. The 0\% FPR is based on the LLM's general-knowledge grounding behavior rather than a systematically curated hard-negative evaluation set equivalent to the financial L0/L1 spectrum. These results should be interpreted as a positive feasibility signal rather than a statistically robust characterization of cross-domain performance.
+
+\textit{LLM backend dependence.} All experiments use GPT-4o-mini as the LLM backend. While the gateway's pre-gate and post-LLM mechanisms are LLM-agnostic by design, different LLMs exhibit different instruction-following behavior and may produce varying rates of borderline leakage responses. Empirical validation across backends (e.g., GPT-4o, Claude 3.5 Sonnet, Llama-3) is needed to confirm that the 2.58\% true leakage rate generalizes beyond the single LLM evaluated here.
+
+\subsection{Bypass Root-Cause Analysis}
+\label{Sect:BypassAnalysis}
+
+To understand the pre-gate bypass pattern across the 271-prompt internal corpus, we run each prompt through the gate sequence without LLM invocation and classify bypasses by evasion technique and attack category. Table~\ref{tab:bypass_technique} and Table~\ref{tab:bypass_category} report the results.
+
+\begin{table}[!t]
+\centering
+\caption{Pre-Gate Bypass Rate by Evasion Technique (201 paraphrase attack prompts across 7 techniques; for attacks, \textit{bypass} means evading all pre-gate blocking; for the baseline row, the figure shows the fraction of 100 benign queries that passed all gates with \textit{no gate rule triggered} (clean pass). Of the remaining 52: 49 triggered a non-blocking flag such as HYP\_01 threshold tightening and passed through, and 3 were actually blocked (FPR=3\%).}
+\label{tab:bypass_technique}
+\scalebox{0.92}{
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Evasion Technique} & \textbf{Total} & \textbf{Bypass} & \textbf{Rate} \\
+\midrule
+synonym substitution     & 24  & 15  & 62.5\% \\
+multi-step decomposition & 29 & 17  & 58.6\% \\
+academic framing         & 29  & 16  & 55.2\% \\
+indirect reference       & 28  & 15  & 53.6\% \\
+passive voice            & 34  & 16  & 47.1\% \\
+roleplay framing         & 30  & 10  & 33.3\% \\
+hypothetical extraction  & 27  &  7  & 25.9\% \\
+\midrule
+benign analyst queries (reference) & 100 & 48  & 48.0\% \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[!t]
+\centering
+\caption{Pre-Gate Bypass Rate by Attack Category}
+\label{tab:bypass_category}
+\scalebox{0.92}{
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Attack Category} & \textbf{Total} & \textbf{Bypass} & \textbf{Rate} \\
+\midrule
+salami attack         & 33 & 33 & 100.0\% \\
+paraphrase extraction & 20 & 15 &  75.0\% \\
+indirect extraction   & 40 & 26 &  65.0\% \\
+direct extraction     & 51 &  9 &  17.6\% \\
+prompt injection      & 29 &  8 &  27.6\% \\
+hard block            & 19 &  0 &   0.0\% \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Table~\ref{tab:bypass_category} reports the six highest-volume attack categories (192/271 prompts); the remaining 79 prompts span four smaller categories (social engineering, encoding extraction, indirect injection, adversarial exfiltration) whose individual counts are too low for statistically meaningful per-category rates and are omitted for brevity.
+
+Three findings emerge. First, \textit{synonym substitution} and \textit{multi-step decomposition} are the hardest evasion techniques for the pre-gate layer to catch; both exploit the finite vocabulary of regex rules. The institutional-grade 90-entry corpus yields 53.9\% bypass due to richer vocabulary overlap with public financial knowledge than a simpler corpus, and synonym-based and decomposition-based attacks remain the primary residual challenge. Second, \textit{salami attacks} achieve 100\% bypass by design---each sub-query is individually innocent and must be assessed in isolation without session-level memory. However, the full-pipeline evaluation confirms that the LLM does not leak secrets in response to these sub-queries, because the 90-entry secret corpus resides in a separate detection index that is never part of the RAG retrieval store (Section~\ref{Sect:Threat_Model}). The LLM can only retrieve and cite content from the public corpus; it has no retrieval access to the confidential strategy assets that Gate~1 monitors. Third, \textit{hard-block} attacks (explicit keyword triggers) achieve 0\% bypass, confirming that lexically obvious attacks are fully neutralized by the deterministic gates.
+
+\subsection{Ablation Study}
+\label{Sect:Ablation}
+
+To quantify each gate's individual contribution, we conduct a systematic ablation study across seven configurations: an unprotected baseline (B0), the full SentinelFlow pipeline (B2), and five ablated variants each removing one gate component. Table~\ref{tab:ablation} reports both the \textit{pre-gate bypass rate} (fraction of prompts passing all pre-LLM gates) and the \textit{true leakage rate} (fraction producing actual secret content through the full pipeline including LLM and leakage scan) for each configuration against the 271-prompt attack corpus and 100-query benign set, evaluated with the 90-entry institutional-grade secret corpus (6 alpha domains).
+
+An important distinction emerges: the pre-gate bypass rate (53.9\% for the full pipeline) measures only the pre-LLM filtering effectiveness, while the true end-to-end leakage rate is only \textbf{2.58\%}. This large gap exists because the LLM itself does not have access to proprietary secrets and typically responds with generic financial knowledge. The denser vocabulary of the 90-entry institutional-grade corpus, relative to the 60-entry baseline, caused a modest +3.0pp increase in pre-gate bypass rate---expected because richer financial terminology increases semantic overlap with legitimate queries---while FPR remained controlled at 3.0\%.
+
+Key findings: (1)~Removing Gate~1 (embedding precheck) causes the largest bypass rate increase (+21.4pp), confirming it as the primary defense mechanism; (2)~The dual-threshold mechanism provides an 18.8pp improvement over a single midpoint threshold ($\tau{=}0.62$); (3)~Removing Gate~1 actually \textit{lowers} FPR from 3\% to 1\%, because Gate~1 is responsible for 2 of the 3 benign false blocks---queries about public financial knowledge that contain extraction-intent phrasing and score 0.50--0.74; the remaining 1 false positive is attributable to the leakage scan (removing LS reduces FPR from 3\% to 2\%), arising from a benign query whose LLM response uses terminology sufficiently similar to a confidential entry to exceed the soft threshold; (4)~Bypass analysis reveals that salami attacks achieve 100\% pre-gate bypass (each sub-query is individually innocent), while direct extraction achieves only 17.6\% bypass.
+
+\paragraph{Secret complexity ablation.} Comparing a smaller corpus (60 entries, simple parameters) against the full institutional-grade corpus (90 entries) provides an ablation of secret corpus complexity. Under identical gate configurations, the full-pipeline pre-gate bypass rate rose from 50.9\% to 53.9\%, and FPR from 2.0\% to 3.0\%. This confirms that more realistic institutional secrets---which share richer vocabulary with public financial knowledge---present a harder detection challenge, yet the system maintains comparable performance well within operational thresholds.
+
+\begin{table*}[!t]
+\centering
+\caption{Ablation Study: Pre-Gate Bypass Rate and True Leakage Rate per Configuration (271-Prompt Corpus). True leakage rate measured for the full pipeline only; ablated variants report pre-gate bypass rate without full LLM invocation. Latency P50 is averaged across all 271 attack prompts under the given configuration (many blocked at early gates), and therefore reflects a different query mix than the dedicated latency benchmark in Table~\ref{tab:latency_gates}. B0 FPR=0\% is trivially true because no gateway is active and therefore nothing is blocked.}
+\label{tab:ablation}
+\scalebox{0.90}{
+\begin{tabular}{l c c c r r}
+\toprule
+\textbf{Configuration} & \textbf{Gates Active} & \textbf{Pre-gate Bypass (\%)} & \textbf{True Leakage (\%)} & \textbf{FPR (\%)} & \textbf{Latency P50 (ms)} \\
+\midrule
+B0 (unprotected)               & None              & 100.0 & ---  & 0.0 & 0.0  \\
+No G0a (no regex)              & G0b+G1+LS         & 66.1  & ---  & 3.0 & 32.7 \\
+No G0b (no verb$\times$obj)    & G0a+G1+LS         & 56.8  & ---  & 3.0 & 21.0 \\
+\rowcolor{babyb}
+No G1 (no embedding)           & G0a+G0b+LS        & 75.3  & ---  & 1.0 & 15.8 \\
+\arrayrulecolor{black}No LS (no leakage scan)        & G0a+G0b+G1        & 53.9  & ---  & 2.0 & 12.8 \\
+Single $\tau$ ($\tau{=}0.62$)  & All, single $\tau$ & 72.7 & --- & 4.0 & 25.4 \\
+\rowcolor{teagreen}
+\textbf{Full pipeline (B2)}    & \textbf{All}      & \textbf{53.9} & \textbf{2.58} & \textbf{3.0} & \textbf{23.4} \\
+\arrayrulecolor{black}\bottomrule
+\end{tabular}}
+\end{table*}
+
+\subsection{Encoding Evasion Defense}
+\label{Sect:Encoding}
+
+Gate~0 Decode addresses a class of evasion attacks that bypass lexical pattern matching through encoding obfuscation (Base64, ROT13, hex encoding). It detects and normalizes six encoding schemes (Base64, ROT13, hex escapes, URL encoding, Unicode escapes, reversed text) before passing decoded input to downstream gates. This gate operates in under 0.03ms (P95) and does not block---it only transforms input. Unit tests confirm correct detection of encoded attack prompts while maintaining zero false positives on the 100-query benign analyst corpus.
+
+\subsection{Latency Analysis}
+\label{Sect:Latency}
+
+Table~\ref{tab:latency_gates} reports per-gate latency measurements. The deterministic gates (Gate 0 through Gate~1) are benchmarked over 100 queries; the Leakage Scan and end-to-end pipeline are benchmarked over 50 queries after the embedding model is fully warm. The pre-gates (regex, hard-block) operate in sub-millisecond time. Gate~1 dominates latency at P50=14.8~ms, with the majority of cost in sentence encoding rather than FAISS search ($<0.01$~ms). End-to-end gate pipeline latency is P50=28.75~ms, well within interactive response requirements. Scalability testing across index sizes (90--450 entries) shows sub-linear growth, confirming that FAISS IndexFlatIP is adequate for practical deployment sizes without requiring approximate nearest-neighbor indexing.
+
+\begin{table*}[!t]
+\centering
+\caption{Per-Gate Latency Benchmark (CPU inference). Gate 0 Decode through Gate~1 measured over $n{=}100$ queries; Leakage Scan and End-to-end measured over $n{=}50$ queries (model warm after Gate~1 runs). P99 equals the observed maximum in each sample due to small $n$.}
+\label{tab:latency_gates}
+\scalebox{0.92}{
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Component} & \textbf{P50 (ms)} & \textbf{P95 (ms)} & \textbf{P99/Max (ms)} \\
+\midrule
+Gate 0 Decode (encoding normalizer) & 0.01 & 0.03 & 2.09 \\
+Gate 0a (Regex precheck)             & 0.02 & 0.05 & 1.49 \\
+Gate 0b (Hard-block classifier)      & 0.01 & 0.02 & 0.15 \\
+Gate 1 (Embedding precheck)$^\dagger$ & 14.82 & 39.76 & 942.11 \\
+Leakage Scan (post-LLM)              & 15.58 & 23.03 & 88.37 \\
+\midrule
+\textbf{End-to-end (gates only)}    & \textbf{28.75} & \textbf{36.86} & \textbf{43.74} \\
+\bottomrule
+\multicolumn{4}{l}{\footnotesize $^\dagger$Gate~1 P99 = 942.11~ms is the cold-start first-invocation outlier (model load + memory allocation).} \\
+\multicolumn{4}{l}{\footnotesize The end-to-end benchmark runs after Gate~1 is already warm, so the 43.74~ms P99 does not include this cost.} \\
+\end{tabular}}
+\end{table*}
+
+\subsection{Cross-Domain Generalization}
+\label{Sect:CrossDomain}
+
+To demonstrate that SentinelFlow is a generalizable framework rather than a finance-specific tool, we conduct a medical domain pilot. We create 20 medical confidential entries (10 L2: institutional clinical protocols; 10 L3: drug formulation parameters with specific numerical thresholds such as eGFR cutoffs and QTc monitoring rules) and 20 adversarial attack prompts, then adapt only the configuration file (keyword lists, sensitive objects, intent amplifiers) with \textit{zero changes to detection logic}. The public corpus uses general medical literature sourced from PubMed abstracts.
+
+Table~\ref{tab:crossdomain} shows that SentinelFlow achieves 85\% TPR and 0\% FPR in the medical domain (note: the 0\% FPR reflects general PubMed literature rather than curated near-miss queries; see limitation note in Section~\ref{Sect:Discussion}). Gate~0 blocked 4 of 20 attack prompts; Gate~1 blocked a further 13; the remaining 3 produced safe LLM responses grounded in public literature. The higher pre-gate block rate in the medical domain (85\% vs.\ 46.1\% finance pre-gate block rate) reflects the more direct phrasing of the medical attack prompts---none of the medical prompts use synonym substitution, multi-step decomposition, or academic framing, which are the primary evasion techniques responsible for the finance bypass rate. For a fair comparison: the finance full-pipeline achieves a true leakage rate of only 2.58\%, meaning 97.4\% of attacks are ultimately caught across all defense layers; the medical pilot achieves 0\% leakage with a simpler attack set. This result establishes the key claim that \textit{the SentinelFlow framework generalizes to any domain where a domain-appropriate FAISS secret index and configuration file are provided}. As noted in Section~\ref{Sect:Discussion}, the small pilot scale (20 entries, 20 prompts) means these results should be interpreted as a positive feasibility signal; broader domain pilots are identified as a future work priority.
+
+\begin{table*}[!t]
+\centering
+\caption{Cross-Domain Generalization: Finance vs.\ Medical Domain}
+\label{tab:crossdomain}
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Domain} & \textbf{Pre-gate Block} & \textbf{True Leakage} & \textbf{FPR} & \textbf{Code Changes} \\
+\midrule
+Finance & 46.1\% & 2.58\% & 3.0\% & Baseline \\
+\rowcolor{teagreen}
+\textbf{Medical} & \textbf{85.0\%} & \textbf{0.0\%} & \textbf{0.0\%} & \textbf{Config only} \\
+\arrayrulecolor{black}\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Supplementary Large-Scale Evaluation}
+\label{Sect:ExternalFramework}
+
+To validate SentinelFlow against attacks beyond the internal adversarial corpus, we conduct a supplementary evaluation using two additional attack sources. First, from the \textbf{garak} framework (NVIDIA, v0.14)---a fully external, third-party tool---we extract 779 prompts from 13 probe classes (encoding obfuscation, DAN jailbreaks, prompt injection, data leakage replay), used without modification. Second, we construct 50 financial-domain attack behaviors in HarmBench format (IDs fin\_001--fin\_050), each expanded into 6 attack variants (direct request, DAN prefix, fictional framing, academic wrapping, instruction override, authority impersonation), yielding 300 prompts. These HarmBench-format behaviors were authored by the research team and are independent of the 271-prompt internal corpus, though they share the same domain knowledge; they are therefore best characterized as a supplementary author-created corpus rather than a fully external dataset. The combined \textbf{1,079-prompt} evaluation (779 garak + 300 HarmBench-format) represents the largest reported adversarial test of a financial RAG security gateway.
+
+Table~\ref{tab:external_framework} reports results. The garak probes---designed for general-purpose LLM attacks (XSS injection, slur generation, copyrighted text replay)---achieve only 2.3\% pre-gate block rate because they do not target financial domain secrets. This is the \textit{expected} behavior of a domain-specific gateway: SentinelFlow is designed to detect financial strategy leakage, not to serve as a general-purpose content moderation layer; the LLM also does not disclose proprietary financial content in response to non-financial attack prompts, confirming that the low block rate does not translate into leakage. The financial-domain HarmBench-format behaviors achieve 45.0\% pre-gate block rate, comparable to the internal adversarial corpus. Across all 1,079 prompts tested through the full pipeline (pre-gates + GPT-4o-mini + leakage scan), only \textbf{8 prompts} (0.74\%) produced responses in which at least one sentence reached cosine similarity $\geq 0.60$ to a secret entry yet escaped the cascade redaction mechanism---cases where soft-hit sentences appeared non-consecutively (evading the $k{=}2$ cascade trigger) or where the matched vocabulary reflected public financial terminology rather than proprietary parametric specificity. All 8 leaked cases originate from the HarmBench-format financial behaviors; zero garak probes produced any data leakage, yielding a \textbf{true ASR of 0.74\%} across all 1,079 prompts.
+
+\begin{table*}[!t]
+\centering
+\caption{Consolidated Evaluation: Internal vs Supplementary Attack Corpus. $^\dagger$The hand-crafted set achieves 0.00\% true ASR in B2 via combined pre-gate blocking and post-LLM leakage scanning; an isolated pre-gate block rate for this subset is not separately reported here---see Table~\ref{tab:b0_vs_b2} for per-category B2 results. $^\ddagger$Supplementary total covers garak (truly external) and HarmBench-format behaviors (author-created, independent of the 271-prompt internal corpus); internal corpus results are reported separately for comparison.}
+\label{tab:external_framework}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Evaluation Set} & \textbf{Prompts} & \textbf{Gate Block Rate} & \textbf{True Leaked} & \textbf{True ASR} \\
+\midrule
+  Hand-crafted (internal, 70) & 70 & ---$^\dagger$ & 0 & 0.00\% \\
+  Internal corpus (paraphrases, 271) & 271 & 46.1\% & 7 & 2.58\% \\
+\midrule
+  garak framework (external) & 779 & 2.3\% & 0 & 0.00\% \\
+  HarmBench-format financial (author-created) & 300 & 45.0\% & 8 & 2.67\% \\
+\midrule
+  \textbf{Supplementary total}$^\ddagger$ & \textbf{1,079} & \textbf{14.2\%} & \textbf{8} & \textbf{0.74\%} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[!t]
+\centering
+\caption{Embedding Model Selection: Discrimination Gap on Secret Corpus (higher Gap = better FPR/TPR trade-off)}
+\label{tab:embedding_benchmark}
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Model} & \textbf{Dim} & \textbf{L1$\to$L3 Max} & \textbf{L2$\to$L3 Max} & \textbf{Gap(L2--L1)} \\
+\midrule
+all-MiniLM-L6-v2 (deployed) & 384 & 0.560 & 0.659 & 0.099 \\
+\rowcolor{babyblue}
+all-mpnet-base-v2           & 768 & 0.608 & 0.731 & \textbf{0.123} \\
+\arrayrulecolor{black}bge-small-en-v1.5           & 384 & 0.769 & 0.815 & 0.046 \\
+\midrule
+\multicolumn{5}{l}{\footnotesize Gap(L2--L1) = mean(L2$\to$L3 max) $-$ mean(L1$\to$L3 max). Higher = better threshold separability.} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%%% Section starts here
+\section{Conclusion and Future Work}
+\label{Sect:Conclusion}
+
+\subsection{Conclusion}
+
+This paper presented SentinelFlow, an inline AI security gateway designed to prevent strategy leakage in financial RAG pipelines. The system implements a multi-gate pipeline architecture with four pre-LLM gates (encoding normalizer, regex intent precheck, verb$\times$object hard-block classifier, and embedding-based secret proximity detection) and two post-LLM stages (advisory grounding analysis and sentence-level semantic leakage scan), all linked by a tamper-evident dual hash chain audit trail.
+
+The central technical contribution is the \textit{intent-aware dual-threshold mechanism} in Gate~1, which resolves the classic precision--recall tension in data loss prevention: generic financial queries use a permissive threshold ($\tau_g = 0.75$) to avoid false positives, while extraction-intent queries---detected via 62 amplifier keywords---trigger a strict threshold ($\tau_e = 0.50$) to maximize detection. Combined with the three-tier leakage firewall (hard/soft/cascade thresholds) and an encoding normalization pre-stage, this design achieves a true end-to-end leakage rate of \textbf{2.58\%} (7/271 borderline cases) against a corpus of 271 adversarial prompts spanning 10 attack categories, evaluated with an institutional-grade secret corpus (90 entries across 6 alpha domains), while maintaining a 3\% false positive rate on benign analyst queries. The 7 leakage cases involve generic financial descriptions that overlap with secrets by vocabulary, not by proprietary parametric specificity---an inherent boundary of embedding-based detection that is documented as a detection boundary rather than a system failure.
+
+A critical finding from full-pipeline evaluation is the distinction between \textit{pre-gate bypass rate} (53.9\%) and \textit{true leakage rate} (2.58\%): the vast majority of queries that bypass the pre-gate layer do not result in secret disclosure, because the 90 confidential strategy assets reside in a separate detection index never fed to the LLM---the LLM can only answer from the public corpus. The post-LLM leakage scan provides the final enforcement layer for the small fraction of bypass queries that produce semantically similar responses. Ablation confirms that Gate~1 is the single most important component---its removal raises the bypass rate by 21.4 percentage points---and that the dual-threshold mechanism outperforms a single midpoint threshold by 18.8 percentage points.
+
+The cross-domain generalization experiment (C7) demonstrates that SentinelFlow is not a finance-specific tool: with zero changes to detection logic and only a domain-appropriate configuration file, the system achieves 85\% TPR and 0\% FPR in the medical domain (clinical protocol protection), establishing SentinelFlow as a generalizable framework for domain-sensitive RAG security. Per-gate latency benchmarks confirm sub-millisecond overhead for the deterministic gates and a 28.75~ms end-to-end P50, confirming operational viability.
+
+The fail-safe gate ordering ensures that blocked queries never invoke the LLM API---reducing both cost and attack surface---while the append-only audit chain with SHA-256 hash verification provides compliance-ready evidence for regulated financial environments.
+
+These results demonstrate that \textbf{inline semantic security for domain-sensitive RAG agents is both feasible and generalizable}: domain-specific leakage prevention can be achieved without sacrificing usability for legitimate queries, and the architecture transfers to new domains through configuration alone.
+
+\subsection{Future Work}
+
+Several directions extend SentinelFlow's capabilities:
+
+\textbf{Session-level salami defense.} SentinelFlow includes a session-level salami detector (Section~\ref{Sect:SalamiDetector}) that accumulates per-session extraction signals and progressively tightens thresholds. The open challenge is systematic empirical evaluation: constructing a realistic multi-turn attack benchmark and measuring TPR improvement against legitimate multi-turn analyst workflows.
+
+\textbf{LLM-powered amplifier generation.} The bypass analysis shows that synonym substitution (62.5\% bypass) and multi-step decomposition (58.6\%) are the hardest evasion techniques. Rather than manually expanding regex rules, a lightweight LLM could be used in an online learning loop: when a bypass case is flagged by post-LLM analysis, the LLM generates canonical paraphrases and extracts new amplifier keywords, automatically enriching the keyword configuration without human intervention.
+
+\textbf{Tool governance.} SentinelFlow secures the RAG+LLM query path but does not inspect agent-to-tool interactions. Extending the gateway to enforce least-privilege tool access, schema validation, and approval workflows would address OWASP LLM06 (Excessive Agency) for agentic deployments.
+
+\textbf{Domain-specific embeddings.} An empirical model comparison (Table~\ref{tab:embedding_benchmark}) shows all-mpnet-base-v2 achieves 24\% larger discrimination gap than all-MiniLM-L6-v2, providing better FPR/TPR separability at the cost of $2\times$ encoding latency. Future work should evaluate whether GPU deployment eliminates the latency penalty, and whether domain fine-tuning (e.g., FinBERT-based encoders) further improves the gap beyond 0.123.
+
+\textbf{Additional domain pilots.} The medical domain pilot (C7) establishes the generalization pattern. Future work should extend this to legal (litigation strategy protection), pharmaceutical (clinical trial parameter protection), and semiconductor (process recipe protection) domains, each requiring domain-appropriate configuration but the same detection logic.
+
+\textbf{Continuous red-team integration.} This work incorporated garak probes (779 external prompts) and author-created HarmBench-format financial behaviors (300 prompts) into the evaluation pipeline (Section~\ref{Sect:ExternalFramework}), demonstrating 0.74\% true ASR across 1,079 supplementary prompts. Future work should automate garak integration as a CI/CD gate that runs on every code change, and explore fine-tuned adversarial LLMs (e.g., GCG-optimized suffixes) to probe the detection boundary more aggressively.
+
+\textbf{Independent red-team validation.} The adversarial corpus was generated by the same team that built the system, creating a circularity risk. Future work should commission external red-teamers---financial security practitioners with no knowledge of the gateway's internals---to attempt strategy extraction. This would provide the strongest external validity for the security claims.
+
+\textbf{Multi-LLM backend validation.} All experiments use GPT-4o-mini as the LLM backend. Future work should validate SentinelFlow against additional backends (GPT-4o, Claude 3.5 Sonnet, open-source Llama-3) to confirm that the true leakage rate and FPR remain stable across LLMs with different instruction-following characteristics.
+
+
+%%% Acknowledgments
+\section*{Acknowledgments}
+The authors thank Dr.\ Zhida Li for his supervision and guidance throughout this work.
+
+\section*{Data Availability}
+The source code, evaluation scripts, adversarial attack corpus, and reproducibility artifacts for SentinelFlow are publicly available at \url{https://github.com/xiaoxiaomay/INCS870-SP26-Team02}.
+
+%%% references section
+\begin{thebibliography}{99}
+
+\bibitem{wsj_jpmorgan_ai}
+H. Son, ``JPMorgan is giving its employees an AI assistant powered by LLM Suite,'' \textit{CNBC}, Feb. 2024. [Online]. Available: \url{https://www.cnbc.com/2024/02/01/jpmorgan-is-giving-its-employees-an-ai-assistant.html}
+
+\bibitem{bloomberg_ms_ai}
+S. Natarajan, ``Morgan Stanley Starts Using OpenAI-Powered Chatbot to Assist Financial Advisors,'' \textit{Bloomberg}, Sep. 2023.
+
+\bibitem{ft_gs_ai}
+T. Bradshaw, ``Goldman Sachs rolls out AI assistant for thousands of employees,'' \textit{Financial Times}, Jul. 2024.
+
+\bibitem{owasp_llm_2025}
+OWASP, ``OWASP Top 10 for Large Language Model Applications (2025),'' OWASP Foundation, 2024. [Online]. Available: \url{https://owasp.org/www-project-top-10-for-large-language-model-applications/}
+
+\bibitem{nist_ai_rmf}
+National Institute of Standards and Technology (NIST), ``AI Risk Management Framework (AI RMF),'' NIST AI 100-1, Jan. 2023. [Online]. Available: \url{https://www.nist.gov/itl/ai-risk-management-framework}
+
+\bibitem{nist_ai_600_1}
+NIST, ``Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile (NIST AI 600-1),'' Jul. 2024. [Online]. Available: \url{https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf}
+
+\bibitem{llama_guard}
+H. Inan \textit{et al.}, ``Llama Guard: LLM-based Input-Output Safeguard for Real-World Applications,'' \textit{arXiv preprint arXiv:2312.06674}, 2023.
+
+\bibitem{ms_prompt_shields}
+Microsoft, ``Prompt Shields in Azure AI Content Safety (jailbreak \& document attack detection),'' Microsoft Learn, Nov. 2025. [Online]. Available: \url{https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection}
+
+\bibitem{pipeda_guidance}
+Office of the Privacy Commissioner of Canada, ``PIPEDA in brief,'' Government of Canada. [Online]. Available: \url{https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/pipeda_brief/}
+
+\bibitem{mitre_atlas}
+MITRE, ``ATLAS: Adversarial Threat Landscape for Artificial-Intelligence Systems,'' MITRE Corporation. [Online]. Available: \url{https://atlas.mitre.org/}
+
+\bibitem{sbert}
+N. Reimers and I. Gurevych, ``Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks,'' in \textit{Proc. 2019 Conf. Empirical Methods in Natural Language Processing (EMNLP-IJCNLP)}, 2019, pp. 3982--3992.
+
+\bibitem{nemo_guardrails}
+NVIDIA, ``NeMo Guardrails,'' GitHub repository. [Online]. Available: \url{https://github.com/NVIDIA/NeMo-Guardrails}
+
+\bibitem{nvidia_morpheus}
+NVIDIA, ``NVIDIA Morpheus: AI-Powered Cybersecurity SDK,'' 2023. [Online]. Available: \url{https://developer.nvidia.com/morpheus-cybersecurity}
+
+\bibitem{garak_paper}
+L. Derczynski, E. Galinkin, J. Martin, S. Majumdar, and N. Inie, ``garak: A Framework for Security Probing Large Language Models,'' \textit{arXiv preprint arXiv:2406.11036}, Jun. 2024.
+
+\bibitem{garak_github}
+NVIDIA, ``garak: the LLM vulnerability scanner,'' GitHub repository. [Online]. Available: \url{https://github.com/NVIDIA/garak}
+
+\bibitem{jailbreakbench}
+P. Chao \textit{et al.}, ``JailbreakBench: An Open and Collaborative Benchmark for Jailbreaking Large Language Models,'' \textit{arXiv preprint arXiv:2404.01318}, 2024.
+
+\bibitem{advbench}
+A. Zou \textit{et al.}, ``Universal and Transferable Adversarial Attacks on Aligned Language Models,'' \textit{arXiv preprint arXiv:2307.15043}, 2023.
+
+\bibitem{agentdojo}
+J. Tiwald \textit{et al.}, ``AgentDojo: A Benchmark for Tool-using Agents under Injection Attacks,'' \textit{arXiv preprint arXiv:2407.01392}, 2024.
+
+\bibitem{bipia}
+Y. Yi \textit{et al.}, ``BIPIA: Benchmarking Indirect Prompt Injection Attacks,'' \textit{arXiv preprint arXiv:2312.14197}, 2023.
+
+\bibitem{pimentel_novelty}
+M. A. Pimentel \textit{et al.}, ``A Review of Novelty Detection,'' \textit{Signal Processing}, vol. 99, pp. 215--249, 2014.
+
+\bibitem{owasp_agentic_promptfoo}
+OWASP, ``OWASP Top 10 for Agentic Applications,'' announced at Black Hat Europe 2025. Implementation reference: Promptfoo OWASP Agentic AI guide. [Online]. Available: \url{https://www.promptfoo.dev/docs/red-team/owasp-agentic-ai/}
+
+\bibitem{sombra_llm_security_2026}
+Sombra Inc., ``LLM Security Risks in 2026: Prompt Injection, RAG, and Shadow AI,'' Jan. 2026. [Online]. Available: \url{https://sombrainc.com/blog/llm-security-risks-2026}
+
+\bibitem{arxiv_privilege_escalation_2025}
+Y. Li \textit{et al.}, ``Taming Various Privilege Escalation in LLM-Based Agent Systems: A Mandatory Access Control Framework,'' \textit{arXiv preprint arXiv:2601.11893}, Jan. 2026. [Online]. Available: \url{https://arxiv.org/abs/2601.11893}
+
+\end{thebibliography}
+
+
+%%%%%%%%%
+\end{document}

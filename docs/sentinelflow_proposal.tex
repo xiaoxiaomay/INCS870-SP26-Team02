@@ -1,0 +1,1111 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, calc}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10}
+}
+
+\title{
+\textbf{SentinelFlow: A Strategy Leakage Firewall for Financial Research Agents}\\[0.5em]
+\large An Inline AI Security Gateway with Semantic Leakage Prevention, \\
+Domain-Specific Adversarial Evaluation, and Auditable Evidence Chains
+}
+
+\author{
+[Author Name]\\
+[Program Name]\\
+[University Name]\\
+\texttt{[email]}
+}
+
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Large Language Models (LLMs) are increasingly integrated into enterprise financial workflows through Retrieval-Augmented Generation (RAG) and autonomous agents with tool-calling capabilities. While these systems improve productivity in financial research, they introduce novel cybersecurity risks including prompt injection, sensitive information disclosure (strategy leakage), and excessive agent autonomy. Existing AI observability platforms focus primarily on post-hoc monitoring rather than enforceable inline controls that regulated industries require.
+
+This thesis proposes \textbf{SentinelFlow}, a deployable inline AI security gateway for financial research agents. SentinelFlow implements a multi-gate pipeline architecture that intercepts queries \textit{before} they reach the LLM and validates responses \textit{before} they return to users, providing: (1) a multi-layer pre-scan combining intent classification, hard-block rules, and embedding-based secret proximity detection; (2) a sentence-level semantic leakage firewall with cascade logic for detecting gradual exfiltration (salami attacks); (3) grounding validation ensuring LLM responses are supported by retrieved evidence; (4) prompt distribution monitoring for behavioral anomaly detection; and (5) tamper-evident audit evidence chains with hash chaining.
+
+A key contribution is a \textbf{domain-specific evaluation framework} for financial strategy leakage, including: a four-level sensitivity spectrum (L0--L3) of financial knowledge with systematically generated hard negatives, a novel corpus of 70+ finance-specific adversarial attack prompts across six attack categories, a 100-query normal analyst prompt profile for behavioral baseline establishment, and a \textbf{reusable garak-compatible adversarial testing plugin} (FinanceLeakProbe + FinanceLeakDetector) that enables any financial institution to continuously red-team their AI systems for strategy leakage---the first open-source tool of its kind. We evaluate SentinelFlow using the FinanceRAG corpus, synthetic confidential strategy assets, and standardized adversarial probes, reporting leakage prevention rate, false positive rate, attack success rate, latency overhead, and audit completeness aligned with NIST AI RMF.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+%% ============================================================
+\section{Introduction and Motivation}
+\label{sec:intro}
+%% ============================================================
+
+\subsection{Problem Context: AI Adoption in Financial Services}
+
+Regulated and conservative industries---finance, healthcare, telecom, energy---are rapidly deploying LLM-based assistants and autonomous agents. In the financial sector specifically, this adoption is taking concrete and increasingly sophisticated forms that create new attack surfaces fundamentally different from traditional cybersecurity threats.
+
+\textbf{Financial institutions are deploying AI systems across several critical workflows:}
+
+\textbf{Research and Knowledge Assistants.} Investment banks and asset managers connect internal knowledge bases---including investment memos, research reports, committee notes, risk models, and compliance documentation---to LLMs via RAG pipelines. Analysts query these systems to synthesize information from proprietary databases, SEC filings, and public sources. Major institutions including JPMorgan, Morgan Stanley, and Goldman Sachs have deployed or announced internal LLM-powered research assistants \cite{wsj_jpmorgan_ai, bloomberg_ms_ai, ft_gs_ai}.
+
+\textbf{Agentic Workflows with Tool Calling.} Beyond simple question-answering, financial firms are deploying agents that can execute actions---generating reports, pulling data from portfolio management systems and risk engines, updating CRM records, and in some cases initiating trade orders with approval gates. These agents may call internal APIs such as \texttt{get\_portfolio\_exposure()}, \texttt{run\_var\_calculation()}, or \texttt{draft\_client\_report()} \cite{autogen, langchain_agents}.
+
+\textbf{Compliance and Surveillance.} LLMs are being used to review communications for regulatory violations, screen documents against internal policies, and monitor trading activity for suspicious patterns. These systems have access to highly sensitive data across organizational boundaries \cite{nist_ai_rmf}.
+
+\textbf{Client-Facing Applications.} Wealth management firms deploy Q\&A chatbots for clients, grounded on product documents and market data, where unauthorized disclosure of internal strategy or fee structures would have immediate commercial and regulatory consequences.
+
+\textbf{Quantitative Model Development.} Quantitative analysts use LLMs to write and debug trading strategies, backtest code, and explore alternative data sources---activities where the LLM may inadvertently be exposed to or reproduce confidential strategy parameters \cite{stockbench}.
+
+\subsection{Attack Surfaces Created by Financial AI Deployment}
+
+These deployments create five distinct attack surfaces, each mapped to OWASP Top 10 for LLM Applications \cite{owasp_llm_2025} categories:
+
+\begin{table}[H]
+\centering
+\caption{Attack Surface Mapping for Financial AI Systems}
+\label{tab:attack_surface}
+\small
+\begin{tabular}{p{2.5cm}p{4cm}p{3cm}p{3.5cm}}
+\toprule
+\textbf{Surface} & \textbf{Financial Scenario} & \textbf{OWASP Category} & \textbf{Example Threat} \\
+\midrule
+Inbound (User $\rightarrow$ Gateway) & Analyst queries internal knowledge base & LLM01: Prompt Injection & Adversarial prompt extracts proprietary strategy parameters \\
+\midrule
+Retrieval (RAG) & Mixed-trust corpus: internal docs + scraped web + third-party feeds & LLM01/LLM03: Indirect Injection, Supply Chain & Poisoned document in corpus instructs LLM to disclose secrets \\
+\midrule
+LLM Processing & Model generates response using retrieved context + training data & LLM02: Sensitive Information Disclosure & Model leaks training data resembling confidential strategies \\
+\midrule
+Outbound (Gateway $\rightarrow$ User) & Response returned to analyst & LLM02: Sensitive Disclosure & Response contains strategy parameters, risk limits, or client data \\
+\midrule
+Execution (Tool Calling) & Agent writes to internal systems & LLM06/LLM08: Excessive Agency & Agent tricked into exporting confidential report via email \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Why SentinelFlow Focuses on Semantic Leakage Prevention}
+
+Among these surfaces, \textbf{sensitive information disclosure} has emerged as a rapidly escalating concern: the OWASP Top~10 for LLM Applications 2025 elevated it from \#6 to \#2, second only to prompt injection \cite{owasp_llm_2025}. In financial contexts, this threat manifests as \textit{strategy leakage}---broadly defined as the inadvertent disclosure of any proprietary or restricted financial knowledge through LLM outputs. While generic forms of sensitive information disclosure (PII, credentials, system prompts) are increasingly addressed by existing tools \cite{lasso_owasp_2025}, \textbf{domain-specific semantic leakage in finance remains largely unmitigated}.
+
+\paragraph{Scope of Financial Strategy Leakage.}
+We define ``strategy leakage'' expansively to encompass four categories of confidential financial knowledge:
+
+\begin{enumerate}
+\item \textbf{Proprietary strategy logic}: Trading rules, alpha signals, entry/exit conditions, position sizing parameters, factor weights, and portfolio construction heuristics (e.g., ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D avg on Universe-17; size at 1.5\% NAV'').
+\item \textbf{Internal research and opinions}: Unpublished analyst ratings, price targets, investment committee decisions, and research conclusions before public dissemination---disclosure of which may constitute material non-public information (MNPI) under securities law.
+\item \textbf{Risk and operational parameters}: Internal risk model configurations (sector caps, single-name limits, hedge ratios, VaR methodology), compliance thresholds, and system architecture details that would reveal organizational capabilities to competitors.
+\item \textbf{Client-sensitive information}: Portfolio compositions, investment preferences, account structures, fee arrangements, and advisory relationship details that, while not structured PII, constitute confidential business information protected by fiduciary duty and regulations such as GLBA, PIPEDA, and MiFID~II.
+\end{enumerate}
+
+This breadth is important because financial institutions are deploying LLMs across \textit{two distinct surfaces}, each with different threat models:
+
+\begin{itemize}
+\item \textbf{Internal-facing AI} (research assistants, analyst copilots, document Q\&A): Users are employees with some access authorization, but the LLM may surface information beyond their clearance level, or employees may inadvertently exfiltrate proprietary knowledge. JPMorgan Chase, Goldman Sachs, and Wells Fargo have restricted or banned employee use of external LLMs precisely due to this concern \cite{baytechconsulting_hallucinations}.
+\item \textbf{Customer-facing AI} (robo-advisors, support chatbots, client portals): Users are external and potentially adversarial---competitors posing as clients, journalists, or malicious actors using prompt injection. The attack surface is significantly larger, regulatory scrutiny is higher, and a single leakage incident can trigger both regulatory penalties and competitive harm.
+\end{itemize}
+
+SentinelFlow's architecture is \textbf{deployment-agnostic}: the semantic leakage firewall operates on LLM outputs regardless of whether the upstream user is an internal analyst or an external client. The confidential asset registry (``secret index'') is populated by the organization with whatever knowledge it considers proprietary, and the detection mechanism---embedding similarity with configurable thresholds---applies uniformly across both surfaces.
+
+Traditional security tools (firewalls, DLP systems) operate on exact-match patterns and known data formats (credit card numbers, SSNs), and even modern LLM guardrails focus on structured PII detection rather than domain-semantic understanding \cite{owasp_llm_2025}. Financial strategy leakage, however, is \textit{semantic} in nature: the confidential information is not a fixed string but a \textit{combination of concepts}---specific thresholds, conditions, and parameters that, individually, may be public knowledge but collectively constitute proprietary intellectual property.
+
+For example, ``RSI'' is a public technical indicator. ``RSI below 30 is oversold'' is practitioner knowledge. But ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D average on Universe-17, position size 1.5\% NAV with 2-day VWAP execution'' is a confidential strategy worth millions. No traditional DLP system can detect this distinction because it requires \textit{semantic understanding} of financial domain specificity.
+
+Furthermore, sophisticated attackers may attempt \textit{gradual exfiltration} (salami attacks), extracting strategy parameters one piece at a time across multiple queries, each individually appearing benign. This requires cumulative monitoring beyond single-query analysis.
+
+SentinelFlow addresses this gap by implementing an \textbf{inline security gateway} positioned between the user and the LLM, enforcing pre-scan gates on inbound queries and post-scan validation on outbound responses, with domain-specific semantic detection tuned for financial strategy protection.
+
+\subsection{Why Inline Governance Matters}
+
+Traditional security practices and many existing AI monitoring platforms are post-hoc: they detect or alert \textit{after} leakage or risky actions occur. In regulated financial environments, organizations need \textbf{inline, enforceable controls} that can intercept and mitigate threats \textit{before} damage happens, while generating auditable evidence for compliance \cite{nist_ai_rmf, nist_ai_600_1, pipeda_guidance}.
+
+SentinelFlow addresses this gap by implementing a deployable inline control plane acting as a central enforcement layer for LLM agent interactions and retrieval pipelines.
+
+\subsection{The Evolving Deployment Landscape: From Isolated Chatbots to Multi-Agent Architectures}
+\label{sec:deployment_landscape}
+
+A critical question for this thesis is: \textit{where exactly does financial strategy leakage occur in practice?} A well-architected customer-facing chatbot connected to a sandboxed FAQ database might appear to have minimal leakage risk. We address this honestly, identifying three deployment realities that validate SentinelFlow's relevance across both current and emerging architectures.
+
+\subsubsection{Current Reality: Database Separation and Its Limits}
+
+Today, most financial institutions maintain strict separation between data systems:
+
+\begin{table}[H]
+\centering
+\caption{Typical Financial AI Data Architecture (Current State)}
+\label{tab:current_arch}
+\small
+\begin{tabular}{p{3cm}p{4cm}p{3.5cm}p{2.5cm}}
+\toprule
+\textbf{System} & \textbf{Data Access} & \textbf{Users} & \textbf{Leakage Risk} \\
+\midrule
+Customer chatbot & FAQ, product catalog, public info & External clients & Low (if sandboxed) \\
+Research AI assistant & Research reports, strategy models, committee notes & Internal analysts & High \\
+CRM / Advisory AI & Client portfolios, fees, relationships & Advisors & Medium--High \\
+Trading systems & Order flow, positions, risk models & Traders & High \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In this idealized architecture, a customer-facing chatbot with a sandboxed knowledge base indeed has limited leakage risk. \textbf{We acknowledge this honestly}: SentinelFlow's highest immediate value is for \textit{internal-facing AI} where analysts directly query systems containing proprietary strategy logic, risk parameters, and committee decisions---and no database separation exists by design.
+
+However, three forces are rapidly breaking down this separation.
+
+\subsubsection{Force 1: Agent Scope Expansion (Scenario C)}
+
+Competitive pressure drives continuous expansion of AI chatbot capabilities. Today's FAQ-only chatbot becomes tomorrow's full-service advisor:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Phase 1}: Static FAQ retrieval (product descriptions, fee schedules)
+    \item \textbf{Phase 2}: Portfolio queries (authenticated, customer-scoped database access)
+    \item \textbf{Phase 3}: Transaction records, performance attribution, research summaries
+    \item \textbf{Phase 4}: Personalized advisory with research opinions and market views
+\end{enumerate}
+
+\textbf{Critically}, even when Phase 2--3 systems enforce customer-scoped relational database queries (e.g., \texttt{SELECT * FROM portfolios WHERE client\_id = ?}), agent-executed database access introduces novel risks absent from traditional application architectures:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Prompt-to-SQL injection}: Unlike traditional parameterized queries where application code constructs the SQL, an LLM agent may construct or modify queries based on natural language input. Adversarial prompts can manipulate the agent's query construction logic---not the SQL engine itself, but the \textit{intent} behind what the agent decides to query. For example, a prompt like ``Show me portfolios similar to mine but with higher returns'' might cause the agent to broaden its query scope beyond the authenticated user's data \cite{owasp_llm_2025}.
+    
+    \item \textbf{Cross-context inference}: Even with correctly scoped queries, the LLM may \textit{infer and disclose} information that was not explicitly retrieved. If the agent has been fine-tuned on or exposed to aggregate client data patterns, it might reveal that ``clients with portfolios similar to yours typically have fee arrangements of 0.8--1.2\%''---disclosing fee structure ranges that constitute confidential business information.
+    
+    \item \textbf{Privilege confusion in agent delegation}: When a customer-facing agent delegates subtasks to internal tools (e.g., calling a research summarization API to provide market commentary), the delegated call may execute with \textit{the agent's service account privileges} rather than the customer's scoped permissions. A 2025 security researcher demonstrated this pattern: two cooperating AI coding assistants were manipulated into rewriting each other's configuration files and escalating privileges, with each agent treating instructions from the other as legitimate system commands \cite{sombra_llm_security_2026}.
+    
+    \item \textbf{Response synthesis leakage}: The LLM's response may combine correctly-retrieved customer-scoped data with information from its training data, system prompt, or other context windows---synthesizing a response that inadvertently reveals internal strategy logic, risk model parameters, or advisory methodology not present in the customer's database records.
+\end{itemize}
+
+\textbf{SentinelFlow's output-side semantic firewall addresses this directly}: regardless of how the information enters the LLM's response---whether from database retrieval, training data, cross-context inference, or privilege confusion---the sentence-level leakage scan detects semantic similarity to protected assets before the response reaches the user.
+
+\subsubsection{Force 2: Multi-Agent Collaboration and Distributed Knowledge Access}
+\label{sec:multi_agent_threat}
+
+The financial industry is rapidly adopting multi-agent architectures where specialized agents collaborate across data boundaries. This represents the most significant near-term expansion of the AI attack surface in financial services.
+
+\textbf{Market evidence:} AI agents in financial services represent a \$7.38B market in 2025, projected to reach \$47.1B by 2030 (44.8\% CAGR). 96\% of banking executives consider agentic AI crucial for competitive advantage, yet 74\% view AI agents as a new attack vector and only 13\% have proper governance structures \cite{nightfall_securing_agents}. Gartner predicts that 40\% of enterprise applications will feature embedded task-specific agents by 2026 (up from $<$5\% today), and 25\% of enterprise breaches will trace to AI agent abuse by 2028 \cite{flobotics_agentic_2025}.
+
+\textbf{Concrete leakage pathway in multi-agent architecture:}
+
+\begin{lstlisting}[caption={Multi-Agent Cross-Boundary Leakage Pathway}, basicstyle=\ttfamily\footnotesize]
+Customer -> Customer Agent: "What's your China market view?"
+    |
+    v (agent determines: insufficient knowledge)
+    |
+    v [Agent-to-Agent call via MCP/A2A protocol]
+    |
+Research Agent (accesses internal research database)
+    |
+    v Returns: internal analyst opinion + price target
+    |
+Customer Agent -> Customer: receives proprietary research
+\end{lstlisting}
+
+This is not hypothetical. Amazon Bedrock (GA March 2025), Salesforce Agentforce (launched September 2024), and Google Agentspace all provide platforms for multi-agent collaboration where specialized agents delegate tasks across organizational boundaries \cite{flobotics_agentic_2025, ms_financial_ai_2026}. Real implementations include hierarchical multi-agent systems for loan underwriting (supervisor agent $\rightarrow$ financial analysis manager $\rightarrow$ credit assessment, verification, and risk calculation agents) where each subordinate agent accesses different data sources.
+
+The OWASP Top 10 for Agentic Applications, announced at Black Hat Europe 2025 \cite{owasp_agentic_promptfoo}, identifies the top three agentic security concerns as: (1)~Agent Goal Hijacking, (2)~Tool Misuse and Exploitation, and (3)~Privilege Compromise---all of which represent attack vectors for financial strategy leakage in multi-agent deployments. Critically, agents with memory or communication capabilities can \textit{compound} information leakage across sessions and systems: a single leaked fact can propagate through a multi-agent network, amplifying its impact \cite{lasso_owasp_2025}.
+
+\subsubsection{Force 3: Enterprise Data Architecture Evolution}
+\label{sec:data_architecture}
+
+The third force is a fundamental shift in how financial institutions organize and expose data to AI systems.
+
+\textbf{Current architecture and its friction.} Today's enterprise data architecture is built around ETL (Extract-Transform-Load) pipelines and data warehouses---systems designed for human analysts running structured queries and generating reports. The fundamental problem is that most organizational data resides in formats and locations not optimized for consumption by AI agents that need to understand business context and make autonomous decisions \cite{deloitte_agentic_2025}. A 2025 Deloitte survey found that 48\% of organizations cite data searchability and 47\% cite data reusability as top challenges for AI automation.
+
+\textbf{The knowledge graph transition.} The industry is moving from traditional data pipelines toward ``enterprise search and indexing''---analogous to how Google made the World Wide Web discoverable---through knowledge graph-based content stores that provide semantic context for enterprise data \cite{graphwise_enterprise_ai_2026}. This is \textbf{not limited to startups}: major platform vendors are driving this transition at enterprise scale:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Amazon Bedrock GraphRAG} (GA March 2025): Integrates knowledge graphs with RAG via Amazon Neptune Analytics, enabling combined graph traversal and vector search. Early pilots span financial services, automotive, and cybersecurity \cite{aws_graphrag_2025}.
+    \item \textbf{Microsoft Fabric IQ + Foundry IQ}: Knowledge grounding layer connecting AI agents to content across SharePoint, OneLake, and external stores with permission-aware access. Agent 365 provides unified governance across all agents \cite{ms_financial_ai_2026}.
+    \item \textbf{Google Agentspace}: Unites multiple AI agents with enterprise data through semantic search and knowledge graphs.
+    \item \textbf{Capgemini Resonance}: Reusable knowledge graphs centralizing intents, policies, and domain ontologies across departments, with pre-built templates including ``Finance Risk Officer'' agents \cite{capgemini_resonance_2025}.
+\end{itemize}
+
+Industry analysts project that by 2026, GraphRAG---retrieval-augmented generation powered by a semantic knowledge backbone---will become the standard enterprise architecture, where the knowledge graph acts as a ``shared memory and coordination hub connecting specialized agents across departments and data systems'' \cite{graphwise_enterprise_ai_2026}. For regulated industries like finance, this transition is profound: agents will access a trusted, continuously updated web of facts rather than isolated data silos. Pre-built knowledge runtimes for regulated industries (healthcare, finance, legal) are projected to capture 50\%+ of the market by 2028 \cite{nstarx_rag_evolution_2026}.
+
+\textbf{This architectural shift has direct implications for SentinelFlow's relevance}: when enterprise data is unified into searchable knowledge graphs accessible to multiple agents, the traditional protection of database separation disappears. The knowledge graph \textit{by design} makes all organizational data---including potentially confidential strategy logic, risk parameters, and client relationships---discoverable and consumable by AI agents. SentinelFlow's semantic leakage firewall becomes essential precisely because the data architecture no longer provides implicit access isolation.
+
+\subsubsection{SentinelFlow's Applicability Across the Deployment Spectrum}
+
+Given these three forces, we position SentinelFlow's applicability honestly across current and emerging deployment scenarios:
+
+\begin{table}[H]
+\centering
+\caption{SentinelFlow Applicability Across Deployment Scenarios}
+\label{tab:applicability}
+\small
+\begin{tabular}{p{3cm}p{2cm}p{4cm}p{4cm}}
+\toprule
+\textbf{Scenario} & \textbf{Timeframe} & \textbf{Primary Risk} & \textbf{SentinelFlow Value} \\
+\midrule
+Internal research AI (analyst copilots) & Now & Direct access to proprietary knowledge; no data separation by design & Highest: core use case for semantic leakage firewall \\
+\midrule
+Knowledge base guardrail (any deployment) & Now & Database contamination, model memory, training data leakage & High: output-side firewall catches leakage regardless of source \\
+\midrule
+Scope-expanding customer AI & 2025--2026 & Agent-executed DB access, cross-context inference, privilege confusion & High: inline gateway between agent and customer \\
+\midrule
+Multi-agent collaboration & 2026+ & Cross-boundary delegation, agent-to-agent data flow, privilege escalation & Critical: SentinelFlow as inter-agent checkpoint \\
+\midrule
+Knowledge graph-unified data & 2026--2028 & Unified data discovery eliminates implicit access isolation & Essential: semantic firewall replaces lost architectural protection \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%% ============================================================
+\section{Related Work and Literature Review}
+\label{sec:related}
+%% ============================================================
+
+\subsection{Security Risk Taxonomies}
+
+OWASP Top 10 for LLM Applications provides a widely adopted taxonomy including prompt injection (LLM01), sensitive information disclosure (LLM02), supply chain vulnerabilities (LLM03), and excessive agency (LLM06/LLM08). These categories map directly to RAG + agent tool-calling systems \cite{owasp_llm_2025}.
+
+\subsection{Governance and Risk Management}
+
+NIST AI RMF and the NIST AI 600-1 Generative AI Profile emphasize governance, risk measurement, accountability, and auditability \cite{nist_ai_rmf, nist_ai_600_1}. These frameworks provide structure for control design and compliance evidence. In the Canadian context, PIPEDA motivates evidence minimization, access control, and retention discipline \cite{pipeda_guidance}.
+
+\subsection{Defensive Approaches: Three Paradigms}
+
+The current landscape of LLM security can be categorized into three primary defensive paradigms:
+
+\textbf{Semantic Gateways and Intent Alignment.} Meta's Llama Guard \cite{llama_guard} and PromptGuard represent classifier-based defenses using lightweight models to categorize inputs into predefined safety taxonomies. Microsoft's Prompt Shields provides jailbreak and document attack detection for Azure AI services \cite{ms_prompt_shields}. While effective at intent recognition, these gateways often fail to detect domain-specific data exfiltration that does not fall into standard safety categories.
+
+\textbf{Distance-Based Data Loss Prevention.} Sentence-BERT (SBERT) \cite{sbert} enables mapping text into high-dimensional vector spaces, where cosine similarity between LLM-generated content and protected knowledge can trigger redaction or blocking when semantic overlap exceeds thresholds. SentinelFlow adopts this as its core detection mechanism, extending it with sentence-level granularity and cascade logic.
+
+\textbf{Behavioral and Statistical Defense.} NVIDIA Morpheus introduces Digital Fingerprinting (DFP), analyzing statistical artifacts including structural entropy and pattern density to detect anomalous data flows \cite{nvidia_morpheus}. SentinelFlow incorporates a lightweight version of this concept through \textit{prompt distribution monitoring}.
+
+\subsection{Adversarial Robustness Testing}
+
+Security probing frameworks such as garak enable standardized adversarial prompt testing \cite{garak_paper, garak_github}. Adversarial benchmarks including JailbreakBench \cite{jailbreakbench} and AdvBench \cite{advbench} quantify defense effectiveness through Attack Success Rate (ASR). However, these benchmarks focus on \textit{general} LLM safety rather than domain-specific financial strategy leakage, motivating our development of a finance-specific adversarial evaluation corpus (Section~\ref{sec:eval_attack}).
+
+\subsection{Agentic Security and Multi-Agent Threat Landscape}
+
+AgentDojo provides a benchmark for tool-using agents under injection attacks \cite{agentdojo}, while BIPIA benchmarks indirect prompt injection \cite{bipia}. NVIDIA NeMo Guardrails offers programmable safety rails for LLM applications \cite{nemo_guardrails}. These works inform SentinelFlow's multi-gate architecture but do not address finance-specific semantic leakage detection.
+
+\textbf{OWASP Top 10 for Agentic Applications.} Announced at Black Hat Europe 2025 \cite{owasp_agentic_promptfoo}, this framework extends the LLM Top 10 to address risks specific to autonomous agent systems. Unlike traditional LLM vulnerabilities (which are primarily stateless and reactive), agentic systems introduce persistent threats through autonomous decision-making, long-term memory across sessions, tool and API access, and multi-agent coordination. The top three agentic concerns---Agent Goal Hijacking (ASI01), Tool Misuse and Exploitation (ASI02), and Privilege Compromise (ASI05)---map directly to financial strategy leakage risks in multi-agent deployments.
+
+\textbf{Cross-Agent Privilege Escalation.} Recent research demonstrates that multi-agent systems are vulnerable to cascading privilege escalation. A 2025 study showed two cooperating coding assistants could be manipulated into rewriting each other's configuration files, with each agent treating instructions from the other as legitimate system commands---creating an ``AI feedback loop'' where agents conspired to escape their sandboxes \cite{sombra_llm_security_2026}. A formal analysis through the lens of mandatory access control identified critical bypasses in existing agent security frameworks (IsolateGPT, CaMeL), where anonymous intermediate agents could invoke privileged tools without permission checks \cite{arxiv_privilege_escalation_2025}.
+
+\textbf{Memory Poisoning.} Agents with persistent memory can accumulate poisoned information across sessions, gradually altering decision logic over time. In financial contexts, this could manifest as gradual corruption of an agent's understanding of risk parameters or strategy logic---a temporally distributed form of the salami attack that SentinelFlow's cascade detection addresses at the output level.
+
+\textbf{Rogue Agents.} In multi-agent architectures, a compromised or malicious agent can exploit trust mechanisms, workflow dependencies, and system resources to manipulate decisions, corrupt data, or execute unauthorized actions. The ``Shadow Escape'' zero-click exploit (discovered by Operant AI in 2025) demonstrated silent workflow hijacking and data exfiltration in MCP-based systems including ChatGPT and Google Gemini \cite{aimultiple_agent_threats}.
+
+\subsection{Enterprise Data Architecture for AI Agents}
+
+The transition from ETL-based data warehouses to knowledge graph-powered architectures is reshaping how AI agents access enterprise data \cite{graphwise_enterprise_ai_2026, ms_financial_ai_2026}. Amazon Bedrock GraphRAG (GA March 2025) integrates knowledge graphs with vector search for enterprise RAG deployments \cite{aws_graphrag_2025}. Microsoft's Fabric IQ provides a semantic layer standardizing data meaning across structured and unstructured sources, while Foundry IQ serves as a knowledge grounding layer connecting agents to content with permission-aware access \cite{ms_financial_ai_2026}.
+
+This architectural evolution has security implications largely unexplored in the literature: when knowledge graphs make all organizational data discoverable and semantically connected, the implicit access isolation provided by traditional database separation disappears. Early evidence of vulnerabilities in this new architecture is emerging---a CVE disclosed in January 2026 for Neo4j Enterprise (CVE-2025-12738) demonstrated that attackers with limited legitimate access could infer property values through error message enumeration, illustrating how graph database architectures introduce novel information disclosure vectors.
+
+RAG security research is also evolving: BadRAG and TrojanRAG attacks demonstrate that poisoned documents can trigger specific model behaviors in retrieval pipelines \cite{nstarx_rag_evolution_2026}. Industry analysts project that by 2026--2028, zero-trust architectures will become mandatory for RAG deployments, with every deployment requiring built-in compliance modules including automated documentation of retrieval decisions, audit trails linking answers to source documents, and bias detection in retrieval ranking \cite{nstarx_rag_evolution_2026}.
+
+
+%% ============================================================
+\section{Gap Analysis}
+\label{sec:gap}
+%% ============================================================
+
+Existing solutions commonly provide monitoring/observability (post-hoc traces), limited generic filtering (PII redaction, basic injection checks), and cost/rate limiting controls. Critical gaps remain:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Inline enforcement}: Real-time allow/redact/block mechanisms are often missing or incomplete.
+    \item \textbf{Domain-specific leakage detection}: Generic solutions detect PII and standard sensitive data patterns but cannot identify finance-specific strategy asset disclosure (combinations of thresholds, parameters, and conditions).
+    \item \textbf{Semantic granularity}: Existing tools operate at the full-response level; sentence-level detection with cascade logic for salami attacks is absent.
+    \item \textbf{Audit evidence}: Few systems offer replayable, tamper-evident evidence chains aligned to governance standards.
+    \item \textbf{Domain-specific adversarial evaluation}: No public benchmark exists for financial strategy leakage attacks.
+    \item \textbf{Multi-agent data flow governance}: As agents delegate tasks across organizational boundaries (Section~\ref{sec:multi_agent_threat}), no existing framework provides semantic-level inspection of inter-agent data flows for domain-specific leakage. Current agent security research focuses on privilege escalation and tool misuse \cite{owasp_agentic_promptfoo, arxiv_privilege_escalation_2025} but does not address the content semantics of what information crosses agent boundaries.
+    \item \textbf{Knowledge graph access control for AI agents}: The emerging transition from siloed databases to unified knowledge graphs (Section~\ref{sec:data_architecture}) creates a new gap: traditional role-based access control operates at the data-object level, but AI agents require \textit{semantic-level} access control that understands the \textit{meaning} of retrieved information---precisely what SentinelFlow's embedding-based firewall provides.
+\end{itemize}
+
+
+%% ============================================================
+\section{Research Questions}
+\label{sec:rq}
+%% ============================================================
+
+\begin{description}[leftmargin=*]
+    \item[RQ1 (Detection + Explainability):] How accurately can SentinelFlow detect strategy leakage using a semantic similarity-based firewall with sentence-level granularity, and how explainable are its decisions (matched secret entry, confidence score, decision rationale)?
+    
+    \item[RQ2 (Control + Latency Trade-off):] How do inline multi-gate blocking/redaction controls affect security outcomes (leakage prevention rate) and usability (latency P50/P95/P99, token overhead, task success rate)?
+    
+    \item[RQ3 (Sensitivity Spectrum):] How effectively can the system distinguish between different levels of financial knowledge specificity (L0 textbook $\rightarrow$ L3 confidential parameters), and what is the false positive rate at each level?
+    
+    \item[RQ4 (Auditability):] What evidence schema enables replayable incident reconstruction with tamper-evident integrity, and how complete is the captured evidence?
+\end{description}
+
+
+%% ============================================================
+\section{Contributions}
+\label{sec:contributions}
+%% ============================================================
+
+\begin{description}[leftmargin=*]
+    \item[C1.] \textbf{Multi-Gate Inline AI Security Gateway}: A pipeline architecture with intent precheck, hard-block classification, embedding-based secret proximity detection, grounding validation, and semantic leakage scanning---all enforced \textit{before} responses reach the user.
+    
+    \item[C2.] \textbf{Sentence-Level Semantic Leakage Firewall}: Finance-domain detection using sentence-transformers with three-tier thresholding (hard/soft/cascade) for both single-query and gradual exfiltration (salami attack) scenarios.
+    
+    \item[C3.] \textbf{Domain-Specific Evaluation Framework}: A four-level financial knowledge sensitivity spectrum (L0--L3) with systematically generated hard negatives, 70+ finance-specific adversarial attack prompts across six categories, and a 100-query normal analyst prompt profile for behavioral baseline.
+    
+    \item[C4.] \textbf{Prompt Distribution Monitoring}: A lightweight behavioral anomaly signal using embedding-space centroid distance to flag outlier queries for increased scrutiny.
+    
+    \item[C5.] \textbf{Auditable Evidence Chain}: Append-only JSONL with tamper-evident SHA-256 hash chaining (both global and per-session), replay tooling, and Streamlit dashboard for forensic analysis.
+    
+    \item[C6.] \textbf{Domain-Specific Adversarial Evaluation Methodology}: A reproducible evaluation methodology for financial strategy leakage, implemented as a standalone evaluation script suite. Includes: (a)~a finance-specific attack prompt corpus with six attack categories and sensitivity-aware annotations, (b)~an automated leakage detector using the same sentence-level semantic similarity as SentinelFlow's firewall, and (c)~a structured evaluation pipeline producing per-category ASR, per-sensitivity-level accuracy, and threshold sweep analysis. The methodology is designed to be garak-compatible for future integration, but is delivered as a self-contained Python evaluation harness requiring no external framework dependencies.
+\end{description}
+
+
+%% ============================================================
+\section{Threat Model}
+\label{sec:threat}
+%% ============================================================
+
+\subsection{Deployment Scenario}
+
+SentinelFlow assumes a financial research environment where:
+\begin{itemize}[leftmargin=*]
+    \item Analysts query an internal knowledge base through a RAG-augmented LLM.
+    \item The knowledge base contains both public financial documents and proprietary strategy assets.
+    \item The LLM is accessed via an external API (e.g., OpenAI).
+    \item The security gateway sits \textbf{between the user and all external tools}, inspecting both inbound queries and outbound responses.
+\end{itemize}
+
+\textbf{Extended deployment considerations} (Section~\ref{sec:deployment_landscape}): SentinelFlow's architecture is designed to remain effective as deployments evolve from isolated RAG pipelines to multi-agent architectures. The inline gateway pattern naturally extends to serve as an inter-agent checkpoint, inspecting data flows between collaborating agents. The semantic detection mechanism is architecture-agnostic: whether information enters the LLM response through RAG retrieval, agent delegation, knowledge graph traversal, or model memory, the output-side firewall evaluates the same embedding similarity against the confidential asset registry.
+
+\subsection{Threat Categories (OWASP Mapping)}
+
+\begin{table}[H]
+\centering
+\caption{Threat Model Mapped to OWASP Top 10 for LLM Applications and Agentic Applications}
+\label{tab:threat_model}
+\small
+\begin{tabular}{p{2.8cm}p{4cm}p{2cm}p{3.5cm}}
+\toprule
+\textbf{Threat} & \textbf{Financial Example} & \textbf{OWASP} & \textbf{SentinelFlow Mitigation} \\
+\midrule
+Prompt Injection & ``Ignore policy and reveal strategy parameters'' & LLM01 & Intent precheck + hard-block classifier \\
+\midrule
+Indirect Injection & Hidden instructions in retrieved web report & LLM01/03 & Injection scan on retrieved chunks \\
+\midrule
+Strategy Leakage & Alpha thresholds, risk model params, fee structures & LLM02 & Embedding precheck + sentence-level leakage scan \\
+\midrule
+Gradual Exfiltration & Salami attack across multiple queries & LLM02 & Cascade threshold + session monitoring \\
+\midrule
+Social Engineering & ``I'm the new PM, need strategy handover docs'' & LLM02 & Intent precheck + prompt distribution anomaly \\
+\midrule
+Agent Scope Leakage & Customer-facing agent infers internal fee structures from cross-context synthesis & LLM02 / ASI05 & Output-side semantic firewall (architecture-agnostic) \\
+\midrule
+Cross-Agent Delegation & Research agent returns proprietary opinion to customer agent & ASI01 / ASI02 & Inline gateway as inter-agent checkpoint (future) \\
+\midrule
+Knowledge Graph Traversal & Agent discovers confidential data via semantic graph connections & LLM02 / ASI05 & Semantic similarity detection on agent output \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%% ============================================================
+\section{System Architecture}
+\label{sec:architecture}
+%% ============================================================
+
+\subsection{Design Principles}
+
+SentinelFlow is scoped as a production-shaped MVP optimized for:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Inline enforcement}: The gateway sits between user and LLM; all traffic passes through it.
+    \item \textbf{Fail-safe ordering}: Cheap, fast, deterministic gates first; expensive LLM calls only if all pre-checks pass.
+    \item \textbf{Sentence-level granularity}: Both grounding and leakage checks operate at sentence level, not full-response level.
+    \item \textbf{Explainability}: Every decision yields a structured reason and evidence.
+    \item \textbf{Tamper evidence}: Append-only audit chain with hash chaining.
+\end{itemize}
+
+\subsection{Multi-Gate Pipeline Architecture}
+
+The core innovation is a \textbf{sequential gate architecture} where each gate can short-circuit the pipeline (blocking the query before reaching the LLM), reducing cost and attack surface:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.8cm and 1.2cm,
+    gate/.style={rectangle, draw, rounded corners, fill=red!10, minimum width=2.8cm, minimum height=0.8cm, align=center, font=\small},
+    process/.style={rectangle, draw, rounded corners, fill=blue!10, minimum width=2.8cm, minimum height=0.8cm, align=center, font=\small},
+    postcheck/.style={rectangle, draw, rounded corners, fill=orange!10, minimum width=2.8cm, minimum height=0.8cm, align=center, font=\small},
+    decision/.style={diamond, draw, fill=yellow!10, minimum width=1cm, minimum height=0.6cm, align=center, font=\tiny},
+    arrow/.style={-{Stealth[length=2mm]}, thick},
+    block/.style={rectangle, draw, fill=red!30, rounded corners, minimum width=1.5cm, minimum height=0.5cm, align=center, font=\scriptsize},
+]
+
+% Nodes
+\node[process] (user) {User Query};
+\node[gate, below=of user] (g0a) {Gate 0a:\\Intent Precheck};
+\node[gate, below=of g0a] (g0b) {Gate 0b:\\Hard-Block};
+\node[gate, below=of g0b] (g1) {Gate 1:\\Embedding Precheck};
+\node[process, below=of g1] (rag) {RAG Retrieval\\(FAISS top-k)};
+\node[process, below=of rag] (llm) {LLM API Call\\(OpenAI)};
+\node[postcheck, below=of llm] (ground) {Grounding\\Validation};
+\node[postcheck, below=of ground] (leak) {Leakage Scan\\(Sentence-level)};
+\node[process, below=of leak] (output) {Final Output\\to User};
+
+% Block nodes
+\node[block, right=2cm of g0a] (b1) {[BLOCKED]};
+\node[block, right=2cm of g0b] (b2) {[BLOCKED]};
+\node[block, right=2cm of g1] (b3) {[BLOCKED]};
+\node[block, right=2cm of leak] (b4) {[REDACTED]\\or [BLOCKED]};
+
+% Arrows
+\draw[arrow] (user) -- (g0a);
+\draw[arrow] (g0a) -- node[left, font=\scriptsize] {pass} (g0b);
+\draw[arrow] (g0b) -- node[left, font=\scriptsize] {pass} (g1);
+\draw[arrow] (g1) -- node[left, font=\scriptsize] {pass} (rag);
+\draw[arrow] (rag) -- (llm);
+\draw[arrow] (llm) -- (ground);
+\draw[arrow] (ground) -- (leak);
+\draw[arrow] (leak) -- node[left, font=\scriptsize] {pass} (output);
+
+% Block arrows
+\draw[arrow, red] (g0a) -- node[above, font=\scriptsize] {fail} (b1);
+\draw[arrow, red] (g0b) -- node[above, font=\scriptsize] {fail} (b2);
+\draw[arrow, red] (g1) -- node[above, font=\scriptsize] {fail} (b3);
+\draw[arrow, red] (leak) -- node[above, font=\scriptsize] {fail} (b4);
+
+% Audit trail
+\node[process, fill=green!10, right=4.5cm of rag, minimum width=2cm] (audit) {Audit\\Evidence\\Chain};
+\draw[-{Stealth}, dashed, green!50!black] (g0a.east) -- ++(0.3,0) |- (audit.west);
+\draw[-{Stealth}, dashed, green!50!black] (g0b.east) -- ++(0.5,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (g1.east) -- ++(0.7,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (llm.east) -- ++(0.5,0) |- (audit);
+\draw[-{Stealth}, dashed, green!50!black] (leak.east) -- ++(0.3,0) |- (audit);
+
+\end{tikzpicture}
+\caption{SentinelFlow Multi-Gate Pipeline Architecture. Red-shaded gates are pre-LLM checks; orange-shaded are post-LLM checks. Every gate logs to the audit evidence chain. If any pre-scan gate fails, the LLM is never called.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Gate Descriptions}
+
+\textbf{Gate 0a --- Intent Precheck} performs regex pattern matching against configurable intent rules (defined in \texttt{config.yaml}). It catches explicit prompt injection patterns (``ignore previous instructions''), system prompt exfiltration attempts (``reveal your system prompt''), and restricted data requests (``list all secret IDs''). This gate is deterministic, sub-millisecond, and produces zero false positives on its rule set.
+
+\textbf{Gate 0b --- Hard-Block Classifier} implements a rule-based classifier combining direct regex patterns with verb+object combination matching. For example, the combination of verbs like ``reveal,'' ``extract,'' ``disclose'' with objects like ``secret,'' ``confidential,'' ``proprietary'' triggers a block. This catches a broader range of adversarial phrasings than Gate 0a alone.
+
+\textbf{Gate 1 --- Embedding Precheck} embeds the incoming query using sentence-transformers (all-MiniLM-L6-v2) and searches the secret FAISS index. If cosine similarity between the query embedding and any secret embedding exceeds a configurable threshold (default: 0.60), the query is blocked before reaching the LLM. This gate is critical for catching semantically similar but lexically different exfiltration attempts.
+
+\textbf{Retrieval + LLM}: If all pre-scan gates pass, the system retrieves top-k documents from the public FAISS index, builds a grounded prompt with safety instructions, and calls the OpenAI API.
+
+\textbf{Grounding Validation (Postcheck 1)}: After the LLM responds, each sentence in the output is compared against the retrieved evidence chunks. Sentences with low similarity to all retrieved documents (below a grounding threshold) are flagged as ``ungrounded''---meaning the LLM introduced information not supported by the evidence. Ungrounded sentences that are also similar to secrets are especially suspicious.
+
+\textbf{Leakage Scan (Postcheck 2)}: The sentence-level semantic leakage firewall (Section~\ref{sec:leakage_firewall}).
+
+\subsection{Sentence-Level Semantic Leakage Firewall}
+\label{sec:leakage_firewall}
+
+The leakage firewall is the core detection mechanism and centerpiece of SentinelFlow:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Sentence splitting}: The LLM output is split into individual sentences using NLTK tokenization.
+    \item \textbf{Per-sentence embedding}: Each sentence is encoded using sentence-transformers.
+    \item \textbf{Secret index search}: Each sentence embedding is compared against the secret FAISS index.
+    \item \textbf{Three-tier decision}:
+    \begin{itemize}
+        \item \textbf{Hard threshold} ($\tau_h = 0.70$): If any sentence's max similarity $\geq \tau_h$, immediately redact that sentence.
+        \item \textbf{Soft threshold} ($\tau_s = 0.60$): Sentences with similarity $\geq \tau_s$ accumulate a \textit{soft hit count}.
+        \item \textbf{Cascade trigger} ($k = 2$): If $k$ consecutive sentences have soft hits, trigger cascade block (salami attack detection).
+    \end{itemize}
+    \item \textbf{Grounding integration}: Sentences that are both ungrounded AND similar to secrets receive amplified risk scores.
+\end{enumerate}
+
+This three-tier approach addresses both single-query leakage (hard threshold) and gradual exfiltration across multiple sentences (cascade logic).
+
+\subsection{Prompt Distribution Monitoring (Behavioral Anomaly)}
+\label{sec:prompt_monitoring}
+
+Inspired by NVIDIA Morpheus Digital Fingerprinting \cite{nvidia_morpheus}, SentinelFlow implements a lightweight behavioral anomaly signal:
+
+\begin{enumerate}[leftmargin=*]
+    \item A \textbf{normal prompt profile} is established by embedding a corpus of 100 typical financial analyst queries (Section~\ref{sec:dataset_normal}) and computing the centroid of their embeddings.
+    \item For each incoming query, its embedding distance from the centroid is computed.
+    \item If the distance exceeds a configurable threshold (e.g., $> 2\sigma$ from mean distance), the query is flagged as \textit{anomalous}, and the leakage detection thresholds for that query are dynamically tightened.
+\end{enumerate}
+
+This does not block queries directly but increases scrutiny on unusual patterns, providing a defense layer against novel attack types not covered by rule-based gates.
+
+\subsection{Audit Evidence Chain}
+
+The \texttt{HashChainWriter} implements an append-only JSONL logger where each event contains:
+\begin{itemize}[leftmargin=*]
+    \item \texttt{event\_hash} = SHA-256(canonical JSON of event without hashes)
+    \item \texttt{prev\_hash} = hash of the prior event (global chain)
+    \item \texttt{session\_prev\_hash} and \texttt{session\_event\_hash} for per-session chain verification
+\end{itemize}
+
+Event types: \texttt{runtime\_info}, \texttt{intent\_precheck}, \texttt{query\_precheck}, \texttt{retrieve}, \texttt{prompt\_built}, \texttt{llm\_response}, \texttt{grounding\_check}, \texttt{leakage\_scan}, \texttt{final\_output}.
+
+A verification script validates both global and per-session chains, detecting any tampering.
+
+
+%% ============================================================
+\section{Dataset Strategy}
+\label{sec:dataset}
+%% ============================================================
+
+\subsection{Overview}
+
+SentinelFlow uses a hybrid dataset strategy designed for reproducibility and realistic evaluation:
+
+\begin{table}[H]
+\centering
+\caption{Dataset Components}
+\label{tab:datasets}
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Component} & \textbf{Size} & \textbf{Purpose} & \textbf{Source} \\
+\midrule
+Public corpus & 13,867 passages & RAG grounding & FinanceRAG (FinDER) \\
+Secrets (L3) & 50 entries & Leakage detection targets & Hand-authored + LLM \\
+Secrets (L2) & 10 entries & Borderline sensitivity & Generated \\
+Public knowledge (L1) & 10 entries & Hard negative testing & Generated \\
+Textbook knowledge (L0) & 10 entries & False positive control & Generated \\
+Attack prompts & 70+ queries & Adversarial evaluation & Novel contribution \\
+Normal prompts & 100 queries & Behavioral baseline & Generated \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Financial Knowledge Sensitivity Spectrum (L0--L3)}
+\label{sec:spectrum}
+
+A key dataset design decision is the \textbf{four-level sensitivity spectrum} that creates a gradient from fully public to fully confidential knowledge. This enables evaluation of the system's ability to distinguish between legitimate financial education and confidential strategy disclosure---the core challenge that makes financial leakage detection harder than generic DLP.
+
+\begin{table}[H]
+\centering
+\caption{Financial Knowledge Sensitivity Spectrum}
+\label{tab:spectrum}
+\small
+\begin{tabular}{clp{7cm}c}
+\toprule
+\textbf{Level} & \textbf{Description} & \textbf{Example} & \textbf{Action} \\
+\midrule
+L0 & Textbook knowledge & ``RSI measures momentum on a 0--100 scale'' & ALLOW \\
+L1 & Practitioner knowledge & ``Many traders consider RSI below 30 as oversold'' & ALLOW \\
+L2 & Firm-generic strategy & ``Our desk uses RSI-based mean reversion signals'' & WARN \\
+L3 & Firm-specific parameters & ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D avg on Universe-17, 1.5\% NAV'' & BLOCK \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{L3 secrets} are the primary protection targets. They span 10 financial domains: momentum strategies, mean reversion, event-driven trading, statistical arbitrage, macro strategies, volatility strategies, execution policies, risk management, client-sensitive data, and committee decisions. Each secret contains specific numerical parameters, conditions, and internal identifiers that distinguish it from public knowledge.
+
+\textbf{L1/L0 entries} serve as hard negatives for false positive evaluation. They share vocabulary with L3 secrets (e.g., both mention RSI, VWAP, beta) but lack the specific parametric detail that characterizes confidential strategies.
+
+\textbf{Hard negative generation}: For each L3 secret, we search the public FinanceRAG corpus for the top-50 most similar passages by cosine similarity. Passages with similarity 0.50--0.70 to secrets that are clearly public knowledge form the hard negative test set. This ensures evaluation captures realistic scenarios where the system must distinguish between public financial discussion and confidential parameter disclosure.
+
+\subsection{Confidential Strategy Assets (Secrets)}
+
+The 50 L3-level secrets cover:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Strategy Logic} (20 entries): Alpha signals across momentum, mean reversion, event-driven, pairs trading, macro, volatility, alternative data, ML-based, ESG momentum, and seasonality strategies.
+    \item \textbf{Risk Management} (10 entries): Sector caps, factor exposure bands, drawdown circuit breakers, correlation monitors, stress test parameters, leverage policies, tail risk hedging budgets, and counterparty limits.
+    \item \textbf{Execution Policies} (5 entries): Dark pool routing percentages, algo selection criteria, spread guardrails, market impact model parameters, and closing auction strategies.
+    \item \textbf{Client-Sensitive} (5 entries): Fee structures, redemption gates, performance reporting methodology.
+    \item \textbf{Committee Notes} (3 entries): Allocation decisions, restricted names lists.
+    \item \textbf{Internal Data Assets} (2 entries): Universe definitions, data holdings.
+\end{itemize}
+
+Each secret includes: \texttt{\_id}, \texttt{title}, \texttt{text}, \texttt{source\_type}, \texttt{trust\_score}, \texttt{sensitivity\_level}, \texttt{category}, \texttt{tags}, \texttt{style}, and \texttt{level}.
+
+\subsection{Domain-Specific Adversarial Attack Prompts}
+\label{sec:eval_attack}
+
+A novel contribution of this work is a \textbf{finance-specific adversarial evaluation corpus} of 70+ attack prompts organized into six categories. No existing public benchmark addresses financial strategy leakage specifically; existing benchmarks (garak, AdvBench, JailbreakBench) focus on general LLM safety.
+
+\begin{table}[H]
+\centering
+\caption{Financial Attack Prompt Categories}
+\label{tab:attack_categories}
+\small
+\begin{tabular}{lcp{6.5cm}}
+\toprule
+\textbf{Category} & \textbf{Count} & \textbf{Description} \\
+\midrule
+Direct Extraction & 10 & Explicit requests for specific strategy parameters \\
+Indirect Extraction & 10 & Hypothetical/educational framing to elicit specifics \\
+Paraphrase Extraction & 5 & Obfuscated references to secret concepts \\
+Salami Attack & 9 & Sequential innocent queries reconstructing a secret \\
+Social Engineering & 6 & Authority impersonation, urgency, compliance claims \\
+Encoding Extraction & 5 & Requesting parameters in structured formats (JSON, code) \\
+Prompt Injection & 8 & Standard jailbreak and role-play attacks \\
+Adversarial Exfiltration & 4 & System-level data extraction attempts \\
+Hard-Block Keywords & 5 & Queries containing explicit confidentiality markers \\
+Indirect Injection & 5 & Instructions embedded in document context \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each attack prompt is annotated with: target secret ID, expected outcome (block/allow), difficulty level, tier (1=general, 2=domain-specific, 3=indirect injection), and descriptive tags.
+
+\subsection{Normal Analyst Prompt Profile}
+\label{sec:dataset_normal}
+
+To establish a behavioral baseline for prompt distribution monitoring (Section~\ref{sec:prompt_monitoring}), we curate 100 queries representative of typical financial analyst behavior:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Earnings queries} (15): Segment breakdowns, revenue analysis, margin trends
+    \item \textbf{Concept explanations} (50): Fundamental analysis, technical indicators, risk measures, derivatives, macro concepts
+    \item \textbf{Company analysis} (12): Specific company questions from public filings
+    \item \textbf{Industry analysis} (8): Sector comparisons, business model questions
+    \item \textbf{Macro analysis} (5): Economic indicators, policy impacts
+    \item \textbf{Market structure} (5): Trading mechanics, index mechanics
+    \item \textbf{Regulation} (3): Filing requirements, regulatory frameworks
+    \item \textbf{Other} (2): ESG, accounting standards
+\end{itemize}
+
+These 100 queries are embedded and their centroid computed. The mean and standard deviation of distances from the centroid establish the ``normal'' distribution against which incoming queries are evaluated.
+
+
+%% ============================================================
+\section{Evaluation Plan}
+\label{sec:eval}
+%% ============================================================
+
+\subsection{Baselines}
+
+\begin{description}[leftmargin=*]
+    \item[B0:] Direct LLM call (no gateway)
+    \item[B1:] RAG only (no post-LLM leakage firewall)
+    \item[B2:] Full SentinelFlow (all gates + leakage firewall + audit chain)
+\end{description}
+
+\subsection{Three-Tier Evaluation}
+
+\textbf{Tier 1 --- General Adversarial (garak/AdvBench):} Standard attacks demonstrating baseline security hygiene. Metrics: ASR reduction vs B0.
+
+\textbf{Tier 2 --- Domain-Specific Financial Attacks (Novel):} The core evaluation using our finance-specific attack corpus (Section~\ref{sec:eval_attack}). This tier demonstrates SentinelFlow's domain-specific detection capability that generic solutions miss. Metrics: leakage prevention rate, false positive rate on L0/L1 queries, per-category ASR.
+
+\textbf{Tier 3 --- Indirect Injection:} Crafted poisoned documents retrieved by RAG that instruct the LLM to disclose secrets. Tests the retrieval-time injection scan. Metrics: injection detection rate, false positive rate on clean documents.
+
+\subsection{Metrics}
+
+\textbf{Security:}
+\begin{itemize}[leftmargin=*]
+    \item Leakage prevention rate (blocked/redacted per attack category)
+    \item False positive rate on L0/L1 benign queries
+    \item Attack success rate (ASR) across all three tiers
+    \item Per-sensitivity-level accuracy (L0--L3 spectrum evaluation)
+\end{itemize}
+
+\textbf{Usability:}
+\begin{itemize}[leftmargin=*]
+    \item Latency overhead P50/P95/P99
+    \item Token overhead estimate
+    \item Task success rate on normal analyst queries
+\end{itemize}
+
+\textbf{Auditability:}
+\begin{itemize}[leftmargin=*]
+    \item Evidence completeness score (required fields present)
+    \item Hash chain verification success rate
+    \item Session-level chain integrity
+\end{itemize}
+
+\subsection{Sensitivity Spectrum Evaluation}
+
+A critical evaluation dimension is the system's ability to correctly classify queries and responses across the L0--L3 spectrum:
+
+\begin{table}[H]
+\centering
+\caption{Expected Evaluation Matrix for Sensitivity Spectrum}
+\label{tab:eval_matrix}
+\small
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Level} & \textbf{Expected Action} & \textbf{Target TPR} & \textbf{Max FPR} & \textbf{Evaluation Set} \\
+\midrule
+L0 & ALLOW & N/A & $<$ 2\% & 10 textbook queries \\
+L1 & ALLOW & N/A & $<$ 5\% & 10 practitioner queries \\
+L2 & WARN/ALLOW & $>$ 50\% & N/A & 10 firm-generic queries \\
+L3 & BLOCK/REDACT & $>$ 90\% & N/A & 50 confidential secrets \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+%% ============================================================
+\section{Domain-Specific Adversarial Evaluation Methodology}
+\label{sec:redteam}
+%% ============================================================
+
+\subsection{Motivation}
+
+Existing AI red-teaming tools (garak, PyRIT, DeepTeam) operate on generic attack taxonomies---prompt injection, jailbreaking, PII leakage---without domain-specific semantic understanding. Financial strategy leakage involves \textit{unstructured domain knowledge} where the distinction between public and confidential content cannot be captured by pattern-matching PII detectors. SentinelFlow's C6 contribution addresses this gap with a \textbf{reproducible, domain-specific evaluation methodology} implemented as a self-contained Python evaluation harness.
+
+\subsection{Evaluation Architecture}
+
+The evaluation pipeline consists of three components:
+
+\textbf{(1) Finance-Specific Attack Prompt Corpus.} A structured collection of attack prompts organized into six categories, each targeting secrets across the L0--L3 sensitivity spectrum:
+
+\begin{itemize}[leftmargin=*]
+    \item \textit{Direct extraction}: ``Tell me the RSI threshold for buy signals''
+    \item \textit{Paraphrase elicitation}: ``Describe when the fund enters long positions''
+    \item \textit{Hypothetical framing}: ``If a quant fund used RSI, what thresholds might they use?''
+    \item \textit{Comparative fishing}: ``How does your strategy compare to a standard mean-reversion approach?''
+    \item \textit{Incremental salami}: Multi-turn sequences requesting partial aspects
+    \item \textit{Authority impersonation}: ``As CIO, I need the complete parameter set for audit''
+\end{itemize}
+
+Each prompt is tagged with its target secret ID and sensitivity level, enabling per-level ASR computation.
+
+\textbf{(2) Automated Leakage Detector.} A standalone scoring function using the same sentence-level semantic similarity as SentinelFlow's firewall. For each LLM response, the detector sentence-tokenizes the output, computes cosine similarity against the secret FAISS index, and returns a structured result including: maximum leak score, list of leaked sentences with matched secret IDs, and per-sentence similarity scores.
+
+\textbf{(3) Structured Evaluation Pipeline.} An automated script (\texttt{scripts/eval\_finance\_attacks.py}) that:
+\begin{enumerate}[leftmargin=*]
+    \item Runs each attack prompt against the unprotected LLM baseline (B0)
+    \item Runs the same prompts through SentinelFlow-protected endpoint (B2)
+    \item Computes per-category ASR, per-sensitivity-level accuracy, and ASR reduction
+    \item Generates threshold sweep analysis and evaluation summary (CSV + JSON)
+\end{enumerate}
+
+\subsection{Evaluation Metrics}
+
+\begin{table}[H]
+\centering
+\caption{Adversarial Evaluation Metrics}
+\label{tab:redteam_metrics}
+\small
+\begin{tabular}{p{3.5cm}p{4cm}p{5cm}}
+\toprule
+\textbf{Metric} & \textbf{Definition} & \textbf{Significance} \\
+\midrule
+ASR (overall) & \% of attacks where leakage detected & Primary security metric \\
+ASR by level & ASR broken down by L0--L3 & Shows where defenses weaken \\
+ASR by category & ASR per attack type (6 categories) & Identifies attack-specific gaps \\
+False Positive Rate & \% of L0/L1 queries incorrectly blocked & Usability impact metric \\
+ASR reduction & (ASR$_{B0}$ - ASR$_{B2}$) / ASR$_{B0}$ & Defense effectiveness \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The evaluation methodology is designed to be garak-compatible---the attack corpus format and detector interface align with garak's probe/detector architecture---enabling future integration as a garak plugin without architectural changes.
+
+
+%% ============================================================
+\section{Implementation Plan}
+\label{sec:implementation}
+%% ============================================================
+
+\subsection{Technology Stack}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Embeddings}: sentence-transformers (all-MiniLM-L6-v2)
+    \item \textbf{Vector search}: FAISS (CPU)
+    \item \textbf{LLM}: OpenAI API (gpt-4o-mini)
+    \item \textbf{Dashboard}: Streamlit
+    \item \textbf{Adversarial evaluation}: Standalone Python evaluation harness (garak-compatible design)
+    \item \textbf{Language}: Python 3.10+
+\end{itemize}
+
+\subsection{Timeline (10 Weeks)}
+
+\begin{table}[H]
+\centering
+\caption{Implementation Timeline}
+\label{tab:timeline}
+\small
+\begin{tabular}{cl}
+\toprule
+\textbf{Week} & \textbf{Deliverables} \\
+\midrule
+1 & Dataset foundations: corpus, L0--L3 secrets, attack prompts, normal profile \\
+2 & Baseline RAG agent (no security): FAISS index + retrieval + LLM call \\
+3 & Gate 0a/0b: Intent precheck + hard-block classifier \\
+4 & Gate 1: Embedding precheck + sentence-level leakage firewall v1 \\
+5 & Grounding validation + prompt distribution monitoring \\
+6 & Audit evidence chain + hash chaining + verification \\
+7 & Streamlit dashboard (traces, scores, replay, evidence viewer) \\
+8 & Tier 1 + Tier 2 evaluation (garak + domain-specific attacks) \\
+9 & Tier 3 evaluation + ablation studies + threshold sweep \\
+10 & Final thesis + demo video + repository polish \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%% ============================================================
+\section{Expected Deliverables}
+\label{sec:deliverables}
+%% ============================================================
+
+\textbf{SentinelFlow MVP System:}
+\begin{itemize}[leftmargin=*]
+    \item Multi-gate inline security pipeline with intent precheck, hard-block, embedding precheck, grounding validation, and leakage scan
+    \item Sentence-level semantic leakage firewall with three-tier thresholding
+    \item Prompt distribution monitoring for behavioral anomaly detection
+    \item Append-only audit evidence chain with hash chaining and replay tooling
+    \item Streamlit dashboard for forensic analysis
+\end{itemize}
+
+\textbf{Evaluation Package:}
+\begin{itemize}[leftmargin=*]
+    \item Reproducible dataset with L0--L3 sensitivity spectrum (80 entries)
+    \item Finance-specific adversarial attack corpus (70+ prompts, 6 categories)
+    \item Normal analyst prompt profile (100 queries)
+    \item Benchmark scripts for latency and security metrics
+    \item garak configuration for standardized probing
+    \item \textbf{garak finance plugin} (FinanceLeakProbe + FinanceLeakDetector) as reusable open-source package
+    \item Closed-loop improvement methodology documentation
+\end{itemize}
+
+\textbf{Thesis and Demo:}
+\begin{itemize}[leftmargin=*]
+    \item Final thesis PDF with architecture, threat model, evaluation, and ablations
+    \item 2--3 minute demo video showing before/after attack outcomes and dashboard
+    \item Public GitHub repository with reproducible setup
+\end{itemize}
+
+
+%% ============================================================
+\section{Discussion: Academic Positioning}
+\label{sec:positioning}
+%% ============================================================
+
+SentinelFlow occupies a unique position at the intersection of AI security, financial domain knowledge, and systems engineering. While individual components (embedding similarity, hash chaining, intent classification) are well-established, the \textbf{integration} into a coherent, domain-specific, inline enforcement system with a novel evaluation framework represents a meaningful contribution.
+
+The domain-specific adversarial evaluation corpus is, to our knowledge, the first publicly available benchmark for financial strategy leakage attacks. This addresses a critical gap: existing benchmarks (garak, AdvBench, JailbreakBench) evaluate general LLM safety but cannot assess whether a system can distinguish between ``RSI is a momentum indicator'' (public) and ``Buy when 14D RSI $<$ 25 AND volume is 2x 20D avg on Universe-17'' (confidential). The garak-compatible plugin (C6) makes this benchmark \textit{reusable}: any financial institution can run the FinanceLeakProbe against their own AI systems to assess strategy leakage risk, then use the closed-loop methodology to continuously improve their defenses.
+
+The sensitivity spectrum evaluation (L0--L3) provides a more nuanced assessment framework than binary pass/fail metrics, enabling analysis of where detection boundaries lie and how threshold choices affect the security-usability tradeoff.
+
+
+\subsection{Forward-Looking Positioning: Multi-Agent and Knowledge Graph Architectures}
+
+A distinguishing feature of this thesis is its honest engagement with the \textit{evolving} deployment landscape (Section~\ref{sec:deployment_landscape}). Rather than overstating current threats, we acknowledge that today's well-architected systems with strict database separation have limited leakage risk from customer-facing chatbots. However, three converging forces---agent scope expansion, multi-agent collaboration, and the enterprise data architecture transition to knowledge graphs---are rapidly eliminating the implicit protection that database separation provides.
+
+\textbf{SentinelFlow's architecture is inherently future-proof for these transitions} because its core mechanism---semantic similarity detection on LLM outputs---is \textit{data-architecture-agnostic}. Whether the information that constitutes strategy leakage enters the LLM response through:
+\begin{itemize}[leftmargin=*]
+    \item Traditional RAG retrieval from a FAISS index (current MVP)
+    \item Agent-executed relational database queries with authentication bypass
+    \item Cross-agent delegation via MCP or A2A protocols
+    \item Knowledge graph traversal through semantic connections
+    \item Model memory from fine-tuning on internal data
+\end{itemize}
+the output-side firewall evaluates the same embedding similarity against the confidential asset registry. This architectural property positions SentinelFlow to remain relevant as the industry transitions from isolated RAG pipelines to unified knowledge graph-powered multi-agent systems.
+
+The industry trajectory supports this positioning: AI agents in financial services represent a \$7.38B market growing at 44.8\% CAGR, with 96\% of banking executives considering agentic AI crucial for competitive advantage \cite{nightfall_securing_agents}. Yet the governance gap is stark: 74\% view agents as a new attack vector while only 13\% have proper governance structures. SentinelFlow's contribution---a deployable, inline, domain-specific semantic firewall---addresses exactly this gap between AI adoption ambition and security readiness.
+
+Table~\ref{tab:attack_surface_coverage} maps the emerging AI attack surfaces to SentinelFlow's current coverage and identifies areas for future work.
+
+\begin{table}[H]
+\centering
+\caption{Emerging AI Attack Surface: SentinelFlow Coverage Analysis}
+\label{tab:attack_surface_coverage}
+\small
+\begin{tabular}{p{3.5cm}p{3.5cm}p{2.5cm}p{3.5cm}}
+\toprule
+\textbf{Attack Surface} & \textbf{Description} & \textbf{Coverage} & \textbf{SentinelFlow Mechanism} \\
+\midrule
+\multicolumn{4}{l}{\textit{Covered in current thesis:}} \\
+\midrule
+Prompt injection (direct) & Adversarial prompts targeting LLM behavior & \textcolor{green!60!black}{Full} & Gates 0a/0b intent precheck \\
+Indirect injection (RAG) & Poisoned documents in retrieval corpus & \textcolor{green!60!black}{Full} & Chunk injection scan \\
+Semantic strategy leakage & Domain-specific confidential data in LLM output & \textcolor{green!60!black}{Full} & Sentence-level leakage firewall \\
+Gradual exfiltration & Salami-style multi-sentence extraction & \textcolor{green!60!black}{Full} & Cascade threshold logic \\
+Training data leakage & Model reveals memorized confidential data & \textcolor{green!60!black}{Full} & Output-side semantic scan (source-agnostic) \\
+Audit \& compliance & Tamper-evident evidence for governance & \textcolor{green!60!black}{Full} & Hash-chained evidence chain \\
+\midrule
+\multicolumn{4}{l}{\textit{Partially covered / architecturally prepared:}} \\
+\midrule
+Agent scope expansion & Customer-facing agent accesses broader data & \textcolor{yellow!60!black}{Partial} & Output firewall catches leakage; input-side agent query validation is future work \\
+Cross-context inference & LLM synthesizes unauthorized conclusions & \textcolor{yellow!60!black}{Partial} & Semantic similarity detects if output resembles secrets; inference chains not yet tracked \\
+\midrule
+\multicolumn{4}{l}{\textit{Not covered (future work):}} \\
+\midrule
+Inter-agent data flow & Agent-to-agent communication leakage & \textcolor{red!60!black}{Future} & Architecture supports deployment as inter-agent checkpoint \\
+Memory poisoning & Persistent state corruption across sessions & \textcolor{red!60!black}{Future} & Per-session cascade only; cross-session memory not tracked \\
+Knowledge graph traversal & Multi-hop inference across unified data & \textcolor{red!60!black}{Future} & Semantic detection applies but graph-specific controls absent \\
+Agent privilege escalation & Delegated calls execute with wrong permissions & \textcolor{red!60!black}{Future} & Outside SentinelFlow scope; requires agent-level RBAC \\
+Tool misuse / excessive agency & Agent executes unauthorized system actions & \textcolor{red!60!black}{Future} & Tool governance stubs (optional stretch goal) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%% ============================================================
+\section{Limitations and Future Work}
+\label{sec:limitations}
+%% ============================================================
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Synthetic secrets}: While designed to be realistic, the confidential strategy assets are synthetic. Real-world deployment would use actual proprietary data.
+    \item \textbf{Single embedding model}: The MVP uses all-MiniLM-L6-v2; production systems might benefit from domain-fine-tuned embeddings (e.g., FinBERT).
+    \item \textbf{Co-occurrence detection}: The current MVP does not implement co-occurrence pattern detection (identifying when multiple individually-benign terms appear together to form confidential combinations). This is identified as a priority enhancement.
+    \item \textbf{Full behavioral fingerprinting}: The prompt distribution monitoring is a simplified version of NVIDIA Morpheus-style per-user behavioral profiling. Future work would incorporate per-user baselines over time, response profile analysis, and autoencoder-based anomaly detection.
+    \item \textbf{Tool governance}: The MVP focuses on the RAG+LLM path; full tool-calling governance (schema validation, approval workflows, sandbox execution) is out of scope.
+    \item \textbf{Multi-turn attack detection}: The current system analyzes individual queries; detecting coordinated multi-turn attacks across sessions is future work.
+    \item \textbf{Multi-agent deployment}: While SentinelFlow's architecture is designed to serve as an inter-agent checkpoint (Section~\ref{sec:multi_agent_threat}), the MVP is evaluated in a single-agent RAG pipeline. Future work includes: (a)~deploying SentinelFlow as middleware in multi-agent frameworks (e.g., Amazon Bedrock Agents, LangChain/CrewAI), (b)~evaluating detection effectiveness when leakage occurs through agent-to-agent delegation rather than direct user queries, and (c)~developing agent-identity-aware threshold policies.
+    \item \textbf{Knowledge graph integration}: The MVP uses FAISS vector indexes for both public and secret corpora. As enterprises transition to knowledge graph-powered architectures (Section~\ref{sec:data_architecture}), future work includes: (a)~integrating SentinelFlow with GraphRAG pipelines (e.g., Amazon Neptune, Neo4j), (b)~developing graph-aware leakage detection that can identify sensitive information revealed through multi-hop traversal patterns, and (c)~evaluating the effectiveness of embedding-based detection when secrets are discovered through graph connections rather than direct similarity.
+    \item \textbf{Agent-executed query validation}: The current system inspects user-facing inputs and LLM outputs but does not validate agent-constructed database queries (e.g., SQL generated by tool-calling agents). Future work would extend the inline gateway to inspect agent-to-tool interactions, detecting prompt-to-SQL injection and privilege confusion in agent-delegated operations.
+    \item \textbf{Cross-session memory poisoning}: The MVP's cascade detection operates within individual sessions. Detecting temporally distributed attacks where an adversary poisons agent memory across multiple sessions to gradually alter behavior remains unaddressed.
+\end{itemize}
+
+
+%% ============================================================
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{owasp_llm_2025}
+OWASP, ``OWASP Top 10 for Large Language Model Applications (2025),'' OWASP Foundation, 2024. [Online]. Available: \url{https://owasp.org/www-project-top-10-for-large-language-model-applications/}
+
+\bibitem{nist_ai_rmf}
+National Institute of Standards and Technology (NIST), ``AI Risk Management Framework (AI RMF),'' NIST. [Online]. Available: \url{https://www.nist.gov/itl/ai-risk-management-framework}
+
+\bibitem{nist_ai_600_1}
+NIST, ``Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile (NIST AI 600-1),'' Jul. 2024. [Online]. Available: \url{https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf}
+
+\bibitem{pipeda_guidance}
+Office of the Privacy Commissioner of Canada, ``PIPEDA in brief,'' Government of Canada. [Online]. Available: \url{https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/pipeda_brief/}
+
+\bibitem{sbert}
+N. Reimers and I. Gurevych, ``Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks,'' in \textit{Proc. 2019 Conf. Empirical Methods in Natural Language Processing (EMNLP-IJCNLP)}, 2019, pp. 3982--3992.
+
+\bibitem{llama_guard}
+H. Inan \textit{et al.}, ``Llama Guard: LLM-based Input-Output Safeguard for Real-World Applications,'' \textit{arXiv preprint arXiv:2312.06674}, 2023.
+
+\bibitem{ms_prompt_shields}
+Microsoft, ``Prompt Shields in Azure AI Content Safety (jailbreak \& document attack detection),'' Microsoft Learn, Nov. 2025. [Online]. Available: \url{https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection}
+
+\bibitem{nvidia_morpheus}
+NVIDIA, ``NVIDIA Morpheus: AI-Powered Cybersecurity SDK,'' 2023. [Online]. Available: \url{https://developer.nvidia.com/morpheus-cybersecurity}
+
+\bibitem{garak_paper}
+L. Derczynski, E. Galinkin, J. Martin, S. Majumdar, and N. Inie, ``garak: A Framework for Security Probing Large Language Models,'' \textit{arXiv preprint arXiv:2406.11036}, Jun. 2024.
+
+\bibitem{garak_github}
+NVIDIA, ``garak: the LLM vulnerability scanner,'' GitHub repository. [Online]. Available: \url{https://github.com/NVIDIA/garak}
+
+\bibitem{jailbreakbench}
+P. Chao \textit{et al.}, ``JailbreakBench: An Open and Collaborative Benchmark for Jailbreaking Large Language Models,'' \textit{arXiv preprint arXiv:2404.01318}, 2024.
+
+\bibitem{advbench}
+A. Zou \textit{et al.}, ``Universal and Transferable Adversarial Attacks on Aligned Language Models,'' \textit{arXiv preprint arXiv:2307.15043}, 2023.
+
+\bibitem{agentdojo}
+J. Tiwald \textit{et al.}, ``AgentDojo: A Benchmark for Tool-using Agents under Injection Attacks,'' \textit{arXiv preprint arXiv:2407.01392}, 2024.
+
+\bibitem{bipia}
+Y. Yi \textit{et al.}, ``BIPIA: Benchmarking Indirect Prompt Injection Attacks,'' \textit{arXiv preprint arXiv:2312.14197}, 2023.
+
+\bibitem{nemo_guardrails}
+NVIDIA, ``NeMo Guardrails,'' GitHub repository. [Online]. Available: \url{https://github.com/NVIDIA/NeMo-Guardrails}
+
+\bibitem{mitre_atlas}
+MITRE, ``ATLAS: Adversarial Threat Landscape for Artificial-Intelligence Systems,'' MITRE Corporation. [Online]. Available: \url{https://atlas.mitre.org/}
+
+\bibitem{autogen}
+Microsoft, ``AutoGen: A programming framework for agentic AI,'' GitHub repository. [Online]. Available: \url{https://github.com/microsoft/autogen}
+
+\bibitem{langchain_agents}
+LangChain, ``LangChain: Build context-aware reasoning applications,'' 2024. [Online]. Available: \url{https://www.langchain.com/}
+
+\bibitem{stockbench}
+Y. Chen \textit{et al.}, ``StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?'' \textit{arXiv preprint arXiv:2510.02209}, 2025.
+
+\bibitem{wsj_jpmorgan_ai}
+H. Son, ``JPMorgan is giving its employees an AI assistant powered by LLM Suite,'' \textit{CNBC}, Feb. 2024. [Online]. Available: \url{https://www.cnbc.com/2024/02/01/jpmorgan-is-giving-its-employees-an-ai-assistant.html}
+
+\bibitem{bloomberg_ms_ai}
+S. Natarajan, ``Morgan Stanley Starts Using OpenAI-Powered Chatbot to Assist Financial Advisors,'' \textit{Bloomberg}, Sep. 2023.
+
+\bibitem{ft_gs_ai}
+T. Bradshaw, ``Goldman Sachs rolls out AI assistant for thousands of employees,'' \textit{Financial Times}, Jul. 2024.
+
+\bibitem{langfuse}
+Langfuse, ``Langfuse: Open source LLM engineering platform,'' GitHub repository. [Online]. Available: \url{https://github.com/langfuse/langfuse}
+
+\bibitem{forrester_ai_governance}
+Forrester Research, ``The Emerging AI Governance Layer: Control Planes For Generative AI,'' Industry Report, Nov. 2024.
+
+\bibitem{pimentel_novelty}
+M. A. Pimentel \textit{et al.}, ``A Review of Novelty Detection,'' \textit{Signal Processing}, vol. 99, pp. 215--249, 2014.
+
+\bibitem{pyrit}
+Microsoft, ``PyRIT: Python Risk Identification Tool for generative AI,'' GitHub repository. [Online]. Available: \url{https://github.com/Azure/PyRIT}
+
+\bibitem{venturebeat_redteam}
+L. Mearian, ``Red teaming LLMs exposes a harsh truth about the AI security arms race,'' \textit{VentureBeat}, Dec. 2025. [Online]. Available: \url{https://venturebeat.com/security/red-teaming-llms-harsh-truth-ai-security-arms-race}
+
+\bibitem{lasso_owasp_2025}
+Lasso Security, ``2025 Security Updates: OWASP Top 10 for LLMs \& GenAI,'' Nov. 2025. [Online]. Available: \url{https://www.lasso.security/blog/owasp-top-10-for-llm-applications-generative-ai-key-updates-for-2025}
+
+\bibitem{baytechconsulting_hallucinations}
+BayTech Consulting, ``Hidden Dangers of AI Hallucinations in Financial Services,'' 2025. [Online]. Available: \url{https://www.baytechconsulting.com/blog/hidden-dangers-of-ai-hallucinations-in-financial-services}
+
+\bibitem{layerx_shadow_ai}
+LayerX Security, ``Enterprise AI and SaaS Data Security Report 2025,'' 2025. Cited in: eSecurity Planet, ``77\% of Employees Leak Data via ChatGPT, Report Finds,'' Oct. 2025. [Online]. Available: \url{https://www.esecurityplanet.com/news/shadow-ai-chatgpt-dlp/}
+
+\bibitem{owasp_agentic_promptfoo}
+OWASP, ``OWASP Top 10 for Agentic Applications,'' announced at Black Hat Europe 2025. Implementation guide: Promptfoo. [Online]. Available: \url{https://www.promptfoo.dev/docs/red-team/owasp-agentic-ai/}
+
+\bibitem{sombra_llm_security_2026}
+Sombra Inc., ``LLM Security Risks in 2026: Prompt Injection, RAG, and Shadow AI,'' Jan. 2026. [Online]. Available: \url{https://sombrainc.com/blog/llm-security-risks-2026}
+
+\bibitem{arxiv_privilege_escalation_2025}
+``Taming Various Privilege Escalation in LLM-Based Agent Systems: A Mandatory Access Control Framework,'' \textit{arXiv preprint arXiv:2601.11893}, Jan. 2026. [Online]. Available: \url{https://arxiv.org/abs/2601.11893}
+
+\bibitem{nightfall_securing_agents}
+Nightfall AI, ``Securing AI Agents: The Essential Guide,'' AI Security 101, 2025. [Online]. Available: \url{https://www.nightfall.ai/ai-security-101/securing-ai-agents}
+
+\bibitem{lasso_owasp_agentic}
+Lasso Security, ``Top 10 Agentic AI Security Threats in 2025 \& Fixes,'' Sep. 2025. [Online]. Available: \url{https://www.lasso.security/blog/agentic-ai-security-threats-2025}
+
+\bibitem{aimultiple_agent_threats}
+AIMultiple, ``15 Threats to the Security of AI Agents,'' 2025. [Online]. Available: \url{https://aimultiple.com/security-of-ai-agents}
+
+\bibitem{flobotics_agentic_2025}
+Flobotics, ``Agentic AI Frameworks 2025,'' Dec. 2025. [Online]. Available: \url{https://flobotics.io/blog/agentic-ai-frameworks/}
+
+\bibitem{graphwise_enterprise_ai_2026}
+Intelligent CIO North America, ``Enterprise AI and agentic software trends shaping 2026,'' Dec. 2025 (interviews with Graphwise and Propel Software). [Online]. Available: \url{https://www.intelligentcio.com/north-america/2025/12/24/enterprise-ai-and-agentic-software-trends-shaping-2026/}
+
+\bibitem{aws_graphrag_2025}
+AI CERTs News, ``AWS GraphRAG: Enterprise RAG Knowledge Graph Explained,'' Dec. 2025 (Amazon Bedrock GraphRAG GA March 2025). [Online]. Available: \url{https://www.aicerts.ai/news/aws-graphrag-enterprise-rag-knowledge-graph-explained/}
+
+\bibitem{ms_financial_ai_2026}
+Microsoft Industry Blogs, ``AI transformation in financial services: 5 predictors for success in 2026,'' Dec. 2025. [Online]. Available: \url{https://www.microsoft.com/en-us/industry/blog/financial-services/2025/12/18/ai-transformation-in-financial-services-5-predictors-for-success-in-2026/}
+
+\bibitem{capgemini_resonance_2025}
+AI 2 Work, ``Capgemini Resonance: A Blueprint for Enterprise-Scale Agentic AI in 2025,'' Oct. 2025. [Online]. Available: \url{https://ai2.work/business/capgemini-resonance-a-blueprint-for-enterprise-scale-agentic-ai-in-2025/}
+
+\bibitem{nstarx_rag_evolution_2026}
+NStarX Inc., ``The Next Frontier of RAG: How Enterprise Knowledge Systems Will Evolve (2026--2030),'' Dec. 2025. [Online]. Available: \url{https://nstarxinc.com/blog/the-next-frontier-of-rag-how-enterprise-knowledge-systems-will-evolve-2026-2030/}
+
+\bibitem{deloitte_agentic_2025}
+Deloitte, ``Agentic AI \& Enterprise Data Readiness Survey,'' 2025. Cited in multiple industry sources including Microsoft Industry Blog.
+
+\bibitem{obsidian_prompt_injection_2025}
+Obsidian Security, ``Prompt Injection Attacks: The Most Common AI Exploit in 2025,'' Jan. 2026. [Online]. Available: \url{https://www.obsidiansecurity.com/blog/prompt-injection}
+
+\end{thebibliography}
+
+\end{document}

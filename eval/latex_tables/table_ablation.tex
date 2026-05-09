@@ -1,0 +1,18 @@
+\begin{table*}[htbp]
+\centering
+\caption{Ablation Study: Per-Gate Contribution to Attack Prevention}
+\label{tab:ablation}
+\begin{tabular}{lcccccl}
+\toprule
+\textbf{Config} & \textbf{Pre-gate Bypass (\%)} & \textbf{True Leakage (\%)} & \textbf{FPR (\%)} & \textbf{Blocked} & \textbf{Latency (ms)} & \textbf{Gates Disabled} \\
+\midrule
+  B0 & 100.0 & --- & 0.0 & 0/271 & 0.0 & Unprotected baseline — no gates active \\
+  B2\_no\_G0a & 58.7 & --- & 2.0 & 112/271 & 25.8 & Remove regex precheck (Gate 0a) \\
+  B2\_no\_G0b & 53.5 & --- & 2.0 & 126/271 & 18.9 & Remove verb×object hard-block (Gate 0b) \\
+  B2\_no\_G1 & 74.5 & --- & 0.0 & 69/271 & 13.6 & Remove embedding gate (Gate 1) \\
+  B2\_no\_LS & 50.9 & --- & 2.0 & 133/271 & 11.8 & Remove leakage scan \\
+  B2\_single\_tau & 71.2 & --- & 0.0 & 78/271 & 22.4 & Gate 1 single threshold (τ=0.62, midpoin \\
+  B2\_full & 50.9 & 2.6 & 2.0 & 133/271 & 19.5 & Full SentinelFlow — all gates active \\
+\bottomrule
+\end{tabular}
+\end{table*}
