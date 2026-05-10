@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-10T04:05:59Z",
+  "generated_at": "2026-05-10T04:33:34Z",
   "n_cells": 8,
-  "n_built": 0,
+  "n_built": 6,
   "n_cached": 2,
   "n_error": 0,
-  "n_dryrun": 6,
+  "n_dryrun": 0,
   "cells": [
     {
       "encoder_short": "minilm",
@@ -47,7 +47,14 @@
       "expected_ntotal": 60,
       "out_index": "data/index/secrets__mpnet.faiss",
       "out_meta": "data/index/secrets__mpnet_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 60,
+      "dim": 768,
+      "load_time_s": 3.2,
+      "encode_time_s": 0.69,
+      "elapsed_s": 3.89,
+      "index_md5": "2339c82ec44ce57378e50897de115d15",
+      "meta_md5": "c74016b781e6935760c2b552a12fbcf8"
     },
     {
       "encoder_short": "mpnet",
@@ -58,7 +65,14 @@
       "expected_ntotal": 90,
       "out_index": "data/index/secrets_v2__mpnet.faiss",
       "out_meta": "data/index/secrets_v2__mpnet_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 90,
+      "dim": 768,
+      "load_time_s": 0.6,
+      "encode_time_s": 1.33,
+      "elapsed_s": 1.93,
+      "index_md5": "6e9542ffa9c24994b359b339a76c9633",
+      "meta_md5": "949856e2a3762631dbeb4161c190f5cd"
     },
     {
       "encoder_short": "bge_large",
@@ -69,7 +83,14 @@
       "expected_ntotal": 60,
       "out_index": "data/index/secrets__bge_large.faiss",
       "out_meta": "data/index/secrets__bge_large_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 60,
+      "dim": 1024,
+      "load_time_s": 4.72,
+      "encode_time_s": 2.33,
+      "elapsed_s": 7.05,
+      "index_md5": "0d13fbe43b4612ad2a9d60e1a9091535",
+      "meta_md5": "c74016b781e6935760c2b552a12fbcf8"
     },
     {
       "encoder_short": "bge_large",
@@ -80,7 +101,14 @@
       "expected_ntotal": 90,
       "out_index": "data/index/secrets_v2__bge_large.faiss",
       "out_meta": "data/index/secrets_v2__bge_large_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 90,
+      "dim": 1024,
+      "load_time_s": 4.56,
+      "encode_time_s": 4.83,
+      "elapsed_s": 9.4,
+      "index_md5": "50e5b003d9f88824a46c07dd064f961a",
+      "meta_md5": "949856e2a3762631dbeb4161c190f5cd"
     },
     {
       "encoder_short": "finlang",
@@ -91,7 +119,14 @@
       "expected_ntotal": 60,
       "out_index": "data/index/secrets__finlang.faiss",
       "out_meta": "data/index/secrets__finlang_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 60,
+      "dim": 768,
+      "load_time_s": 9.6,
+      "encode_time_s": 2.88,
+      "elapsed_s": 12.48,
+      "index_md5": "b9341ed1ff1ebd039c475eaff154e57a",
+      "meta_md5": "c74016b781e6935760c2b552a12fbcf8"
     },
     {
       "encoder_short": "finlang",
@@ -102,7 +137,14 @@
       "expected_ntotal": 90,
       "out_index": "data/index/secrets_v2__finlang.faiss",
       "out_meta": "data/index/secrets_v2__finlang_meta.pkl",
-      "status": "would_build"
+      "status": "built",
+      "ntotal": 90,
+      "dim": 768,
+      "load_time_s": 1.84,
+      "encode_time_s": 3.53,
+      "elapsed_s": 5.37,
+      "index_md5": "ba98d1347531051b9dcb1d12086cf387",
+      "meta_md5": "949856e2a3762631dbeb4161c190f5cd"
     }
   ]
 }
