@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-05-10T04:05:59Z",
+  "n_cells": 8,
+  "n_built": 0,
+  "n_cached": 2,
+  "n_error": 0,
+  "n_dryrun": 6,
+  "cells": [
+    {
+      "encoder_short": "minilm",
+      "encoder_name": "sentence-transformers/all-MiniLM-L6-v2",
+      "encoder_revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+      "corpus_label": "60entry",
+      "src_jsonl": "data/secrets/secrets.jsonl",
+      "expected_ntotal": 60,
+      "out_index": "data/index/secrets.faiss",
+      "out_meta": "data/index/secrets_meta.pkl",
+      "status": "cached",
+      "ntotal": 60,
+      "dim": 384,
+      "index_md5": "17fd41fe4922e3e64ae53b9014dd6870",
+      "meta_md5": "c74016b781e6935760c2b552a12fbcf8",
+      "elapsed_s": 0.0
+    },
+    {
+      "encoder_short": "minilm",
+      "encoder_name": "sentence-transformers/all-MiniLM-L6-v2",
+      "encoder_revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+      "corpus_label": "90entry",
+      "src_jsonl": "data/secrets/secrets_v2.jsonl",
+      "expected_ntotal": 90,
+      "out_index": "data/index/secrets_v2.faiss",
+      "out_meta": "data/index/secrets_v2_meta.pkl",
+      "status": "cached",
+      "ntotal": 90,
+      "dim": 384,
+      "index_md5": "a03fa690a646f7f02cf0b2cc0d70dcab",
+      "meta_md5": "949856e2a3762631dbeb4161c190f5cd",
+      "elapsed_s": 0.0
+    },
+    {
+      "encoder_short": "mpnet",
+      "encoder_name": "sentence-transformers/all-mpnet-base-v2",
+      "encoder_revision": "e8c3b32edf5434bc2275fc9bab85f82640a19130",
+      "corpus_label": "60entry",
+      "src_jsonl": "data/secrets/secrets.jsonl",
+      "expected_ntotal": 60,
+      "out_index": "data/index/secrets__mpnet.faiss",
+      "out_meta": "data/index/secrets__mpnet_meta.pkl",
+      "status": "would_build"
+    },
+    {
+      "encoder_short": "mpnet",
+      "encoder_name": "sentence-transformers/all-mpnet-base-v2",
+      "encoder_revision": "e8c3b32edf5434bc2275fc9bab85f82640a19130",
+      "corpus_label": "90entry",
+      "src_jsonl": "data/secrets/secrets_v2.jsonl",
+      "expected_ntotal": 90,
+      "out_index": "data/index/secrets_v2__mpnet.faiss",
+      "out_meta": "data/index/secrets_v2__mpnet_meta.pkl",
+      "status": "would_build"
+    },
+    {
+      "encoder_short": "bge_large",
+      "encoder_name": "BAAI/bge-large-en-v1.5",
+      "encoder_revision": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "corpus_label": "60entry",
+      "src_jsonl": "data/secrets/secrets.jsonl",
+      "expected_ntotal": 60,
+      "out_index": "data/index/secrets__bge_large.faiss",
+      "out_meta": "data/index/secrets__bge_large_meta.pkl",
+      "status": "would_build"
+    },
+    {
+      "encoder_short": "bge_large",
+      "encoder_name": "BAAI/bge-large-en-v1.5",
+      "encoder_revision": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "corpus_label": "90entry",
+      "src_jsonl": "data/secrets/secrets_v2.jsonl",
+      "expected_ntotal": 90,
+      "out_index": "data/index/secrets_v2__bge_large.faiss",
+      "out_meta": "data/index/secrets_v2__bge_large_meta.pkl",
+      "status": "would_build"
+    },
+    {
+      "encoder_short": "finlang",
+      "encoder_name": "FinLang/finance-embeddings-investopedia",
+      "encoder_revision": "37d7594d02e3d656a241e099e39ac50ab921f999",
+      "corpus_label": "60entry",
+      "src_jsonl": "data/secrets/secrets.jsonl",
+      "expected_ntotal": 60,
+      "out_index": "data/index/secrets__finlang.faiss",
+      "out_meta": "data/index/secrets__finlang_meta.pkl",
+      "status": "would_build"
+    },
+    {
+      "encoder_short": "finlang",
+      "encoder_name": "FinLang/finance-embeddings-investopedia",
+      "encoder_revision": "37d7594d02e3d656a241e099e39ac50ab921f999",
+      "corpus_label": "90entry",
+      "src_jsonl": "data/secrets/secrets_v2.jsonl",
+      "expected_ntotal": 90,
+      "out_index": "data/index/secrets_v2__finlang.faiss",
+      "out_meta": "data/index/secrets_v2__finlang_meta.pkl",
+      "status": "would_build"
+    }
+  ]
+}

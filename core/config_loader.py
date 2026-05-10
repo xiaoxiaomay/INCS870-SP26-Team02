@@ -15,6 +15,19 @@ PINNED_REVISIONS = {
     # 2026-05-08. Pinning this prevents the upstream-update drift documented
     # in V9_REPRODUCTION.md §3.
     "sentence-transformers/all-MiniLM-L6-v2": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    # Phase-1.F encoder ablation candidates (registered 2026-05-09).
+    # Each revision is HF main as of 2026-05-09, captured via
+    # `git ls-remote https://huggingface.co/<model> refs/heads/main`.
+    # Dim values verified via scripts/probe_encoder.py M1.0 / M1.4.
+    # See PHASE_1F_PLAN_V2.md §1.3 for context.
+    "sentence-transformers/all-mpnet-base-v2":
+        "e8c3b32edf5434bc2275fc9bab85f82640a19130",  # dim=768
+    "BAAI/bge-large-en-v1.5":
+        "d4aa6901d3a41ba39fb536a557fa166f842b0e09",  # dim=1024 (M1.0 PRIMARY: 702.8 MB peak RSS, well under 60% × 8 GB)
+    "BAAI/bge-base-en-v1.5":
+        "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",  # dim=768 (Q2 fallback for bge-large; not exercised — bge-large PASSED probe)
+    "FinLang/finance-embeddings-investopedia":
+        "37d7594d02e3d656a241e099e39ac50ab921f999",  # dim=768 (M1.4 verified)
 }
 
 # Dated OpenAI model snapshot for stable reproduction. Replace the alias

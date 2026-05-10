@@ -60,6 +60,7 @@ if str(REPO_ROOT) not in sys.path:
 from core.config_loader import (  # noqa: E402
     PINNED_OPENAI_MODEL,
     PINNED_REVISIONS,
+    get_pinned_revision,
 )
 
 CANONICAL_HF_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
@@ -183,6 +184,36 @@ def verify_l1_static() -> Tuple[bool, List[str]]:
         except Exception:
             pass
 
+    # 1d. Every literal model-name string passed to SentenceTransformer( must
+    # appear in PINNED_REVISIONS. Phase-1.F adds new encoders to the registry;
+    # if a future contributor hardcodes a new encoder name without registering,
+    # this catches it. We only flag *string-literal* model names; identifiers
+    # (e.g. `SentenceTransformer(model_name)` where model_name is a variable)
+    # are the caller's responsibility — we cannot statically resolve them.
+    literal_st_re = re.compile(
+        r'SentenceTransformer\(\s*["\']([^"\']+)["\']'
+    )
+    pinned_keys = set(PINNED_REVISIONS.keys())
+    for path in REPO_ROOT.rglob("*.py"):
+        rel = str(path.relative_to(REPO_ROOT))
+        if rel == "scripts/verify_repro_pins.py":
+            continue
+        parts = path.relative_to(REPO_ROOT).parts
+        if any(p in {"venv", "__pycache__"} for p in parts):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            for m in literal_st_re.finditer(text):
+                hardcoded_name = m.group(1)
+                if hardcoded_name not in pinned_keys:
+                    line_no = text[: m.start()].count("\n") + 1
+                    violations.append(
+                        f"L1-unregistered-encoder: {rel}:{line_no}: "
+                        f"hardcoded {hardcoded_name!r} not in PINNED_REVISIONS"
+                    )
+        except Exception:
+            pass
+
     return (len(violations) == 0, violations)
 
 
@@ -253,20 +284,20 @@ def verify_l2_runtime(verbose: bool = False) -> Tuple[bool, List[str]]:
         else:
             os.environ.pop("OPENAI_MODEL", None)
 
-    # 2c. HF revision via the helper used by every site
-    from core.config_loader import get_pinned_revision
-
-    rev = get_pinned_revision(CANONICAL_HF_MODEL)
-    if rev != CANONICAL_HF_REVISION:
-        failures.append(
-            f"L2: get_pinned_revision({CANONICAL_HF_MODEL!r}) = "
-            f"{rev!r}, expected {CANONICAL_HF_REVISION!r}"
-        )
-    else:
-        passes.append(
-            f"L2: get_pinned_revision({CANONICAL_HF_MODEL!r}) returns "
-            f"the canonical hash"
-        )
+    # 2c. HF revision via the helper used by every site (every PINNED_REVISIONS
+    # entry — Phase-1.F adds 4 entries, so this loop now covers all of them).
+    for hf_model, expected_rev in PINNED_REVISIONS.items():
+        rev = get_pinned_revision(hf_model)
+        if rev != expected_rev:
+            failures.append(
+                f"L2: get_pinned_revision({hf_model!r}) = "
+                f"{rev!r}, expected {expected_rev!r}"
+            )
+        else:
+            passes.append(
+                f"L2: get_pinned_revision({hf_model!r}) returns "
+                f"the canonical hash (= {expected_rev[:12]}...)"
+            )
 
     # 2d. Each top-level config exposes both pins
     for cfg_path in ["config.yaml", "config_v2.yaml", "config_medical.yaml"]:
@@ -298,11 +329,40 @@ def verify_l2_runtime(verbose: bool = False) -> Tuple[bool, List[str]]:
 # ---------------------------------------------------------------------------
 
 
-def verify_l3_end_to_end(verbose: bool = False) -> Tuple[bool, List[str]]:
+def _expected_revision_for_config(config_path: Path) -> str:
     """
-    Run a 2-prompt sanity through `repro_full_pipeline.py`; inspect
-    `summary.json:llm_model` and `summary.json:embedding_revision`.
-    Confirms that the resolution chain held end-to-end.
+    Resolve the expected HF revision for a given config file (used by L3
+    when --config is specified; Phase-1.F covers multiple encoders, so the
+    expected hash is the one declared in the config's embedding section,
+    which itself must equal PINNED_REVISIONS[model_name]).
+    """
+    import yaml
+    with open(config_path) as f:
+        cfg = yaml.safe_load(f) or {}
+    emb = cfg.get("embedding", {}) or {}
+    name = emb.get("model_name")
+    if not name:
+        raise ValueError(f"{config_path}: missing embedding.model_name")
+    pinned = get_pinned_revision(name)
+    declared = emb.get("revision")
+    if declared and pinned and declared != pinned:
+        raise ValueError(
+            f"{config_path}: embedding.revision={declared} but "
+            f"PINNED_REVISIONS[{name!r}]={pinned}"
+        )
+    return declared or pinned
+
+
+def verify_l3_end_to_end(
+    verbose: bool = False, config_path: str = "config.yaml"
+) -> Tuple[bool, List[str]]:
+    """
+    Run a 2-prompt sanity through `repro_full_pipeline.py` against the
+    given config; inspect `summary.json:llm_model` and
+    `summary.json:embedding_revision`. Confirms the resolution chain
+    held end-to-end.
+
+    Phase-1.F: pass `--config <path>` to probe per-encoder configs.
     """
     failures: List[str] = []
 
@@ -315,13 +375,22 @@ def verify_l3_end_to_end(verbose: bool = False) -> Tuple[bool, List[str]]:
             ],
         )
 
+    cfg_full = REPO_ROOT / config_path
+    if not cfg_full.exists():
+        return (False, [f"L3: config {cfg_full} not found"])
+
+    try:
+        expected_rev = _expected_revision_for_config(cfg_full)
+    except Exception as e:
+        return (False, [f"L3: config-revision resolution failed: {e}"])
+
     with tempfile.TemporaryDirectory(prefix="verify_repro_pins_") as tmp:
         tmp_dir = Path(tmp)
         cmd = [
             sys.executable,
             str(REPO_ROOT / "scripts" / "repro_full_pipeline.py"),
             "--config",
-            "config.yaml",
+            config_path,
             "--limit",
             "2",
             "--output-dir",
@@ -340,21 +409,24 @@ def verify_l3_end_to_end(verbose: bool = False) -> Tuple[bool, List[str]]:
                 env=env,
                 capture_output=True,
                 text=True,
-                timeout=120,
+                timeout=180,  # bge-large needs ~30s for cold load
             )
         except subprocess.TimeoutExpired:
-            return (False, ["L3: probe run timed out (>120s)"])
+            return (False, [f"L3: probe run timed out (>180s) for {config_path}"])
 
         if result.returncode != 0:
             failures.append(
-                f"L3: probe exited with code {result.returncode}; "
+                f"L3 ({config_path}): probe exited code {result.returncode}; "
                 f"stderr tail: {result.stderr[-300:]}"
             )
             return (False, failures)
 
         summary_path = tmp_dir / "summary.json"
         if not summary_path.exists():
-            failures.append(f"L3: probe did not write summary.json at {summary_path}")
+            failures.append(
+                f"L3 ({config_path}): probe did not write summary.json at "
+                f"{summary_path}"
+            )
             return (False, failures)
 
         summary = json.loads(summary_path.read_text())
@@ -362,17 +434,17 @@ def verify_l3_end_to_end(verbose: bool = False) -> Tuple[bool, List[str]]:
         rev = summary.get("embedding_revision")
         if llm != PINNED_OPENAI_MODEL:
             failures.append(
-                f"L3: summary.json:llm_model = {llm!r}, "
+                f"L3 ({config_path}): summary.json:llm_model = {llm!r}, "
                 f"expected {PINNED_OPENAI_MODEL!r}"
             )
-        if rev != CANONICAL_HF_REVISION:
+        if rev != expected_rev:
             failures.append(
-                f"L3: summary.json:embedding_revision = {rev!r}, "
-                f"expected {CANONICAL_HF_REVISION!r}"
+                f"L3 ({config_path}): summary.json:embedding_revision = "
+                f"{rev!r}, expected {expected_rev!r}"
             )
         if verbose and not failures:
             print(
-                f"  PASS L3: probe wrote llm_model={llm!r}, "
+                f"  PASS L3 ({config_path}): probe wrote llm_model={llm!r}, "
                 f"embedding_revision={rev[:12]}..., "
                 f"cost=${summary.get('estimated_cost_usd', 0):.4f}"
             )
@@ -402,6 +474,15 @@ def main() -> int:
         "--verbose",
         action="store_true",
         help="Print PASS lines (default: only FAIL).",
+    )
+    ap.add_argument(
+        "--config",
+        type=str,
+        default="config.yaml",
+        help=(
+            "Config to probe at L3 (Phase-1.F: per-encoder configs). "
+            "Default: config.yaml (MiniLM/60-entry baseline)."
+        ),
     )
     args = ap.parse_args()
 
@@ -440,8 +521,11 @@ def main() -> int:
             overall_ok = False
 
     if "3" in layers:
-        print("\n[L3 END-TO-END] 2-prompt probe through repro_full_pipeline.py …")
-        ok, viols = verify_l3_end_to_end(verbose=args.verbose)
+        print(
+            f"\n[L3 END-TO-END] 2-prompt probe through repro_full_pipeline.py "
+            f"--config {args.config} …"
+        )
+        ok, viols = verify_l3_end_to_end(verbose=args.verbose, config_path=args.config)
         if ok:
             print(
                 "  PASS  summary.json:llm_model + embedding_revision "
