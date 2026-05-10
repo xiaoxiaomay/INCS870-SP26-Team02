@@ -19,6 +19,17 @@ PINNED_REVISIONS = {
 
 # Dated OpenAI model snapshot for stable reproduction. Replace the alias
 # "gpt-4o-mini" everywhere with this dated form.
+#
+# Reproducibility design (B2, applied 2026-05-09): callers MUST resolve
+# the LLM model name via `cfg.get("openai_model") or PINNED_OPENAI_MODEL`.
+# The historical `os.getenv("OPENAI_MODEL")`-first chain was removed
+# because a stale env var (e.g., `.env` carrying an unpinned alias)
+# silently overrode the dated snapshot in config and broke
+# `summary.json`'s provenance contract. To use a different LLM, edit
+# `config*.yaml:openai_model` or pass `--config <other.yaml>`; do NOT
+# set the `OPENAI_MODEL` env var. Verified end-to-end by
+# `scripts/verify_repro_pins.py` (three-layer check: static / runtime /
+# end-to-end). See REPRODUCIBILITY.md §6 change-log entry for context.
 PINNED_OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
 
 

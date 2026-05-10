@@ -190,7 +190,8 @@ def run_b0_baseline(cfg: dict, config_path: str):
         print("No attack prompts found.")
         return
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+    from core.config_loader import PINNED_OPENAI_MODEL
+    model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
 
     # Load embedding model + secret index for leakage detection
     from sentence_transformers import SentenceTransformer

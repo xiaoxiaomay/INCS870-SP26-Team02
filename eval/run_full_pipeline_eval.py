@@ -38,6 +38,7 @@ from scripts.run_rag_with_audit import (
     call_llm, build_fallback_prompt,
 )
 from scripts.leakage_scan import load_faiss_index, scan_text
+from core.config_loader import PINNED_OPENAI_MODEL
 
 
 def load_jsonl(path: str) -> List[dict]:
@@ -195,7 +196,7 @@ def main():
     paths = cfg.get("paths", {})
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model", "gpt-4o-mini-2024-07-18")
+    model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
 
     # Limit queries if requested
     test_cases = bypass_cases

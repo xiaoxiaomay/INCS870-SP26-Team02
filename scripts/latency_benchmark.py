@@ -131,7 +131,8 @@ def run_pipeline_timed(query, cfg, embed_model, pub_index, pub_meta, sec_index, 
     # --- LLM call ---
     prompt = build_prompt(query=query, docs=docs,
                           max_chars_per_doc=int(rag_cfg.get("max_context_chars_per_doc", 1200)))
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+    from core.config_loader import PINNED_OPENAI_MODEL
+    model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
     t3 = time.perf_counter()
     raw_answer = call_llm(prompt, model_name=model_name)
     timings["llm_call"] = (time.perf_counter() - t3) * 1000

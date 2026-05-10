@@ -247,7 +247,8 @@ def run_single_query(query, cfg, embed_model, sec_index, sec_meta, db_conn):
         # ---- LLM Call ----
         prompt = build_prompt(query, docs,
                               max_chars_per_doc=int(rag_cfg.get("max_context_chars_per_doc", 1200)))
-        model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+        from core.config_loader import PINNED_OPENAI_MODEL
+        model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
         raw_answer = call_llm(prompt, model_name)
         result["llm_raw_answer"] = raw_answer
 

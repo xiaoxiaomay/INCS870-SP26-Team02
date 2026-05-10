@@ -57,7 +57,8 @@ def main():
     with open(config_path) as f:
         cfg = yaml.safe_load(f) or {}
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+    from core.config_loader import PINNED_OPENAI_MODEL
+    model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
     paths = cfg.get("paths", {})
 
     print("Loading embedding model...")

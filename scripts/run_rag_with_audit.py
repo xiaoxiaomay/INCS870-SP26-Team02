@@ -31,7 +31,7 @@ if str(REPO_ROOT) not in sys.path:
 # ----------------------------------
 
 from core.audit import HashChainWriter
-from core.config_loader import get_db_params, use_postgres, get_pinned_revision
+from core.config_loader import get_db_params, use_postgres, get_pinned_revision, PINNED_OPENAI_MODEL
 from scripts.leakage_scan import split_sentences, load_faiss_index, scan_text
 
 try:
@@ -913,7 +913,7 @@ def main():
                 "llm_called": False,
             })
 
-            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+            model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
             t3 = time.time()
             raw_answer = call_llm(prompt, model_name=model_name)
             t_llm = time.time() - t3
@@ -1015,7 +1015,7 @@ def main():
             # =========================================================
             # LLM call
             # =========================================================
-            model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
+            model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
             t3 = time.time()
             raw_answer = call_llm(prompt, model_name=model_name)
             t_llm = time.time() - t3

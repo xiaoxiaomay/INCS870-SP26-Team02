@@ -45,6 +45,7 @@ from scripts.run_rag_with_audit import (
 )
 from scripts.leakage_scan import load_faiss_index, scan_text
 from gates.gate_0_decode import decode_gate
+from core.config_loader import PINNED_OPENAI_MODEL
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +243,7 @@ def main():
     print("Loading FAISS index...")
     sec_index, sec_meta = load_faiss_index(paths["secret_index"], paths["secret_meta"])
 
-    model_name = os.getenv("OPENAI_MODEL") or cfg.get("openai_model", "gpt-4o-mini-2024-07-18")
+    model_name = cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
 
     # Load all attack prompts
     print("\n=== Loading attack datasets ===")

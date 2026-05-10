@@ -53,7 +53,8 @@ that affects gate decisions.
 | --- | --- |
 | Identifier | `gpt-4o-mini-2024-07-18` (dated snapshot, NOT the alias `gpt-4o-mini`) |
 | Source of truth | `core/config_loader.py:PINNED_OPENAI_MODEL` AND `openai_model` field in each `config*.yaml` |
-| Loaded by | every `cfg.get("openai_model", …)` fallback in the codebase resolves to this string (8 fallbacks updated) |
+| Resolution chain (B2, applied 2026-05-09) | `cfg.get("openai_model") or PINNED_OPENAI_MODEL` — config wins; the `OPENAI_MODEL` env var is **ignored**. Env-var-first chains were removed from 12 sites because a stale `.env` setting (e.g., the unpinned alias) silently overrode the dated snapshot in config and broke `summary.json` provenance. To use a different LLM, edit a `config*.yaml:openai_model` field or pass a different `--config`. **Do not** set `OPENAI_MODEL` in the environment. |
+| Loaded by | every `cfg.get("openai_model", …) or PINNED_OPENAI_MODEL` resolution site (12 sites: see §3.2). The driver-style scripts (`scripts/repro_full_pipeline.py`, `scripts/run_rag_with_audit.py`, `eval/run_full_pipeline_eval.py`, etc.) write the resolved value to their output `summary.json:llm_model` for end-to-end provenance verification (see §7). |
 
 ### 2.3 Python library exact-patch versions
 
@@ -211,31 +212,57 @@ report (per V9_REPRODUCTION.md §3 example).
 | --- | --- | --- | --- |
 | 2026-05-08 | Initial pinning: HF `all-MiniLM-L6-v2` revision `c9745ed1d9f207416be6d2e6f8de32d1f16199bf`; OpenAI `gpt-4o-mini-2024-07-18`; `transformers` `>=5.0.0,<5.1.0`; `torch` `>=2.10.0,<2.11.0`; `numpy` `>=2.4.0,<2.5.0`; `openai` `>=2.24.0,<2.25.0`. Updated 27 SentenceTransformer call sites + 11 OpenAI fallback sites + 3 configs. | Item 1.0b: prevent the upstream-update drift documented in V9_REPRODUCTION.md §3 (3.7pp ablation drift in safer direction). | audit / Claude Code session |
 | 2026-05-08 | Tightened the four reproducibility-critical pins from minor band to exact patch: `transformers==5.0.0`, `torch==2.10.0`, `numpy==2.4.2`, `openai==2.24.0`. Cross-checked HF main revision (`git ls-remote` and `HfApi`) — pin still equals current upstream `main`. | Verifications 1+3 (audit-phase 1.0b ratification): patch-exact provides bit-level reproducibility; minor-band would re-introduce a numerical-determinism drift surface that the v9 reproduction already exposed. | audit / Claude Code session |
+| 2026-05-09 | **B2 fix + verification infrastructure.** Removed `os.getenv("OPENAI_MODEL")` from 12 resolution sites (`scripts/repro_full_pipeline.py`, `core/engine.py`, `scripts/run_rag_with_audit.py` ×2, `eval/run_full_pipeline_eval.py`, `eval/run_external_framework_eval.py`, six legacy thesis-era scripts). New chain everywhere: `cfg.get("openai_model") or PINNED_OPENAI_MODEL`. Added `scripts/verify_repro_pins.py` implementing a three-layer (static / runtime / end-to-end) verification probe. | Sanity-check end-to-end run on 2026-05-09 produced `summary.json:llm_model = "gpt-4o-mini"` (the unpinned alias) because `.env` had `OPENAI_MODEL=gpt-4o-mini` set. The 1.0b verification (static grep only) missed the env-var sidechannel; B2 closes the chain at the resolution level and the new verifier closes the verification gap. | audit / Claude Code session |
 
 ---
 
-## 7. Verification commands
+## 7. Verification
 
-To verify pins are applied correctly:
+The canonical verification command is the three-layer probe in
+`scripts/verify_repro_pins.py`. It supersedes the ad-hoc grep checks
+that lived here previously.
 
 ```bash
-# 1. HF revision matches local cache
+# Three-layer pin verification (static / runtime / end-to-end).
+# L3 uses ~$0.0002 of OpenAI quota (2-prompt probe).
+python scripts/verify_repro_pins.py --verbose
+# Expect: "OVERALL: PASS"
+
+# Skip the LLM probe (static + runtime only)
+python scripts/verify_repro_pins.py --layer 1
+python scripts/verify_repro_pins.py --layer 2
+```
+
+What each layer catches:
+
+| Layer | Catches | Misses |
+| --- | --- | --- |
+| **L1 Static** | Unpinned literal aliases (`"gpt-4o-mini"` without date), missing `revision=` on `SentenceTransformer(...)`, `os.getenv("OPENAI_MODEL")` chains. | Anything that depends on runtime state — env-var sidechannels, dynamic config swaps, test-injected mocks. |
+| **L2 Runtime** | Resolution chains that compile cleanly but resolve to a non-canonical value at process startup (the failure mode that the B2 fix addresses). Probes with a deliberately-wrong `OPENAI_MODEL` env var to confirm config wins. | Code paths only reachable through actual I/O (e.g., LLM client misconfiguration). |
+| **L3 End-to-end** | Provenance fields in `summary.json` deviating from canonical (the failure mode that surfaced the original 1.0b regression). 2-prompt probe at ~$0.0002 cost. | Per-prompt drift in the bulk of a real run; that's what the full V9 reproduction (`V9_REPRODUCTION.md`) is for. |
+
+Pre-commit hook usage (optional): the script returns non-zero on any
+failure and is safe to wire into a `pre-commit` config:
+
+```yaml
+- id: verify-repro-pins
+  name: verify reproducibility pins
+  entry: python scripts/verify_repro_pins.py --layer 1
+  language: system
+  pass_filenames: false
+```
+
+(The L1 layer is fast enough for every commit; L2 and L3 should be
+gated behind manual or CI invocation.)
+
+### Manual sanity (legacy commands, retained for forensic use)
+
+```bash
+# HF revision matches local cache
 cat ~/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/refs/main
-# Expect: c9745ed1d9f207416be6d2e6f8de32d1f16199bf
 
-# 2. Every SentenceTransformer call passes revision
-grep -rn "SentenceTransformer(" --include="*.py" . \
-  | grep -v "revision=" | grep -v venv | grep -v archive
-# Expect: empty (all 27 call sites pass revision=)
-
-# 3. Every OpenAI fallback uses dated snapshot
-grep -rn '"gpt-4o-mini"' --include="*.py" --include="*.yaml" . \
-  | grep -v venv | grep -v archive | grep -v "core/config_loader.py"
-# Expect: empty (only the comment in config_loader.py mentions the alias)
-
-# 4. requirements.txt has minor pins for the four critical libs
+# requirements.txt minor pins for the four critical libs
 grep -E "^(openai|transformers|torch|numpy)" requirements.txt
-# Expect: each line shows a >=X.Y.Z,<X.(Y+1).0 spec
 ```
 
 ---

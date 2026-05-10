@@ -4,7 +4,7 @@ import uuid
 import numpy as np
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from core.config_loader import get_db_params, use_postgres, get_pinned_revision
+from core.config_loader import get_db_params, use_postgres, get_pinned_revision, PINNED_OPENAI_MODEL
 from sentence_transformers import SentenceTransformer
 
 from dotenv import load_dotenv
@@ -241,7 +241,7 @@ class SentinelEngine:
         })
 
         # --- 生成回答 (LLM) ---
-        model_name = os.getenv("OPENAI_MODEL") or self.cfg.get("openai_model", "gpt-4o-mini-2024-07-18")
+        model_name = self.cfg.get("openai_model") or PINNED_OPENAI_MODEL  # B2: config-only
         grounding_cfg = self.cfg.get("grounding", {}) or {}
         grounding_threshold = float(grounding_cfg.get("threshold", 0.55))
         grounding_action = str(grounding_cfg.get("action", "redact")).lower()
