@@ -1,13 +1,13 @@
-# Phase-1.F encoder-ablation config — GENERATED 2026-05-10 from config.yaml.
-# Encoder: FinLang/finance-embeddings-investopedia  (rev 37d7594d02e3...)
-# Corpus:  60entry
-# M3.5 calibrated sensitive_threshold: 0.50  (delta from v9 default 0.50: +0.00)
+# Phase-1.F encoder-ablation config — GENERATED 2026-05-10 from config_v2.yaml.
+# Encoder: sentence-transformers/all-MiniLM-L6-v2  (rev c9745ed1d9f2...)
+# Corpus:  90entry
+# M3.5 calibrated sensitive_threshold: 0.45  (delta from v9 default 0.50: -0.05)
 # Do not hand-edit; regenerate via M3.5 calibration if encoder/corpus changes.
 embedding:
-  model_name: "FinLang/finance-embeddings-investopedia"
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
   # HF commit hash pinned for reproducibility (item 1.0b).
   # See REPRODUCIBILITY.md and core/config_loader.py:PINNED_REVISIONS.
-  revision: "37d7594d02e3d656a241e099e39ac50ab921f999"
+  revision: "c9745ed1d9f207416be6d2e6f8de32d1f16199bf"
   chunk_size: 800     # for langchain_text_splitters
   chunk_overlap: 100  # for langchain_text_splitters
   separators: [
@@ -42,8 +42,8 @@ db:
   port : 5432
 
 paths:
-  secret_index: "data/index/secrets__finlang.faiss"
-  secret_meta:  "data/index/secrets__finlang_meta.pkl"
+  secret_index: "data/index/secrets_v2.faiss"
+  secret_meta:  "data/index/secrets_v2_meta.pkl"
   docs_dir : "datasource/docs" # internal documents
 
 rag:
@@ -242,7 +242,7 @@ policy:
 query_precheck:
   enabled: true
   threshold: 0.75
-  sensitive_threshold: 0.50  # M3.5 calibrated for finlang × 60entry (v9 default 0.50)
+  sensitive_threshold: 0.45  # M3.5 calibrated for minilm × 90entry (v9 default 0.50)
   strict_threshold: 0.45          # used when Gate 0a flags hypothetical/academic framing (HYP_01)
   top_k_secrets: 3
   block_message: "[BLOCKED] This query is too similar to internal confidential topics."
@@ -453,6 +453,26 @@ benchmark:
     target: "http://localhost:8000/v1/chat/completions"
   reports_dir: "reports"
   timeout_per_query_s: 60
+
+# -------------------------
+# Gate 0c: Zero-shot ML Intent Classifier
+# -------------------------
+gate_0c:
+  enabled: false                      # disabled by default, enable for enhanced mode
+  block_threshold: 0.75
+  tighten_threshold: 0.50
+  tighten_delta: 0.10
+
+# -------------------------
+# Salami Session Tracking (multi-turn extraction detection)
+# -------------------------
+salami_detection:
+  enabled: true
+  window_size: 10
+  per_query_threshold: 0.55
+  session_alert_threshold: 0.55
+  min_targeting_queries: 3
+  gate1_tightening_delta: 0.05
 
 # -------------------------
 # configuration for scraper

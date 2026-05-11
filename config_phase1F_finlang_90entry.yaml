@@ -1,7 +1,8 @@
-# Phase-1.F encoder-ablation config — GENERATED 2026-05-09 from config_v2.yaml.
+# Phase-1.F encoder-ablation config — GENERATED 2026-05-10 from config_v2.yaml.
 # Encoder: FinLang/finance-embeddings-investopedia  (rev 37d7594d02e3...)
 # Corpus:  90entry
-# Do not hand-edit; regenerate via the M1.3 step in PHASE_1F_PLAN_V2.md if needed.
+# M3.5 calibrated sensitive_threshold: 0.50  (delta from v9 default 0.50: +0.00)
+# Do not hand-edit; regenerate via M3.5 calibration if encoder/corpus changes.
 embedding:
   model_name: "FinLang/finance-embeddings-investopedia"
   # HF commit hash pinned for reproducibility (item 1.0b).
@@ -241,7 +242,7 @@ policy:
 query_precheck:
   enabled: true
   threshold: 0.75
-  sensitive_threshold: 0.50
+  sensitive_threshold: 0.50  # M3.5 calibrated for finlang × 90entry (v9 default 0.50)
   strict_threshold: 0.45          # used when Gate 0a flags hypothetical/academic framing (HYP_01)
   top_k_secrets: 3
   block_message: "[BLOCKED] This query is too similar to internal confidential topics."

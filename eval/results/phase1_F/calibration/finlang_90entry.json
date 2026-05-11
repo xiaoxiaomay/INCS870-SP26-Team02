@@ -1,0 +1,150 @@
+{
+  "encoder_short": "finlang",
+  "encoder_name": "FinLang/finance-embeddings-investopedia",
+  "encoder_revision": "37d7594d02e3d656a241e099e39ac50ab921f999",
+  "corpus_label": "90entry",
+  "secret_index": "data/index/secrets_v2__finlang.faiss",
+  "config_template": "config_v2.yaml",
+  "config_target": "config_phase1F_finlang_90entry.yaml",
+  "calibration_corpus": "data/benchmark/normal_prompts.jsonl",
+  "calibration_corpus_n": 100,
+  "robustness_corpus": "data/eval/real_world_normal_prompts.json",
+  "robustness_corpus_n": 219,
+  "target_fpr": 0.03,
+  "threshold_grid": [
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8
+  ],
+  "sweep": [
+    {
+      "sensitive_threshold": 0.3,
+      "n_total": 100,
+      "n_blocked": 15,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 14,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.15
+    },
+    {
+      "sensitive_threshold": 0.35,
+      "n_total": 100,
+      "n_blocked": 14,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 13,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.14
+    },
+    {
+      "sensitive_threshold": 0.4,
+      "n_total": 100,
+      "n_blocked": 9,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 8,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.09
+    },
+    {
+      "sensitive_threshold": 0.45,
+      "n_total": 100,
+      "n_blocked": 6,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 5,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.06
+    },
+    {
+      "sensitive_threshold": 0.5,
+      "n_total": 100,
+      "n_blocked": 3,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 2,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.03
+    },
+    {
+      "sensitive_threshold": 0.55,
+      "n_total": 100,
+      "n_blocked": 2,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 1,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.02
+    },
+    {
+      "sensitive_threshold": 0.6,
+      "n_total": 100,
+      "n_blocked": 1,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 0,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.01
+    },
+    {
+      "sensitive_threshold": 0.65,
+      "n_total": 100,
+      "n_blocked": 1,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 0,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.01
+    },
+    {
+      "sensitive_threshold": 0.7,
+      "n_total": 100,
+      "n_blocked": 1,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 0,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.01
+    },
+    {
+      "sensitive_threshold": 0.75,
+      "n_total": 100,
+      "n_blocked": 1,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 0,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.01
+    },
+    {
+      "sensitive_threshold": 0.8,
+      "n_total": 100,
+      "n_blocked": 1,
+      "blocked_g0": 0,
+      "blocked_g1_amplifier": 0,
+      "blocked_g1_base": 1,
+      "blocked_g1_strict": 0,
+      "fpr": 0.01
+    }
+  ],
+  "calibrated_sensitive_threshold": 0.5,
+  "calibrated_fpr_on_100": 0.03,
+  "calibrated_n_blocked_on_100": 3,
+  "robustness_fpr_on_219": 0.0,
+  "robustness_n_blocked_on_219": 0,
+  "robustness_drift_pp": -0.03,
+  "encoder_load_time_s": 1.83,
+  "encoder_n_features_s": 1.65,
+  "v9_default_sensitive_threshold": 0.5,
+  "calibrated_minus_v9_default": 0.0,
+  "design_choice_note": "Only `query_precheck.sensitive_threshold` is calibrated. `threshold` (0.75 generic) and `strict_threshold` (0.45 HYP_01) are kept at v9 values. Per-tier calibration deferred."
+}
