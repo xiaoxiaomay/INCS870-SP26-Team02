@@ -336,6 +336,12 @@ secrets is closer to the secret manifold — these are
 semantically *harder* attacks that the downstream LLM is
 correspondingly more likely to leak on.
 
+This trade-off shows a clean inverse monotonic relationship
+within the general-purpose encoder family (MiniLM, mpnet,
+bge-large). FinLang's behavior — high bypass with low per-bypass
+leak — operates on a different trade-off geometry, addressed
+separately in §5.2.
+
 **Implication for v10:** the Table XIII discrimination metric
 ("Gap(L2-L1)") was measured retrieval-side and did not capture
 this trade-off. v10 §IV-K should add operational metrics (Bypass%,
@@ -450,7 +456,7 @@ The takeaway: **encoder selection should be a workload-aware
 decision, not a benchmark-leader-take-all decision.** v10 §IV-K
 can frame this as the operational guidance for practitioners.
 
-### §5.5 — v9 Methodology Gap
+### §5.5 — Methodology Refinement Over v9 Table XIII
 
 The v9 paper's Table XIII reported retrieval-side discrimination
 gaps (L2-L1 cosine spreads on secret-vs-secret pairs) and ranked
@@ -727,6 +733,13 @@ ablation results.
 $0$-LLM, $\leq 5$-minute budget and to use only the v9-canonical
 benign corpora (no new data).
 
+### §7.5 — ROC Curve Plotting Deferred
+
+ROC curve plotting (per-encoder threshold sweep visualization)
+is deferred to Phase 3 paper rewrite phase. Raw sweep data for
+all 8 cells (88 threshold-FPR tuples) is preserved in
+`eval/results/phase1_F/matrix.json` for future plotting.
+
 ---
 
 ## §8 — Reproducibility Provenance
@@ -953,27 +966,60 @@ contributions list. Each item is grounded in a specific Phase
 1.F artifact (summary.json, calibration.json, or this document)
 that reviewers can verify independently.
 
-### §11.1 — Suggested Next Phase Priorities (for user decision)
+### §11.1 — Candidate Next-Phase Considerations
 
-The user's plan defers Phase ordering to a separate decision.
-Phase 1.F's findings suggest the following Phase 1 sub-phases
-are **logically next** but are not prescribed; user chooses:
+Final Phase 1.A-E sequencing is deferred to user and advisor
+discussion. Below is dependency, impact, and workload information
+to support that decision, listed in `PLAN.md` original order (not
+as a ranking).
 
 - **Phase 1.E — Larger calibration corpus + per-tier calibration.**
-  Addresses §7.2 (bge-large 3-prompt floor) and §7.4 (100-query
-  power). Cost: $0 LLM, ~1 week wall.
-- **Phase 1.G — Multi-sample LLM stochasticity probe.** Addresses
-  §7.1 (Cell-1 GLR drift). Re-run each of the 8 M4 cells $n=3$
-  times, report mean ± std on GLR. Cost: $0.18 × 2 additional
-  runs = $0.36, total Phase 1.F + 1.G = ~$0.54. Wall: ~6 hr.
-- **Phase 1.H — OpenAI text-embedding-3 ablation.** Addresses §7.3
-  with reproducibility caveats. Cost: small (~$0.05 for
-  embedding API + similar GLR cost), unbudgeted.
-- **Phase 2 — v10 paper rewrite.** Use §6 as the §IV-K starting
-  draft; layer §9's contribution list into v10's contributions
-  section.
-- **Phase 3 — LaTeX upgrade.** Replace v9's Table XIII with the
-  Phase 1.F operational ablation (or augment).
+  - *Dependencies:* Phase 1.F (calibration script + matrix.json
+    are reusable inputs).
+  - *Addresses:* §7.2 (bge-large 3-prompt irreducible floor)
+    and §7.4 (100-query statistical power).
+  - *Impact:* extends `scripts/calibrate_thresholds.py` to also
+    sweep the base 0.75 tier and the strict 0.45 tier; may
+    eliminate the bge-large floor.
+  - *Workload:* ~1 week wall, $0 LLM.
+
+- **Phase 1.G — Multi-sample LLM stochasticity probe.**
+  - *Dependencies:* Phase 1.F M4 outputs (re-run the same 8
+    cells with $n \geq 3$).
+  - *Addresses:* §7.1 (Cell-1 +0.36pp GLR drift); converts
+    point-estimate GLR numbers to mean ± std with confidence
+    bounds.
+  - *Impact:* tightens v10's GLR claims; small per-cell
+    differences become statistically interpretable.
+  - *Workload:* ~6 hr wall, $0.36 additional LLM ($0.18 × 2
+    repeats); total Phase 1.F + 1.G = ~$0.54.
+
+- **Phase 1.H — OpenAI text-embedding-3 ablation.**
+  - *Dependencies:* none on Phase 1.F (independent encoder
+    family).
+  - *Addresses:* §7.3 (open-weights-only scope), with
+    reproducibility caveats since OpenAI embeddings cannot be
+    revision-pinned the way HuggingFace encoders are.
+  - *Impact:* adds a proprietary-encoder data point; v10 §IV-K
+    can comment on encoder family generalization.
+  - *Workload:* small (~$0.05 embedding API + similar GLR cost
+    per cell), unbudgeted, ~1 hr wall.
+
+- **Phase 2 — v10 paper rewrite.**
+  - *Dependencies:* Phase 1.F's §6 draft + §9 contribution
+    catalog are direct inputs.
+  - *Addresses:* paper-side gap between v9 and current
+    implementation.
+  - *Impact:* moves v9 Table XIII to the dual-axis structure
+    (retrieval + operational).
+  - *Workload:* writeup-heavy, no new measurements needed.
+
+- **Phase 3 — LaTeX upgrade.**
+  - *Dependencies:* Phase 1.F's `matrix.tex` is drop-in.
+  - *Addresses:* concrete v9_final.tex Table XIII replacement.
+  - *Impact:* paper-ready artifact; ROC plotting (deferred from
+    M5.4) belongs in this phase.
+  - *Workload:* ~1 day, no LLM.
 
 The user has previously stated that LEAK_CASES_FORENSICS follow-
 up Q's are deferred to v10 rewrite, and v9_final.tex LaTeX

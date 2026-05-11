@@ -823,10 +823,10 @@ base-tier FPR floor are documented for v10 §IV-K. M4 will run with
   bypass tend to be orthogonal-to-secret, not high-similarity
   targeted attacks. **This materializes the v10 "general-purpose
   vs domain-tuned encoder" narrative as a real, measured trade-off.**
-- **Watchpoint C alarm fired once** (bge_large × 90: GLR=11.44%,
-  exceeding the 10% threshold). Cell-6 alarm was directionally
-  expected from M3.5's 3-prompt irreducible base-tier floor finding;
-  not unexpected; per user ruling continued through Cells 7-8.
+- **Watchpoint C (GLR ≤10%): 7/8 PASS. Cell 6 (bge_large × 90)
+  FAILED at 11.44%**; root-caused to M3.5-documented bge-large
+  3-prompt irreducible base-tier floor; ruled non-blocking per user
+  decision in M4 review.
 - **Watchpoint B failure on Cell 6** (wall=6684.6s vs 1800s cap).
   Root cause: machine-level contention, not algorithmic — last 71
   cases ran ~1s each (normal); first 200 cases averaged ~33s each.
@@ -897,7 +897,7 @@ Output trees:
 | --- | --- | --- | --- |
 | A (cost ≤$0.10/cell) | $0.10 hard | Max $0.0261 (Cell 6) | PASS all 8 |
 | B (wall ≤1800s) | 30 min | 7/8 PASS; Cell 6 = 6684.6s | Cell 6 FAIL (mitigated) |
-| C (GLR <10% normal, <15% raised) | 10% / 15% | 7/8 < 10%; Cell 6 = 11.44% | Cell 6 FLAG (expected) |
+| C (GLR ≤10%) | 10% hard | 7/8 PASS; Cell 6 = 11.44% | Cell 6 **FAILED**, ruled non-blocking |
 | D (ULR = 0%) | hard 0 | 8/8 ULR = 0% | PASS all 8 |
 | E (L3 verifier PASS) | hard | 8/8 L3 PASS | PASS all 8 |
 | Cell-1 GLR drift | ±0.3pp vs Part B | +0.36pp (1.85→2.21) | FLAG (ruled stochastic) |
