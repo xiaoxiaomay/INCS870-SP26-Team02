@@ -1018,3 +1018,218 @@ dated-snapshot pin; ULR deterministic since redaction is rule-
 based); (5) Cell-6 (bge_large × 90) wall stall 6685s due to
 machine contention, mitigated for Cells 7-8.
 ```
+
+---
+
+## Milestone M5 — Aggregation + Writeup — Status Report
+
+**Date:** 2026-05-10
+**Reporter:** Claude Code session
+**Verdict:** **PASS — Phase 1.F closed; v10 §IV-K is ready to draft directly from PHASE_1F_RESULTS.md §6.**
+
+### Headlines
+
+- M5.1 + M5.2 complete; M5.3 covered within M5.1 (matrix.tex is
+  the drop-in v9 Table XIII upgrade, embedded in
+  `PHASE_1F_RESULTS.md` §6). M5.4 (ROC data) was deferred per
+  user spec — execute only after M5.1+M5.2 report if user
+  approves the time budget.
+- **Two aggregation artifacts** emitted by `scripts/phase1F_matrix.py`:
+  `eval/results/phase1_F/matrix.json` (144 KB master with
+  per-category breakdown, leak case IDs, calibration sweep, and
+  encoder metadata) and `eval/results/phase1_F/matrix.tex`
+  (1.8 KB LaTeX-ready 8-row Table XIII upgrade).
+- **`PHASE_1F_RESULTS.md` is the M5.2 writeup** — full §1-§11
+  + §11.1-§11.2, ~620 lines. Includes 5 detailed findings,
+  drop-in v10 §IV-K draft paragraphs (§6.1), Table XIII upgrade
+  structure (§6.2), discussion points (§6.3), four limitations
+  (§7), reproducibility provenance (§8), 12-item contribution
+  catalog (§9), audit-phase lessons applied (§10), and
+  close-out + next-phase recommendations (§11). No placeholder
+  text; every section has 8-cell data backing.
+- **No new paper-code inconsistency** surfaced during M5
+  writeup. All 5 audit-phase inconsistencies (cascade k=2,
+  two-corpus conflation, GLR/ULR conflation, RESULTS_SUMMARY.md
+  staleness, OpenAI env-var sidechannel) were explicitly checked
+  against Phase 1.F outputs and confirmed fixed; documented in
+  `PHASE_1F_RESULTS.md` §10.
+
+### Completed work units
+
+- [✓] **M5.1 — Master matrix aggregator.**
+  `scripts/phase1F_matrix.py` (~280 LOC): loads 8 cell trees +
+  9 calibration JSONs, emits `matrix.json` + `matrix.tex`.
+  Idempotent, zero-LLM. Per-cell output includes core metrics,
+  per_category breakdown (10 attack categories), GLR-flagged
+  prompt IDs (`leak_cases[]` with category, evasion_technique,
+  difficulty, gate_1_score, max_leak_score, leakage_flag,
+  leakage_redacted), full calibration sweep + robustness drift,
+  encoder metadata (dim, family, model_size_MB, HF name,
+  revision hash), and provenance (config_path, llm_model,
+  secret_index, attack_corpus, started/finished timestamps).
+- [✓] **M5.1 cross-check — aggregate numbers match per-cell
+  totals.** 8 cells × 271 prompts = 2168 total attacks. Total
+  bypass = 1020 (47.05%). Total GLR = 128 (5.9% mean over
+  attacks). Total ULR = 0 (0.00%). Total LLM cost = $0.1756.
+  Matches the in-place per-cell M4 reports.
+- [✓] **M5.2 — `PHASE_1F_RESULTS.md` writeup.** ~620 lines,
+  §1-§11 + §11.1-§11.2. Quality-first per user instruction;
+  written without LLM-stochastic statements as load-bearing
+  claims, with effect-size disclosure (§7.1) and confidence
+  bounds (§5.3 Wilson interval on ULR).
+- [✓] **M5.3 covered.** matrix.tex (drop-in Table XIII) +
+  PHASE_1F_RESULTS.md §6 (drop-in §IV-K prose) jointly deliver
+  the v10 paper draft. No separate deliverable required.
+- [⊝] **M5.4 — Per-encoder ROC curve data.** Deferred per user
+  spec. Calibration sweep data is *already* in matrix.json (every
+  cell has `calibration.threshold_grid` + `calibration.sweep`
+  arrays with 11 (threshold, fpr, n_blocked) tuples). If user
+  approves, a 10-LOC extraction script can lift these into a
+  standalone `roc_data.json` + draft a `scripts/plot_roc.py`;
+  no new data needed, just reformatting.
+
+### Cost / wall
+
+- **LLM:** $0.0000 (M5 is pure aggregation + writing; no LLM
+  calls).
+- **Wall:** ~50 min for M5.1 (~5 min coding + 1 min running +
+  output verification) + M5.2 (~45 min writing). Total Phase
+  1.F LLM spend across all milestones: $0.1776 / $0.40 cap
+  (44.4% utilization). **Paranoid budget held without
+  inflation.**
+
+### Operational checklist
+
+- [✓] `scripts/phase1F_matrix.py` is independently invokable;
+  re-running produces identical outputs (idempotent).
+- [✓] `matrix.json` schema_version = "1.0"; totals block
+  matches in-place cell summaries; per-cell `calibration.sweep`
+  has 11 entries per cell × 8 cells = 88 sweep tuples total.
+- [✓] `matrix.tex` is valid LaTeX (no unescaped `%`, no
+  unclosed math mode, ULR column omitted with explanatory
+  comment).
+- [✓] `PHASE_1F_RESULTS.md` §1-§11 + §11.1-§11.2 complete;
+  no placeholder text; every finding cross-references a
+  specific matrix.json field or an 8-cell data point.
+- [✓] `PHASE_1F_RESULTS.md` §6 (v10 paper draft) is *copy-able*
+  prose, not outline. Drop into `v9_final.tex` (or
+  `sentinelflow_journal_v9_final.tex`) at the position where
+  v9 Table XIII appears.
+- [✓] `PHASE_1F_RESULTS.md` §9 lists 12 v10 contributions, each
+  cross-referenced to a specific Phase 1.F artifact (M3 / M3.5
+  / M4 / M5 outputs).
+- [✓] `PHASE_1F_RESULTS.md` §7 honest disclosure of 4
+  structural limitations (LLM stochasticity, per-tier
+  calibration deferred, OpenAI not in matrix, 100-corpus
+  statistical power).
+- [✓] No `git commit` performed. All M5 artifacts staged ready
+  for user-side big commit.
+
+### Unexpected findings
+
+- **None during M5.** Writeup proceeded without surfacing new
+  inconsistencies; all 5 audit-phase items explicitly checked
+  against Phase 1.F outputs and confirmed fixed
+  (`PHASE_1F_RESULTS.md` §10).
+- **Side observation:** per-encoder mean roll-up (matrix.json's
+  `by_encoder` block) gives a much cleaner v10 narrative than
+  per-cell results. The within-encoder corpus variance is small
+  enough (e.g., MiniLM × 60 GLR 2.21% vs × 90 GLR 2.58%) that
+  cross-encoder comparison can use the mean. This was implicit
+  in M4 but became explicit in M5.1 — useful framing for the
+  v10 abstract.
+
+### Gate condition checks (M5 acceptance, per user spec)
+
+- [✓] `scripts/phase1F_matrix.py` created and independently invokable.
+- [✓] `matrix.json` + `matrix.tex` outputs complete.
+- [✓] `PHASE_1F_RESULTS.md` §1-§10 all written, no placeholder.
+- [✓] 5 Findings (§5.1-§5.5) each backed by 8-cell data.
+- [✓] §6 v10 Paper Draft is copy-able paragraphs, not outline.
+- [✓] §9 12 contributions listed; each cross-references Phase
+  1.F data point.
+- [✓] §7 honest limitations (no overclaim).
+
+### Phase 1.F overall close-out
+
+- **5 milestones completed:** M1, M2, M3 (with M3.5 inserted),
+  M4, M5.
+- **0 blockers remaining.**
+- **5 audit-phase inconsistencies addressed and documented**
+  (`PHASE_1F_RESULTS.md` §10).
+- **12 v10 contributions cataloged** (`PHASE_1F_RESULTS.md` §9).
+- **Total LLM spend:** $0.1776 / $0.40 cap (44.4%).
+- **Defense-in-depth headline:** ULR = 0 across 2168 prompts × 4
+  encoders × 2 corpora. Binomial 95% CI upper bound: 0.17%.
+- **Next-phase priorities** (for user decision, not prescribed):
+  Phase 2 v10 paper rewrite (immediate use of §6 draft), Phase
+  3 LaTeX upgrade (drop in matrix.tex), Phase 1.E per-tier
+  calibration (addresses §7.2 + §7.4), Phase 1.G multi-sample
+  stochasticity probe (addresses §7.1), Phase 1.H OpenAI
+  embedding ablation (addresses §7.3).
+
+### Next milestone
+
+**None — Phase 1.F is closed.** User chooses next phase from
+the §11.1 priorities (no prescribed default; LEAK_CASES_FORENSICS
+follow-up Qs and v9_final.tex LaTeX changes remain deferred per
+prior user rulings).
+
+**Approval requested:** **YES** — please review the M5
+deliverables (matrix.json + matrix.tex + PHASE_1F_RESULTS.md).
+After approval, user commits Phase 1.F as one big commit
+(M3 + M3.5 + M4 + M5 as a single logical unit per the earlier
+instruction).
+
+### Blockers
+
+- None.
+
+### Files staged for M5 (for user-side commit when ready)
+
+```
+A  scripts/phase1F_matrix.py                       NEW M5.1 aggregator
+A  eval/results/phase1_F/matrix.json               NEW M5.1 master JSON (144 KB)
+A  eval/results/phase1_F/matrix.tex                NEW M5.1 Table XIII upgrade
+A  PHASE_1F_RESULTS.md                             NEW M5.2 writeup (~620 lines)
+M  PHASE_1F_STATUS.md                              this M5 entry
+```
+
+**Suggested commit message** for the full Phase 1.F unit
+(M3 + M3.5 + M4 + M5 in one commit, per earlier user
+instruction):
+
+```
+phase1F: full cross-encoder ablation — M3 sanity → M3.5 calibration → M4 matrix → M5 writeup
+
+Phase 1.F upgrades v9 Table XIII from a single-encoder retrieval-
+side discrimination metric to a 4-encoder × 2-corpus operational
+adversarial ablation. Total cost $0.1776 / $0.40 cap; ULR = 0
+uniform across 2168 prompts × 4 encoders × 2 corpora
+(defense-in-depth empirically validated across the encoder family,
+not only against MiniLM as v9 established).
+
+M3 sanity (mpnet × 90) surfaces v9's fixed sensitive_threshold = 0.50
+as non-portable: mpnet attack-query cosines drop ~0.23 vs MiniLM.
+M3.5 calibrates per-encoder sensitive_threshold to ~3% FPR on the
+100-query benign baseline + 219-query real-world robustness check.
+Calibrated thresholds: MiniLM × 90 → 0.45; mpnet/FinLang → 0.50;
+bge-large × 60/90 → 0.70/0.80. M4 runs the calibrated matrix.
+
+Key findings (PHASE_1F_RESULTS.md §5): (1) within-family
+encoder-strength → per-bypass leak rate trade-off (MiniLM 5.3% <<
+mpnet 14.7% << bge-large 23.1%); (2) FinLang domain-tuned
+paradox — highest bypass (54%) but low per-bypass leak (8.8%);
+(3) ULR = 0% across 2168 prompts substantiates defense-in-depth
+cross-encoder claim. v10 §IV-K draft prose + drop-in Table XIII
+LaTeX are in matrix.tex + PHASE_1F_RESULTS.md §6.
+```
+
+---
+
+## Phase 1.F — Closed
+
+All five milestones complete (M1, M2, M3, M3.5, M4, M5). Awaiting
+user review + commit decision. Next phase deferred to user
+selection from `PHASE_1F_RESULTS.md` §11.1 priorities.
+
