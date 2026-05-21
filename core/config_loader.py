@@ -45,6 +45,16 @@ PINNED_REVISIONS = {
 # end-to-end). See REPRODUCIBILITY.md §6 change-log entry for context.
 PINNED_OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
 
+# Phase 1.E E1.2 hard-negative query generation (pinned 2026-05-12).
+# Used by scripts/generate_hard_negatives.py (E1.3).
+# Smoke-tested 2026-05-12 (22 tokens, $0.00002). Pricing tracked in
+# scripts/repro_full_pipeline.py (PRICE_INPUT_PER_1M_GPT5MINI=0.25,
+# PRICE_OUTPUT_PER_1M_GPT5MINI=2.00 per 1M tokens, pinned 2026-05-12).
+# Reproducibility contract: callers MUST resolve via
+# cfg.get("openai_generation_model") or PINNED_OPENAI_GENERATION_MODEL_E1_2.
+# No env-var sidechannel (mirrors B2 defender model contract).
+PINNED_OPENAI_GENERATION_MODEL_E1_2 = "gpt-5-mini-2025-08-07"
+
 
 def get_pinned_revision(model_name: str):
     """Return pinned HF revision for a known model, else None (HF default)."""

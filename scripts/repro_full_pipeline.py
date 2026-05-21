@@ -120,10 +120,14 @@ from core.config_loader import (  # noqa: E402
 
 DEFAULT_ATTACK_CORPUS = REPO_ROOT / "data" / "attack_prompts_expanded.jsonl"
 
-# OpenAI gpt-4o-mini-2024-07-18 launch pricing (per 1M tokens).
+# OpenAI launch pricing (per 1M tokens).
 # Approximation: 1 token ~ 4 chars (English).
-PRICE_INPUT_PER_1M = 0.15
-PRICE_OUTPUT_PER_1M = 0.60
+# gpt-4o-mini-2024-07-18 (defender, v9 + Phase 1.F):
+PRICE_INPUT_PER_1M_GPT4OMINI = 0.15
+PRICE_OUTPUT_PER_1M_GPT4OMINI = 0.60
+# gpt-5-mini-2025-08-07 (Phase 1.E E1.2 generator; pinned 2026-05-12):
+PRICE_INPUT_PER_1M_GPT5MINI = 0.25
+PRICE_OUTPUT_PER_1M_GPT5MINI = 2.00
 CHARS_PER_TOKEN = 4.0
 
 
@@ -143,11 +147,17 @@ def load_jsonl(path: Path) -> List[Dict[str, Any]]:
 
 
 def estimate_cost_usd(input_chars: int, output_chars: int) -> float:
+    """Estimate cost for defender model (gpt-4o-mini-2024-07-18).
+
+    For generator (gpt-5-mini-2025-08-07) cost estimation,
+    use PRICE_INPUT_PER_1M_GPT5MINI / PRICE_OUTPUT_PER_1M_GPT5MINI
+    directly in caller (E1.3+ generator scripts).
+    """
     in_tokens = input_chars / CHARS_PER_TOKEN
     out_tokens = output_chars / CHARS_PER_TOKEN
     return (
-        in_tokens * PRICE_INPUT_PER_1M / 1e6
-        + out_tokens * PRICE_OUTPUT_PER_1M / 1e6
+        in_tokens * PRICE_INPUT_PER_1M_GPT4OMINI / 1e6
+        + out_tokens * PRICE_OUTPUT_PER_1M_GPT4OMINI / 1e6
     )
 
 
