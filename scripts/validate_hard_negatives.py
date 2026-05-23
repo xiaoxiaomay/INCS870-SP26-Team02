@@ -471,6 +471,58 @@ DOCUMENTED_FINDINGS: Dict[str, Any] = {
             "confirms null-result target."
         ),
     },
+    "S13_layer_5_paraphrase_signature_false_positive_rate": {
+        "type": "r6_layer_5_methodology_clarification",
+        "summary": (
+            "R6 Layer 5 paraphrase signature heuristic (V1b ≥2-encoder "
+            "above-band) flagged 4 candidates across the 65-entry "
+            "corpus. Manual content review confirmed 0/4 = 0% actual "
+            "paraphrases. Layer 5 has 100% false-positive rate in this "
+            "corpus, with all 4 candidates exhibiting S11 vocabulary-"
+            "overlap mechanism rather than semantic leakage."
+        ),
+        "data": {
+            "layer_5_candidates_total":            4,
+            "candidates_confirmed_paraphrase":     0,
+            "candidates_retained_non_paraphrase":  4,
+            "false_positive_rate":                 "100%",
+            "candidates_breakdown": {
+                "HN_GEN_051":   "Cat D × factor_neutral, V1a Action 1a 2026-05-21",
+                "HN_GEN_056":   "Cat E × alternative_data, V1a Action 1a 2026-05-21",
+                "HN_SEED_016":  "Cat D × price_volume_momentum, E1.4 content review",
+                "HN_GEN_059":   "Cat E × alternative_data, E1.4 content review",
+            },
+            "category_concentration": {"D": 2, "E": 2},
+        },
+        "interpretation": (
+            "Layer 5 design assumed cross-encoder above-band = paraphrase "
+            "signal. Empirical data shows Layer 5 catches structural "
+            "vocabulary-overlap effects (S11 mechanism in Categories D "
+            "and E) rather than semantic leakage. The 100% false-positive "
+            "rate is explainable: finance hard-negatives in Categories D "
+            "(Educational/Conceptual) and E (Comparison/Benchmarking) use "
+            "vocabulary that overlaps with secret descriptions by design, "
+            "not by leakage. All 4 candidates concentrated in D + E "
+            "categories per S11 pattern."
+        ),
+        "paper_implication": (
+            "Reviewer-grade methodological clarity: Layer 5 alone is not "
+            "a reliable paraphrase predictor in finance hard-negative "
+            "corpora where shared vocabulary between query and secret is "
+            "structural (Categories D/E by design). Defense-in-depth "
+            "holds via layered validation: Layer 2 (V5b exact-match, 0 "
+            "hits per S12) provides primary leakage assurance; Layer 5 "
+            "serves as forensic catchment with manual review gate (not "
+            "auto-drop). The V2 §7.2 R6 6-layer design correctly "
+            "anticipates this via 'audit log reviewed before E2' clause."
+        ),
+        "emerged_from": (
+            "Phase 1.E E1.4 content review 2026-05-23. HN_SEED_016 + "
+            "HN_GEN_059 dispositioned retained_non_paraphrase, completing "
+            "4/4 Layer 5 candidate review with 0/4 paraphrase "
+            "confirmations."
+        ),
+    },
     "PENDING_V2_5_PLAN_REVISION": (
         "PENDING — V2.5 plan revision references S1 (cross-domain "
         "spillover), S8 (mpnet prediction-miss), S9 (bge_large "
@@ -1234,8 +1286,11 @@ def run_v5b() -> int:
                   f"({len(above_band)} encoder{'s' if len(above_band)>1 else ''})")
     print(f"  Layer 5 candidates: {len(layer5_candidates)}")
 
-    # Per-entry disposition for Layer 5 (action-1a content review status)
-    action_1a_ruled = {
+    # Per-entry disposition for Layer 5 candidates (manual content review status).
+    # 2 entries from V1a Action 1a (2026-05-21); 2 entries from E1.4 content
+    # review (2026-05-23). All 4/4 ruled retained_non_paraphrase, contributing
+    # to the S13 finding (Layer 5 100% false-positive rate in this corpus).
+    content_reviewed_dispositions = {
         "HN_GEN_051": (
             "V1a Action 1a manual content review 2026-05-21 ruled NON-paraphrase. "
             "Secret text describes one fund's operational system; query asks "
@@ -1246,20 +1301,46 @@ def run_v5b() -> int:
             "Query asks comparative methodology (decay + cadence); secret describes "
             "combined-source strategy (we use both together)."
         ),
+        "HN_SEED_016": (
+            "E1.4 content review 2026-05-23 ruled NON-paraphrase. Secret "
+            "v2_L1_price_volume_momentum_001 is L1 practitioner-tier educational "
+            "content (textbook RSI knowledge, not proprietary). Query asks "
+            "computation method + general interpretation principle; secret states "
+            "one specific practitioner rule (RSI<30→oversold) without computation "
+            "explanation. Author seed-time rationale (E1.1) explicitly predicted "
+            "this clustering as design-intentional. Lexical overlap structural to "
+            "shared textbook RSI vocabulary, not semantic leakage."
+        ),
+        "HN_GEN_059": (
+            "E1.4 content review 2026-05-23 ruled NON-paraphrase. Comparison-axis "
+            "vs combined-strategy semantic divergence: query asks how two alt-data "
+            "sources compare on operational metrics (longevity + refresh cadence); "
+            "secret describes one fund's strategy combining both sources to "
+            "predict quarterly results. HN_GEN_056 sibling precedent (V1a Action "
+            "1a 2026-05-21, same secret v2_L2_alternative_data_001, same "
+            "mechanism, ruled retained). Encoder above-band reflects S11 "
+            "vocabulary mechanism in alt-data domain. No semantic leakage of "
+            "operational specifics (alpha decay, entry timing)."
+        ),
     }
 
     # Compose R6 audit log entries
     timestamp_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     audit_entries: List[Dict[str, Any]] = []
     counter = 1
-    # Layer 5 first (per Q5 ratification ordering)
+    # Layer 5 first (per Q5 ratification ordering). All 4/4 candidates
+    # ruled retained_non_paraphrase as of E1.4 close (2026-05-23) —
+    # the S13 finding documents this 100% false-positive rate.
     for c in layer5_candidates:
         hn_id = c["hard_neg_id"]
-        if hn_id in action_1a_ruled:
+        if hn_id in content_reviewed_dispositions:
             disposition = "retained_non_paraphrase"
-            disposition_evidence = action_1a_ruled[hn_id]
+            disposition_evidence = content_reviewed_dispositions[hn_id]
             disposition_review_required_by = None
         else:
+            # All 4 Layer 5 candidates are content-reviewed as of E1.4
+            # close. This branch should not fire; keep as defensive
+            # fallback in case future Layer 5 candidates emerge.
             disposition = "requires_content_review_at_E1_4"
             disposition_review_required_by = "E1.4_regeneration_phase"
             n_above = len(c["above_band_encoders"])
@@ -1290,8 +1371,164 @@ def run_v5b() -> int:
             "findings_reference":  [
                 "S11_cat_d_e_cross_encoder_above_band_concentration",
                 "S12_v5b_zero_corpus_contamination",
+                "S13_layer_5_paraphrase_signature_false_positive_rate",
             ],
             "timestamp_utc":       timestamp_utc,
+        })
+        counter += 1
+
+    # Layer 3 — standard outliers (V1a below-band, V1b mpnet/finlang
+    # above-band, multi-validator opposite-direction). Per E1.4 Q3 batch
+    # ruling, all 19 standard outliers are dispositioned
+    # `retained_with_paper_finding_reference` (S1 / S8 explanations).
+    #
+    # Categorization: a hard-neg appears here as a Layer 3 entry iff it
+    # is in V1a outliers OR V1b mpnet/finlang outliers BUT NOT in the
+    # Layer 5 set (4 candidates already handled above).
+    layer5_ids = {c["hard_neg_id"] for c in layer5_candidates}
+
+    # Derive V1a + V1b mpnet outliers from per-entry JSONL fields
+    minilm_hi = GLOBAL_BLOCKING_BAND[1]
+    minilm_lo = GLOBAL_BLOCKING_BAND[0]
+    mpnet_hi  = STEP2_WINDOWS["mpnet"][1]
+    finlang_hi = STEP2_WINDOWS["finlang"][1]
+
+    layer3_records: List[Dict[str, Any]] = []
+    for entry in hard_negs:
+        hid = entry["_id"]
+        if hid in layer5_ids:
+            continue
+        v1a_cos = entry.get("closest_cosine_minilm_90")
+        mpnet_cos = entry.get("closest_cosine_mpnet_90")
+        finlang_cos = entry.get("closest_cosine_finlang_90")
+        if v1a_cos is None:
+            continue
+        v1a_below = v1a_cos < minilm_lo
+        v1a_above = v1a_cos > minilm_hi
+        mpnet_above = mpnet_cos is not None and mpnet_cos > mpnet_hi
+        finlang_above = finlang_cos is not None and finlang_cos > finlang_hi
+        # Skip entries that fully pass V1a + V1b (in-band on minilm,
+        # mpnet, finlang — bge_large is structurally permissive per S9).
+        if not (v1a_below or v1a_above or mpnet_above or finlang_above):
+            continue
+        # Classify primary failure mode
+        if (v1a_below or v1a_above) and mpnet_above:
+            mode = "multi_validator_opposite_direction" if v1a_below else "multi_validator_co_directional"
+            primary_findings = [
+                "S1_cross_domain_spillover",
+                "S8_mpnet_expected_band_prediction_miss",
+            ]
+            evidence_note = (
+                "Retained per V1a Option B + V1b STRICT-with-paper-"
+                "escalation precedents. Multi-validator failure across "
+                "two distinct mechanisms (V1a corpus-coverage on MiniLM, "
+                "V1b vocabulary-overlap on mpnet); neither a paraphrase "
+                "signature."
+            )
+            source_layer = "Layer_3_multi_validator"
+            match_type = "multi_validator_distinct_mechanisms"
+        elif v1a_below:
+            mode = "v1a_below_band"
+            primary_findings = ["S1_cross_domain_spillover"]
+            evidence_note = (
+                "Retained per V1a Option B precedent (E1.3.2 ruling). "
+                "Cosine < 0.40 on MiniLM × 90-entry secret corpus, post-"
+                "L1/L2-filter; FAISS top-1 maps to a secret in a "
+                "different alpha domain than the hard-neg's authored "
+                "domain (S1 cross-domain spillover mechanism). "
+                "Regenerating would not help — the structural gap is in "
+                "secret-corpus vocabulary alignment, not hard-neg query "
+                "quality."
+            )
+            source_layer = "Layer_3_V1a_below_band"
+            match_type = "cosine_below_global_blocking_band"
+        elif mpnet_above:
+            mode = "v1b_mpnet_above_band_single_encoder"
+            primary_findings = ["S8_mpnet_expected_band_prediction_miss"]
+            # Cat D and Cat E entries also inherit S11
+            if entry["category"] in ("D", "E"):
+                primary_findings.append(
+                    "S11_cat_d_e_cross_encoder_above_band_concentration"
+                )
+            evidence_note = (
+                "Retained per V1b STRICT-with-paper-escalation precedent "
+                "(E1.3.4 Q1 ruling). Cosine above mpnet Step-2 window "
+                "[0.07, 0.52]. Dropping would be survivorship bias "
+                "against mpnet's documented +0.18 prediction-miss (S8). "
+                "Single-encoder failure (mpnet only); not a Layer 5 "
+                "paraphrase signature."
+            )
+            source_layer = "Layer_3_V1b_mpnet_above_band"
+            match_type = "cosine_above_step2_window_single_encoder"
+        elif finlang_above:
+            # Should not occur in current corpus (all finlang above-band
+            # entries are in Layer 5); defensive branch.
+            mode = "v1b_finlang_above_band_single_encoder"
+            primary_findings = ["S11_cat_d_e_cross_encoder_above_band_concentration"]
+            evidence_note = (
+                "Retained per V1b STRICT-with-paper-escalation precedent. "
+                "Cosine above finlang Step-2 window [0.20, 0.65]. Single-"
+                "encoder failure (finlang only); not a Layer 5 paraphrase "
+                "signature."
+            )
+            source_layer = "Layer_3_V1b_finlang_above_band"
+            match_type = "cosine_above_step2_window_single_encoder"
+        else:
+            # V1a above-band only (HN_GEN_051/056 are in Layer 5 already)
+            mode = "v1a_above_band_single_validator"
+            primary_findings = ["S11_cat_d_e_cross_encoder_above_band_concentration"]
+            evidence_note = (
+                "Retained per V1a Option B precedent. Cosine > 0.65 on "
+                "MiniLM; single-validator above-band, no multi-encoder "
+                "confirmation."
+            )
+            source_layer = "Layer_3_V1a_above_band"
+            match_type = "cosine_above_global_blocking_band"
+
+        layer3_records.append({
+            "hn_id": hid,
+            "category": entry["category"],
+            "domain": entry["domain"],
+            "mode": mode,
+            "source_layer": source_layer,
+            "match_type": match_type,
+            "primary_findings": primary_findings,
+            "evidence_note": evidence_note,
+            "cosines": {
+                "minilm":    v1a_cos,
+                "mpnet":     mpnet_cos,
+                "bge_large": entry.get("closest_cosine_bge_large_90"),
+                "finlang":   finlang_cos,
+            },
+            "closest_secret_ids": {
+                enc: entry.get(f"closest_secret_id_{enc}_90")
+                for enc in ("minilm", "mpnet", "bge_large", "finlang")
+            },
+        })
+
+    # Sort layer3_records by _id for deterministic audit_id assignment
+    layer3_records.sort(key=lambda r: r["hn_id"])
+    for r in layer3_records:
+        audit_entries.append({
+            "audit_id":            f"R6_AUDIT_{counter:03d}",
+            "source_layer":        r["source_layer"],
+            "hard_neg_id":         r["hn_id"],
+            "category":            r["category"],
+            "domain":              r["domain"],
+            "match_type":          r["match_type"],
+            "matched_secret_ids":  sorted({s for s in r["closest_secret_ids"].values()
+                                            if s is not None}),
+            "matched_secret_corpus": "secrets_v2.jsonl",
+            "evidence": {
+                "cosines":            r["cosines"],
+                "closest_secret_ids": r["closest_secret_ids"],
+                "failure_mode":       r["mode"],
+            },
+            "disposition":         "retained_with_paper_finding_reference",
+            "disposition_evidence": r["evidence_note"],
+            "disposition_review_required_by": None,
+            "findings_reference":   r["primary_findings"],
+            "timestamp_utc":        timestamp_utc,
         })
         counter += 1
 
