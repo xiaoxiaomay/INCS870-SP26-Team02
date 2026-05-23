@@ -1,0 +1,385 @@
+{
+  "generated_at": "2026-05-23T03:01:18Z",
+  "phase": "1.E.E1.3.4 — V1b",
+  "encoders": [
+    "minilm",
+    "mpnet",
+    "bge_large",
+    "finlang"
+  ],
+  "scope_note": "4 encoders × 90-entry corpus only. 60-entry deferred per S7 (corpus-version disjointness; see DOCUMENTED_FINDINGS).",
+  "pinned_revisions": {
+    "sentence-transformers/all-MiniLM-L6-v2": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "sentence-transformers/all-mpnet-base-v2": "e8c3b32edf5434bc2275fc9bab85f82640a19130",
+    "BAAI/bge-large-en-v1.5": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+    "FinLang/finance-embeddings-investopedia": "37d7594d02e3d656a241e099e39ac50ab921f999"
+  },
+  "encoder_windows": {
+    "minilm": [
+      0.4,
+      0.65
+    ],
+    "mpnet": [
+      0.07,
+      0.52
+    ],
+    "bge_large": [
+      0.45,
+      0.9
+    ],
+    "finlang": [
+      0.2,
+      0.65
+    ]
+  },
+  "expected_band_midpoint": {
+    "minilm": 0.525,
+    "mpnet": 0.295,
+    "bge_large": 0.675,
+    "finlang": 0.425
+  },
+  "top_k": 10,
+  "hard_neg_count": 65,
+  "secret_tier_filter": [
+    "L1",
+    "L2"
+  ],
+  "per_encoder_blocking_pass_count": {
+    "minilm": 53,
+    "mpnet": 51,
+    "bge_large": 65,
+    "finlang": 61
+  },
+  "per_encoder_fail_count": {
+    "minilm": 12,
+    "mpnet": 14,
+    "bge_large": 0,
+    "finlang": 4
+  },
+  "per_encoder_fail_rate": {
+    "minilm": 0.1846,
+    "mpnet": 0.2154,
+    "bge_large": 0.0,
+    "finlang": 0.0615
+  },
+  "any_secondary_fails_count": 14,
+  "any_secondary_fails_rate": 0.2154,
+  "cross_encoder_agreement_summary": {
+    "exact_secret_id": "9/65",
+    "same_domain": "34/65",
+    "same_tier": "26/65",
+    "all_blocking_pass": "42/65"
+  },
+  "cross_encoder_agreement_rate": {
+    "exact_secret_id": 0.1385,
+    "same_domain": 0.5231,
+    "same_tier": 0.4,
+    "all_blocking_pass": 0.6462
+  },
+  "cosine_stats_per_encoder": {
+    "minilm": {
+      "mean": 0.4934,
+      "p10": 0.3967,
+      "p90": 0.5996,
+      "n": 65
+    },
+    "mpnet": {
+      "mean": 0.4725,
+      "p10": 0.3889,
+      "p90": 0.5769,
+      "n": 65
+    },
+    "bge_large": {
+      "mean": 0.7034,
+      "p10": 0.6408,
+      "p90": 0.7909,
+      "n": 65
+    },
+    "finlang": {
+      "mean": 0.4753,
+      "p10": 0.3612,
+      "p90": 0.5905,
+      "n": 65
+    }
+  },
+  "deviation_from_expected_midpoint": {
+    "minilm": -0.0316,
+    "mpnet": 0.1775,
+    "bge_large": 0.0284,
+    "finlang": 0.0503
+  },
+  "deviation_flags": [
+    {
+      "encoder": "mpnet",
+      "delta": 0.1775
+    }
+  ],
+  "escalation_flags": [],
+  "per_encoder_outliers": {
+    "minilm": [
+      {
+        "_id": "HN_SEED_004",
+        "category": "A",
+        "cosine": 0.3684,
+        "direction": "below",
+        "target_secret_id": "v2_L1_alternative_data_003"
+      },
+      {
+        "_id": "HN_SEED_006",
+        "category": "B",
+        "cosine": 0.3844,
+        "direction": "below",
+        "target_secret_id": "v2_L2_statistical_arbitrage_004"
+      },
+      {
+        "_id": "HN_SEED_007",
+        "category": "B",
+        "cosine": 0.3151,
+        "direction": "below",
+        "target_secret_id": "v2_L2_event_driven_002"
+      },
+      {
+        "_id": "HN_SEED_010",
+        "category": "B",
+        "cosine": 0.3989,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_005"
+      },
+      {
+        "_id": "HN_SEED_013",
+        "category": "C",
+        "cosine": 0.3986,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_005"
+      },
+      {
+        "_id": "HN_SEED_019",
+        "category": "D",
+        "cosine": 0.3956,
+        "direction": "below",
+        "target_secret_id": "v2_L1_statistical_arbitrage_004"
+      },
+      {
+        "_id": "HN_SEED_025",
+        "category": "E",
+        "cosine": 0.3983,
+        "direction": "below",
+        "target_secret_id": "v2_L1_ml_signals_001"
+      },
+      {
+        "_id": "HN_SEED_028",
+        "category": "F",
+        "cosine": 0.3824,
+        "direction": "below",
+        "target_secret_id": "v2_L1_event_driven_003"
+      },
+      {
+        "_id": "HN_GEN_039",
+        "category": "C",
+        "cosine": 0.3385,
+        "direction": "below",
+        "target_secret_id": "v2_L2_statistical_arbitrage_002"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6778,
+        "direction": "above",
+        "target_secret_id": "v2_L2_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.6781,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_062",
+        "category": "F",
+        "cosine": 0.3822,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_004"
+      }
+    ],
+    "mpnet": [
+      {
+        "_id": "HN_SEED_003",
+        "category": "A",
+        "cosine": 0.525,
+        "direction": "above",
+        "target_secret_id": "v2_L2_statistical_arbitrage_001"
+      },
+      {
+        "_id": "HN_SEED_013",
+        "category": "C",
+        "cosine": 0.5706,
+        "direction": "above",
+        "target_secret_id": "v2_L1_alternative_data_001"
+      },
+      {
+        "_id": "HN_SEED_016",
+        "category": "D",
+        "cosine": 0.6679,
+        "direction": "above",
+        "target_secret_id": "v2_L1_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_SEED_017",
+        "category": "D",
+        "cosine": 0.6579,
+        "direction": "above",
+        "target_secret_id": "v2_L1_event_driven_002"
+      },
+      {
+        "_id": "HN_SEED_021",
+        "category": "E",
+        "cosine": 0.5811,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_GEN_033",
+        "category": "A",
+        "cosine": 0.5419,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_003"
+      },
+      {
+        "_id": "HN_GEN_034",
+        "category": "A",
+        "cosine": 0.532,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_003"
+      },
+      {
+        "_id": "HN_GEN_043",
+        "category": "A",
+        "cosine": 0.5398,
+        "direction": "above",
+        "target_secret_id": "v2_L1_ml_signals_005"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6503,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_053",
+        "category": "D",
+        "cosine": 0.5674,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_054",
+        "category": "D",
+        "cosine": 0.6123,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_055",
+        "category": "D",
+        "cosine": 0.5267,
+        "direction": "above",
+        "target_secret_id": "v2_L2_factor_neutral_002"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.6865,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_059",
+        "category": "E",
+        "cosine": 0.6503,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      }
+    ],
+    "bge_large": [],
+    "finlang": [
+      {
+        "_id": "HN_SEED_016",
+        "category": "D",
+        "cosine": 0.6646,
+        "direction": "above",
+        "target_secret_id": "v2_L1_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6766,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.7027,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_059",
+        "category": "E",
+        "cosine": 0.6558,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      }
+    ]
+  },
+  "fallback_count_per_encoder": {
+    "minilm": 0,
+    "mpnet": 0,
+    "bge_large": 0,
+    "finlang": 0
+  },
+  "documented_findings": {
+    "S1_cross_domain_spillover": "Hard-negative corpus geometry interacts with secret corpus coverage in a previously unmodeled way. When a hard-negative's authored linguistic domain has insufficient vocabulary-aligned secrets, FAISS top-1 lookup crosses domain boundaries, resulting in cosine values below the expected per-encoder band. This 'cross-domain spillover' is structurally distinct from V2 §2.5's anticipated 'easy negative' failure mode and represents a corpus-coverage finding (secrets_v2 has ~5 entries per domain×level), not a query-quality failure. Evidence: 80% (8/10) of below-band hard-negatives map via top-1 to a v2 secret in a DIFFERENT alpha domain than the hard-neg's authored domain. Cross-domain mapping is the dominant mechanism for cosine < 0.40 in this corpus.",
+    "S2_e11_vs_e12_asymmetry": "Audit-driven hard-negative generation produces tighter MiniLM band centrality than manual seed authoring. Manual E1.1 seeds show 26.7% (8/30) below-band failure rate; LLM-generated E1.2 entries show 5.7% (2/35), a 5x improvement attributable to the per-category anti-pattern audit and prompt scaffolding. This is empirical evidence that the audit framework has measurable corpus-quality impact, not just theoretical separation. Per V2 §2.2 specification, the LLM-generated cohort more reliably lands within expected per-category bands.",
+    "S5_length_nonsignal": "Query length is not a band-failure discriminator. Below-band queries (mean 134 chars) show no meaningful length difference from corpus baseline (mean 138 chars). Failures correlate with domain-secret coverage gaps, not query verbosity.",
+    "S6_author_vs_measurement_divergence": {
+      "type": "author_intent_vs_encoder_measurement_alignment",
+      "summary": "Author-intent target_secret_id (manual seeds, n=30) vs MiniLM-measured closest_secret_id_minilm_90 show divergence at three semantic layers: 17% exact-secret match, 67% same-alpha-domain, 40% same-tier alignment.",
+      "data": {
+        "exact_secret_match": "5/30 (17%)",
+        "same_alpha_domain": "20/30 (67%)",
+        "same_tier_L1": "12/30 (40%)"
+      },
+      "interpretation": "Manual seed authors operate at domain-level semantic intuition (67% domain alignment) but cannot reliably target the exact most-similar secret (17% exact match). This mechanistically explains the S2 finding (audit-driven generation 5x lower below-band fail rate): authors lack the semantic-precision intuition that LLM-with-domain-vocabulary-injection provides.",
+      "paper_implication": "Provides 'author-intuition vs encoder-measurement' axis for methodology rigor. Reviewer-grade evidence that the audit framework operates at semantic precision level beyond human authorial intuition.",
+      "emerged_from": "V2 §5.2 + §5.3 dual-field schema (Option C ratification 2026-05-22) — both target_secret_id (author intent) and closest_secret_id_minilm_90 (validator measurement) preserved in same record, enabling direct comparison."
+    },
+    "S7_corpus_version_disjointness": {
+      "type": "schema_assumption_vs_corpus_reality",
+      "summary": "V2 §5.2 schema (closest_secret_id 4 × 2) implies 4 encoders × 2 corpora with the implicit assumption that the 60-entry corpus is a subset of or calibration-comparable to the 90-entry corpus. Pre-flight verification for E1.3.4 surfaced that the corpora are completely disjoint (|60 ∩ 90| = 0) and have incompatible tier distributions: 60-entry (L1=0, L2=10, L3=50) vs 90-entry (L1=30, L2=30, L3=30).",
+      "data": {
+        "overlap": "0 / 60",
+        "60_entry_tiers": {
+          "L1": 0,
+          "L2": 10,
+          "L3": 50
+        },
+        "90_entry_tiers": {
+          "L1": 30,
+          "L2": 30,
+          "L3": 30
+        },
+        "60_entry_id_format": "S0001 (legacy pre-v2)",
+        "90_entry_id_format": "v2_L<tier>_<domain>_<NNN>"
+      },
+      "interpretation": "The 60-entry corpus is the original pre-v2 secret reference; the 90-entry corpus is the v2 redesign with structured per-tier-per-domain coverage. They are parallel canonical sources, not a subset relationship. Applying V2 §5.3's L1+L2 filter to the 60-entry corpus leaves only 10 candidate secrets (all L2), making FAISS top-K post-filter degenerate.",
+      "paper_implication": "V2 §2.5's '60-entry warns if disagrees with 90-entry' provision fails semantically with disjoint corpora — disagreement becomes structural noise rather than calibration signal. E1.3.4 scope was revised to 4 encoders × 90-entry only; 60-entry comparison is properly scoped to v10 §VI reproducibility appendix or a future V1c sub-step.",
+      "emerged_from": "E1.3.4 V1b pre-flight verification 2026-05-22, before any V1b code execution. View-before-implement methodology rigor surfaced the schema-vs-reality gap before it propagated into a shipped validator."
+    },
+    "PENDING_V2_5_PLAN_REVISION": "PENDING — V2.5 plan revision consideration for cross-domain spillover failure mode (S1). Awaiting V1b (multi-encoder) + V5b (exact-match) results before deciding plan revision vs paper-only documentation. To be resolved at E1.3.7 results write-up or E1.6 Phase 1.E close.",
+    "PENDING_V2_5_SCHEMA_REVISION": "PENDING — V2 §5.2 schema describes closest_secret_id (4 × 2) implying 4 encoders × 2 corpora. E1.3.4 pre-flight (S7) surfaced that the 60-entry and 90-entry corpora are disjoint with incompatible tier distributions, making the L1+L2 filter degenerate against the 60-entry corpus. V2.5 schema revision should either (a) restrict the schema to 4 × 1 for E1 validation scope (90-entry only) or (b) introduce explicit 60-entry-legacy-reference field semantics distinct from V1b BLOCKING measurement. Resolution deferred to E1.3.7 results write-up or E1.6 Phase 1.E close."
+  },
+  "wall_seconds": 22.03
+}

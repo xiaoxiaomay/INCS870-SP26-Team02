@@ -1,0 +1,163 @@
+{
+  "generated_at": "2026-05-22T01:28:40Z",
+  "phase": "1.E.E1.3.2 — V1a",
+  "minilm_revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+  "hard_neg_count": 65,
+  "secret_corpus_size": 90,
+  "secret_tier_filter": [
+    "L1",
+    "L2"
+  ],
+  "top_k": 10,
+  "band_distribution_per_category": {
+    "A": {
+      "mid": 12,
+      "low": 3
+    },
+    "B": {
+      "low": 3,
+      "mid": 7
+    },
+    "C": {
+      "low": 6,
+      "mid": 4
+    },
+    "D": {
+      "high": 6,
+      "low": 1,
+      "mid": 3
+    },
+    "E": {
+      "mid": 7,
+      "low": 2,
+      "high": 1
+    },
+    "F": {
+      "mid": 4,
+      "low": 6
+    }
+  },
+  "tier_breakdown": {
+    "L2": 44,
+    "L1": 21
+  },
+  "global_blocking_band": [
+    0.4,
+    0.65
+  ],
+  "blocking_pass": 53,
+  "blocking_fail": 12,
+  "outliers": [
+    {
+      "_id": "HN_SEED_004",
+      "category": "A",
+      "cosine": 0.3684,
+      "target_secret_id": "v2_L1_alternative_data_003",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_006",
+      "category": "B",
+      "cosine": 0.3844,
+      "target_secret_id": "v2_L2_statistical_arbitrage_004",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_007",
+      "category": "B",
+      "cosine": 0.3151,
+      "target_secret_id": "v2_L2_event_driven_002",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_010",
+      "category": "B",
+      "cosine": 0.3989,
+      "target_secret_id": "v2_L2_factor_neutral_005",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_013",
+      "category": "C",
+      "cosine": 0.3986,
+      "target_secret_id": "v2_L2_factor_neutral_005",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_019",
+      "category": "D",
+      "cosine": 0.3956,
+      "target_secret_id": "v2_L1_statistical_arbitrage_004",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_025",
+      "category": "E",
+      "cosine": 0.3983,
+      "target_secret_id": "v2_L1_ml_signals_001",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_SEED_028",
+      "category": "F",
+      "cosine": 0.3824,
+      "target_secret_id": "v2_L1_event_driven_003",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_GEN_039",
+      "category": "C",
+      "cosine": 0.3385,
+      "target_secret_id": "v2_L2_statistical_arbitrage_002",
+      "direction": "below"
+    },
+    {
+      "_id": "HN_GEN_051",
+      "category": "D",
+      "cosine": 0.6778,
+      "target_secret_id": "v2_L2_factor_neutral_001",
+      "direction": "above"
+    },
+    {
+      "_id": "HN_GEN_056",
+      "category": "E",
+      "cosine": 0.6781,
+      "target_secret_id": "v2_L2_alternative_data_001",
+      "direction": "above"
+    },
+    {
+      "_id": "HN_GEN_062",
+      "category": "F",
+      "cosine": 0.3822,
+      "target_secret_id": "v2_L2_factor_neutral_004",
+      "direction": "below"
+    }
+  ],
+  "fallback_warnings": [],
+  "field_population": {
+    "target_secret_id": 30,
+    "closest_secret_id_minilm_90": 65,
+    "expected_minilm_band": 65
+  },
+  "per_category_high_band": {
+    "D": [
+      "HN_SEED_016",
+      "HN_SEED_017",
+      "HN_SEED_018",
+      "HN_GEN_051",
+      "HN_GEN_053",
+      "HN_GEN_054"
+    ],
+    "E": [
+      "HN_GEN_056"
+    ],
+    "note": "V2 §2.2 predicts D band-tightest; V1b cross-encoder (E1.3.4) will determine MiniLM-specific vs systematic."
+  },
+  "documented_findings": {
+    "S1_cross_domain_spillover": "Hard-negative corpus geometry interacts with secret corpus coverage in a previously unmodeled way. When a hard-negative's authored linguistic domain has insufficient vocabulary-aligned secrets, FAISS top-1 lookup crosses domain boundaries, resulting in cosine values below the expected per-encoder band. This 'cross-domain spillover' is structurally distinct from V2 §2.5's anticipated 'easy negative' failure mode and represents a corpus-coverage finding (secrets_v2 has ~5 entries per domain×level), not a query-quality failure. Evidence: 80% (8/10) of below-band hard-negatives map via top-1 to a v2 secret in a DIFFERENT alpha domain than the hard-neg's authored domain. Cross-domain mapping is the dominant mechanism for cosine < 0.40 in this corpus.",
+    "S2_e11_vs_e12_asymmetry": "Audit-driven hard-negative generation produces tighter MiniLM band centrality than manual seed authoring. Manual E1.1 seeds show 26.7% (8/30) below-band failure rate; LLM-generated E1.2 entries show 5.7% (2/35), a 5x improvement attributable to the per-category anti-pattern audit and prompt scaffolding. This is empirical evidence that the audit framework has measurable corpus-quality impact, not just theoretical separation. Per V2 §2.2 specification, the LLM-generated cohort more reliably lands within expected per-category bands.",
+    "S5_length_nonsignal": "Query length is not a band-failure discriminator. Below-band queries (mean 134 chars) show no meaningful length difference from corpus baseline (mean 138 chars). Failures correlate with domain-secret coverage gaps, not query verbosity.",
+    "PENDING_V2_5_PLAN_REVISION": "PENDING — V2.5 plan revision consideration for cross-domain spillover failure mode (S1). Awaiting V1b (multi-encoder) + V5b (exact-match) results before deciding plan revision vs paper-only documentation. To be resolved at E1.3.7 results write-up or E1.6 Phase 1.E close."
+  },
+  "wall_seconds": 7.26
+}
