@@ -442,7 +442,7 @@ Phase 1.E FULL LOGICAL CLOSE:
 - Total Phase 1.E LLM cost: $0.035 (8.75% of $0.40 phase cap)
 - Cumulative wall: ~17-19 hours across 5+ sessions
 
-Next: Phase 1.G adaptive attacker (3-5 day sub-project) + v10
+Next: Phase 1.G multi-sample stochasticity probe (~6 hr wall + analysis, $0.36 LLM per V2 plan §13 + PHASE_1F_RESULTS.md §11.1 #2; see §11 errata) + v10
 paper rewrite (§V + §VI + §VII).
 EOF
 
@@ -482,7 +482,7 @@ Per master `PHASE_1E_RESULTS.md` §11, with E1.6 Part 2 updates:
 | §VI Reproducibility | E1.3 pinned components + FAISS conventions + 3-tier backup + 65-entry close + V3 deferral + sequencing divergence + corpus rename per V2 §5.1 |
 | §VI Findings | S1–S14 (12 findings) — each gets 1–2 paragraphs |
 | §VI RESOLVED Decisions | RESOLVED_V2_5_PLAN_REVISION + RESOLVED_V2_5_SCHEMA_REVISION — methodology decision documentation |
-| §VII Limitations / Future Work | V8 sub-cell balance + 200-entry v11 + V3 v11 + multi-agent + Phase 1.G integration |
+| §VII Limitations / Future Work | V8 sub-cell balance + 200-entry v11 + V3 v11 + multi-agent + Phase 1.G (stochasticity probe) integration + unscheduled adaptive-attacker hardening (PLAN.md line 150) |
 
 The **unified Option B philosophy** is the v10 paper's central
 methodology-discipline claim, emerging organically from the
@@ -494,11 +494,19 @@ framework + layered defense-in-depth validators.
 
 ## §10 — Next Phase Roadmap
 
-### §10.1 — Phase 1.G — Adaptive Attacker
+### §10.1 — Phase 1.G — Multi-sample LLM Stochasticity Probe (per V2 plan §13 + PHASE_1F_RESULTS.md §11.1 #2)
 
-Reviewer-mandatory sub-project per Phase 1.F audit feedback.
-Estimated 3–5 days wall. Can begin once Phase 1.E batched push
-completes (user manual). Independent of paper rewrite.
+**Corrected per 2026-05-24 errata (see §11).** Per V2 plan §13
+(line 900) + PHASE_1F_RESULTS.md §11.1 #2 (lines 986-995):
+re-run Phase 1.F M4 8 cells with n ≥ 3 samples; convert GLR
+point-estimates → mean ± std with confidence bounds; tightens
+v10 §V claims; addresses §7.1 Cell-1 +0.36pp drift. Workload:
+~6 hr wall, $0.36 additional LLM. Independent of paper rewrite.
+
+**Adaptive attacker evaluation** is the unscheduled "Hardening"
+item per `PLAN.md` line 150 (no phase number, no reviewer mandate
+documented). May be designed later as Phase 1.I if reviewer
+feedback emerges from v10 draft review.
 
 ### §10.2 — Paper rewrite (§V + §VI + §VII + integration)
 
@@ -510,8 +518,7 @@ writing.
 ### §10.3 — Realistic timeline to v10 submission-ready
 
 ~3 weeks from Phase 1.E batched push:
-- Week 1: Phase 1.G adaptive attacker (parallel-track with start
-  of paper rewrite)
+- Week 1: Phase 1.G multi-sample stochasticity probe (~6 hr wall + analysis; parallel-track with start of paper rewrite)
 - Week 2: Paper §V + §VI + §VII drafts
 - Week 3: Integration + review + final polish
 
@@ -523,3 +530,48 @@ complete; 12 findings; 2 RESOLVED V2.5 decisions; corpus rename
 commands prepared for user manual execution; batched commit +
 push sequence ready). Standing by for user manual git operations
 + Phase 1.G kickoff.*
+
+---
+
+## §11 — Errata (2026-05-24)
+
+### §11.1 — Phase 1.G scope correction
+
+**ERRATA 2026-05-24:** This document's prior draft (committed at
+`156cec1`) incorrectly characterized **Phase 1.G** as *"Adaptive
+Attacker, reviewer-mandatory per Phase 1.F audit feedback."* This
+claim was **unsupported by source documents**.
+
+Authoritative correction per V2 plan §13 (line 900) +
+`PHASE_1F_RESULTS.md` §11.1 #2 (lines 986-995):
+
+- **Phase 1.G = Multi-sample LLM stochasticity probe.**
+- Dependencies: Phase 1.F M4 outputs (re-run 8 cells with n ≥ 3).
+- Addresses: §7.1 Cell-1 +0.36pp GLR drift.
+- Impact: converts GLR point-estimates to mean ± std with
+  confidence bounds.
+- Workload: ~6 hr wall, $0.36 LLM ($0.18 × 2 repeats).
+
+Adaptive attacker evaluation is an unscheduled "Hardening" item
+per `PLAN.md` line 150. No phase number assigned. No reviewer
+mandate documented. May be designed later as Phase 1.I if/when
+reviewer feedback emerges (e.g., post-v10-draft professor review).
+
+### §11.2 — Sections corrected (in this errata commit)
+
+| Section | Pre-errata | Post-errata |
+| --- | --- | --- |
+| §8 commit-prep "Next" line | "Phase 1.G adaptive attacker (3-5 day sub-project)" | "Phase 1.G multi-sample stochasticity probe (~6 hr wall + analysis)" |
+| §9 paper §VII mapping | "Phase 1.G integration" | "Phase 1.G (stochasticity probe) integration + unscheduled adaptive-attacker hardening" |
+| §10.1 header | "Phase 1.G — Adaptive Attacker" | "Phase 1.G — Multi-sample LLM Stochasticity Probe (per V2 plan §13 + PHASE_1F_RESULTS.md §11.1 #2)" |
+| §10.1 body | Reviewer-mandate claim + 3-5 day scope | V2-canonical stochasticity probe scope |
+| §10.3 timeline | "Week 1: Phase 1.G adaptive attacker" | "Week 1: Phase 1.G multi-sample stochasticity probe (~6 hr wall + analysis)" |
+
+### §11.3 — Mirror to master errata
+
+Companion errata in `PHASE_1E_RESULTS.md` §14. Both errata
+sections together correct the cascading error across yesterday's
+E1.6 Part 1 + Part 2 docs. Follows the **unified Option B
+philosophy** ratified in §5.3 (document deviations, don't
+retroactively refit V2 plan) — symmetrically applied to assistant-
+side documentation correcting toward V2 plan.
