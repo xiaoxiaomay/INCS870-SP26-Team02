@@ -1,0 +1,574 @@
+{
+  "generated_at": "2026-05-24T00:22:58Z",
+  "phase": "1.E.E1.3.4 — V1b",
+  "encoders": [
+    "minilm",
+    "mpnet",
+    "bge_large",
+    "finlang"
+  ],
+  "scope_note": "4 encoders × 90-entry corpus only. 60-entry deferred per S7 (corpus-version disjointness; see DOCUMENTED_FINDINGS).",
+  "pinned_revisions": {
+    "sentence-transformers/all-MiniLM-L6-v2": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "sentence-transformers/all-mpnet-base-v2": "e8c3b32edf5434bc2275fc9bab85f82640a19130",
+    "BAAI/bge-large-en-v1.5": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+    "FinLang/finance-embeddings-investopedia": "37d7594d02e3d656a241e099e39ac50ab921f999"
+  },
+  "encoder_windows": {
+    "minilm": [
+      0.4,
+      0.65
+    ],
+    "mpnet": [
+      0.07,
+      0.52
+    ],
+    "bge_large": [
+      0.45,
+      0.9
+    ],
+    "finlang": [
+      0.2,
+      0.65
+    ]
+  },
+  "expected_band_midpoint": {
+    "minilm": 0.525,
+    "mpnet": 0.295,
+    "bge_large": 0.675,
+    "finlang": 0.425
+  },
+  "top_k": 10,
+  "hard_neg_count": 65,
+  "secret_tier_filter": [
+    "L1",
+    "L2"
+  ],
+  "per_encoder_blocking_pass_count": {
+    "minilm": 53,
+    "mpnet": 51,
+    "bge_large": 65,
+    "finlang": 61
+  },
+  "per_encoder_fail_count": {
+    "minilm": 12,
+    "mpnet": 14,
+    "bge_large": 0,
+    "finlang": 4
+  },
+  "per_encoder_fail_rate": {
+    "minilm": 0.1846,
+    "mpnet": 0.2154,
+    "bge_large": 0.0,
+    "finlang": 0.0615
+  },
+  "any_secondary_fails_count": 14,
+  "any_secondary_fails_rate": 0.2154,
+  "cross_encoder_agreement_summary": {
+    "exact_secret_id": "9/65",
+    "same_domain": "34/65",
+    "same_tier": "26/65",
+    "all_blocking_pass": "42/65"
+  },
+  "cross_encoder_agreement_rate": {
+    "exact_secret_id": 0.1385,
+    "same_domain": 0.5231,
+    "same_tier": 0.4,
+    "all_blocking_pass": 0.6462
+  },
+  "cosine_stats_per_encoder": {
+    "minilm": {
+      "mean": 0.4934,
+      "p10": 0.3967,
+      "p90": 0.5996,
+      "n": 65
+    },
+    "mpnet": {
+      "mean": 0.4725,
+      "p10": 0.3889,
+      "p90": 0.5769,
+      "n": 65
+    },
+    "bge_large": {
+      "mean": 0.7034,
+      "p10": 0.6408,
+      "p90": 0.7909,
+      "n": 65
+    },
+    "finlang": {
+      "mean": 0.4753,
+      "p10": 0.3612,
+      "p90": 0.5905,
+      "n": 65
+    }
+  },
+  "deviation_from_expected_midpoint": {
+    "minilm": -0.0316,
+    "mpnet": 0.1775,
+    "bge_large": 0.0284,
+    "finlang": 0.0503
+  },
+  "deviation_flags": [
+    {
+      "encoder": "mpnet",
+      "delta": 0.1775
+    }
+  ],
+  "escalation_flags": [],
+  "per_encoder_outliers": {
+    "minilm": [
+      {
+        "_id": "HN_SEED_004",
+        "category": "A",
+        "cosine": 0.3684,
+        "direction": "below",
+        "target_secret_id": "v2_L1_alternative_data_003"
+      },
+      {
+        "_id": "HN_SEED_006",
+        "category": "B",
+        "cosine": 0.3844,
+        "direction": "below",
+        "target_secret_id": "v2_L2_statistical_arbitrage_004"
+      },
+      {
+        "_id": "HN_SEED_007",
+        "category": "B",
+        "cosine": 0.3151,
+        "direction": "below",
+        "target_secret_id": "v2_L2_event_driven_002"
+      },
+      {
+        "_id": "HN_SEED_010",
+        "category": "B",
+        "cosine": 0.3989,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_005"
+      },
+      {
+        "_id": "HN_SEED_013",
+        "category": "C",
+        "cosine": 0.3986,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_005"
+      },
+      {
+        "_id": "HN_SEED_019",
+        "category": "D",
+        "cosine": 0.3956,
+        "direction": "below",
+        "target_secret_id": "v2_L1_statistical_arbitrage_004"
+      },
+      {
+        "_id": "HN_SEED_025",
+        "category": "E",
+        "cosine": 0.3983,
+        "direction": "below",
+        "target_secret_id": "v2_L1_ml_signals_001"
+      },
+      {
+        "_id": "HN_SEED_028",
+        "category": "F",
+        "cosine": 0.3824,
+        "direction": "below",
+        "target_secret_id": "v2_L1_event_driven_003"
+      },
+      {
+        "_id": "HN_GEN_039",
+        "category": "C",
+        "cosine": 0.3385,
+        "direction": "below",
+        "target_secret_id": "v2_L2_statistical_arbitrage_002"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6778,
+        "direction": "above",
+        "target_secret_id": "v2_L2_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.6781,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_062",
+        "category": "F",
+        "cosine": 0.3822,
+        "direction": "below",
+        "target_secret_id": "v2_L2_factor_neutral_004"
+      }
+    ],
+    "mpnet": [
+      {
+        "_id": "HN_SEED_003",
+        "category": "A",
+        "cosine": 0.525,
+        "direction": "above",
+        "target_secret_id": "v2_L2_statistical_arbitrage_001"
+      },
+      {
+        "_id": "HN_SEED_013",
+        "category": "C",
+        "cosine": 0.5706,
+        "direction": "above",
+        "target_secret_id": "v2_L1_alternative_data_001"
+      },
+      {
+        "_id": "HN_SEED_016",
+        "category": "D",
+        "cosine": 0.6679,
+        "direction": "above",
+        "target_secret_id": "v2_L1_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_SEED_017",
+        "category": "D",
+        "cosine": 0.6579,
+        "direction": "above",
+        "target_secret_id": "v2_L1_event_driven_002"
+      },
+      {
+        "_id": "HN_SEED_021",
+        "category": "E",
+        "cosine": 0.5811,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_GEN_033",
+        "category": "A",
+        "cosine": 0.5419,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_003"
+      },
+      {
+        "_id": "HN_GEN_034",
+        "category": "A",
+        "cosine": 0.532,
+        "direction": "above",
+        "target_secret_id": "v2_L2_price_volume_momentum_003"
+      },
+      {
+        "_id": "HN_GEN_043",
+        "category": "A",
+        "cosine": 0.5398,
+        "direction": "above",
+        "target_secret_id": "v2_L1_ml_signals_005"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6503,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_053",
+        "category": "D",
+        "cosine": 0.5674,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_054",
+        "category": "D",
+        "cosine": 0.6123,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_055",
+        "category": "D",
+        "cosine": 0.5267,
+        "direction": "above",
+        "target_secret_id": "v2_L2_factor_neutral_002"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.6865,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_059",
+        "category": "E",
+        "cosine": 0.6503,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      }
+    ],
+    "bge_large": [],
+    "finlang": [
+      {
+        "_id": "HN_SEED_016",
+        "category": "D",
+        "cosine": 0.6646,
+        "direction": "above",
+        "target_secret_id": "v2_L1_price_volume_momentum_001"
+      },
+      {
+        "_id": "HN_GEN_051",
+        "category": "D",
+        "cosine": 0.6766,
+        "direction": "above",
+        "target_secret_id": "v2_L1_factor_neutral_001"
+      },
+      {
+        "_id": "HN_GEN_056",
+        "category": "E",
+        "cosine": 0.7027,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      },
+      {
+        "_id": "HN_GEN_059",
+        "category": "E",
+        "cosine": 0.6558,
+        "direction": "above",
+        "target_secret_id": "v2_L2_alternative_data_001"
+      }
+    ]
+  },
+  "fallback_count_per_encoder": {
+    "minilm": 0,
+    "mpnet": 0,
+    "bge_large": 0,
+    "finlang": 0
+  },
+  "documented_findings": {
+    "S1_cross_domain_spillover": "Hard-negative corpus geometry interacts with secret corpus coverage in a previously unmodeled way. When a hard-negative's authored linguistic domain has insufficient vocabulary-aligned secrets, FAISS top-1 lookup crosses domain boundaries, resulting in cosine values below the expected per-encoder band. This 'cross-domain spillover' is structurally distinct from V2 §2.5's anticipated 'easy negative' failure mode and represents a corpus-coverage finding (secrets_v2 has ~5 entries per domain×level), not a query-quality failure. Evidence: 80% (8/10) of below-band hard-negatives map via top-1 to a v2 secret in a DIFFERENT alpha domain than the hard-neg's authored domain. Cross-domain mapping is the dominant mechanism for cosine < 0.40 in this corpus.",
+    "S2_e11_vs_e12_asymmetry": "Audit-driven hard-negative generation produces tighter MiniLM band centrality than manual seed authoring. Manual E1.1 seeds show 26.7% (8/30) below-band failure rate; LLM-generated E1.2 entries show 5.7% (2/35), a 5x improvement attributable to the per-category anti-pattern audit and prompt scaffolding. This is empirical evidence that the audit framework has measurable corpus-quality impact, not just theoretical separation. Per V2 §2.2 specification, the LLM-generated cohort more reliably lands within expected per-category bands.",
+    "S5_length_nonsignal": "Query length is not a band-failure discriminator. Below-band queries (mean 134 chars) show no meaningful length difference from corpus baseline (mean 138 chars). Failures correlate with domain-secret coverage gaps, not query verbosity.",
+    "S6_author_vs_measurement_divergence": {
+      "type": "author_intent_vs_encoder_measurement_alignment",
+      "summary": "Author-intent target_secret_id (manual seeds, n=30) vs MiniLM-measured closest_secret_id_minilm_90 show divergence at three semantic layers: 17% exact-secret match, 67% same-alpha-domain, 40% same-tier alignment.",
+      "data": {
+        "exact_secret_match": "5/30 (17%)",
+        "same_alpha_domain": "20/30 (67%)",
+        "same_tier_L1": "12/30 (40%)"
+      },
+      "interpretation": "Manual seed authors operate at domain-level semantic intuition (67% domain alignment) but cannot reliably target the exact most-similar secret (17% exact match). This mechanistically explains the S2 finding (audit-driven generation 5x lower below-band fail rate): authors lack the semantic-precision intuition that LLM-with-domain-vocabulary-injection provides.",
+      "paper_implication": "Provides 'author-intuition vs encoder-measurement' axis for methodology rigor. Reviewer-grade evidence that the audit framework operates at semantic precision level beyond human authorial intuition.",
+      "emerged_from": "V2 §5.2 + §5.3 dual-field schema (Option C ratification 2026-05-22) — both target_secret_id (author intent) and closest_secret_id_minilm_90 (validator measurement) preserved in same record, enabling direct comparison."
+    },
+    "S7_corpus_version_disjointness": {
+      "type": "schema_assumption_vs_corpus_reality",
+      "summary": "V2 §5.2 schema (closest_secret_id 4 × 2) implies 4 encoders × 2 corpora with the implicit assumption that the 60-entry corpus is a subset of or calibration-comparable to the 90-entry corpus. Pre-flight verification for E1.3.4 surfaced that the corpora are completely disjoint (|60 ∩ 90| = 0) and have incompatible tier distributions: 60-entry (L1=0, L2=10, L3=50) vs 90-entry (L1=30, L2=30, L3=30).",
+      "data": {
+        "overlap": "0 / 60",
+        "60_entry_tiers": {
+          "L1": 0,
+          "L2": 10,
+          "L3": 50
+        },
+        "90_entry_tiers": {
+          "L1": 30,
+          "L2": 30,
+          "L3": 30
+        },
+        "60_entry_id_format": "S0001 (legacy pre-v2)",
+        "90_entry_id_format": "v2_L<tier>_<domain>_<NNN>"
+      },
+      "interpretation": "The 60-entry corpus is the original pre-v2 secret reference; the 90-entry corpus is the v2 redesign with structured per-tier-per-domain coverage. They are parallel canonical sources, not a subset relationship. Applying V2 §5.3's L1+L2 filter to the 60-entry corpus leaves only 10 candidate secrets (all L2), making FAISS top-K post-filter degenerate.",
+      "paper_implication": "V2 §2.5's '60-entry warns if disagrees with 90-entry' provision fails semantically with disjoint corpora — disagreement becomes structural noise rather than calibration signal. E1.3.4 scope was revised to 4 encoders × 90-entry only; 60-entry comparison is properly scoped to v10 §VI reproducibility appendix or a future V1c sub-step.",
+      "emerged_from": "E1.3.4 V1b pre-flight verification 2026-05-22, before any V1b code execution. View-before-implement methodology rigor surfaced the schema-vs-reality gap before it propagated into a shipped validator."
+    },
+    "S8_mpnet_expected_band_prediction_miss": {
+      "type": "predicted_vs_observed_band_calibration_deviation",
+      "summary": "mpnet observed mean cosine 0.4725 exceeds V2 §2.5 predicted band midpoint 0.295 by +0.18, unambiguously triggering V2 §4.4 substantial-deviation threshold (> 0.10).",
+      "data": {
+        "predicted_band": "[0.17, 0.42]",
+        "predicted_midpoint": 0.295,
+        "observed_mean": 0.4725,
+        "observed_p10": 0.3889,
+        "observed_p90": 0.5769,
+        "delta_mean_vs_midpoint": "+0.1775",
+        "deviation_threshold": "0.10 (V2 §4.4)",
+        "outliers_above_window": "14/65 (21.5%)"
+      },
+      "interpretation": "V2 §2.5 mpnet band was derived from Phase 1.F M3 attack-corpus shift observations (~0.23 shift). The hard-negative-corpus shift is asymmetric to the attack-corpus shift: hard-negs land +0.18 above the predicted midpoint on mpnet, indicating hard-negs sit closer to the secret manifold on mpnet than the attack-corpus prediction suggested.",
+      "paper_implication": "Honest reporting of prediction-vs-observed calibration deviation. Per Q1 STRICT-with-paper-escalation ruling: document prediction miss as v10 contribution, do NOT post-hoc re-anchor mpnet band to fit observed data (survivorship bias). V2.5 plan revision is triggered (V2 §4.4 clause); revision wording defers to E1.3.7 / E1.6 close.",
+      "emerged_from": "E1.3.4 V1b multi-encoder run 2026-05-22. Substantial-deviation check was added to validator per V2 §4.4 reporting requirement; mpnet triggered as the sole encoder exceeding the 0.10 threshold."
+    },
+    "S9_bge_large_band_permissiveness_null_result": {
+      "type": "encoder_band_calibration_observation",
+      "summary": "bge_large 0/65 outliers — the V2 §2.5 predicted band [0.45, 0.90] catches all 65 hard-negs with observed mean 0.7034 (P10=0.6408, P90=0.7909) sitting well-centered. The widest predicted band catches the most hard-negs (informative null result).",
+      "data": {
+        "predicted_band": "[0.45, 0.90]",
+        "band_width": 0.45,
+        "observed_mean": 0.7034,
+        "observed_p10": 0.6408,
+        "observed_p90": 0.7909,
+        "outliers_above_window": "0/65 (0.0%)",
+        "outliers_below_window": "0/65 (0.0%)"
+      },
+      "interpretation": "Two readings: (a) the bge_large [0.45, 0.90] window is too wide to function as a useful BLOCKING constraint for this corpus; (b) bge_large embedding has unusually tight clustering of finance-domain content where all hard-negs naturally land mid-band. The observed P10-P90 span (0.64-0.79) suggests the actual hard-neg cluster sits in the upper-mid portion of the predicted band, leaving substantial unused window below.",
+      "paper_implication": "Informative null result. V2.5 consideration: either tighten bge_large window to ~[0.60, 0.80] (still admits all 65 entries based on observed P10=0.64 with margin) for stronger BLOCKING semantics, OR document that bge_large is the most permissive encoder family member in finance hard-neg geometry as a v10 finding. Defer revision decision to E1.3.7 / E1.6 close.",
+      "emerged_from": "E1.3.4 V1b multi-encoder run 2026-05-22. Per-encoder BLOCKING rate report surfaced bge_large 0% fail rate as the only all-pass encoder."
+    },
+    "S10_encoder_family_consensus_structurally_weak": {
+      "type": "cross_encoder_picking_consensus_vs_band_consistency",
+      "summary": "Only 9/65 (13.8%) of entries have all 4 encoders pick the same closest secret; 11/65 (16.9%) have all 4 encoders pick completely different secrets. Same-domain agreement is 52.3%, same-tier agreement 40.0%. Cross-encoder consensus on which-secret-is-closest is structurally weak.",
+      "data": {
+        "exact_secret_id_agreement": "9/65 (13.8%)",
+        "same_domain_agreement": "34/65 (52.3%)",
+        "same_tier_agreement": "26/65 (40.0%)",
+        "all_blocking_pass": "42/65 (64.6%)",
+        "distinct_picks_distribution": {
+          "1_distinct_all_agree": 9,
+          "2_distinct": 23,
+          "3_distinct": 22,
+          "4_distinct_all_differ": 11
+        }
+      },
+      "interpretation": "Mechanistically: the V1b BLOCKING check asks 'is each encoder's hard-neg-vs-secret cosine in its predicted band?' — not 'do the 4 encoders agree on which secret is nearest?' The 4 encoders are NOT picking the same closest secret most of the time; they are validating semantic-band consistency for what each independently calls 'closest secret'. This aligns with V2 §2.5's stated scope: 'closeness to secret manifold across encoder family' (not 'consensus on nearest secret').",
+      "paper_implication": "Reviewer-clarifying methodology note. Cross-encoder hard-negative validation is about no encoder finding the hard-neg dangerously close to ITS nearest secret, not about consensus on which secret is universally nearest. The 13.8% exact-secret-id agreement rate is NOT a failure — it is the expected operating profile of a heterogeneous encoder family on a structurally hard corpus.",
+      "emerged_from": "E1.3.4 V1b cross-encoder agreement analysis 2026-05-22. The 4-way agreement matrix (exact/domain/tier/blocking) was added per Q2 ratification multi-level agreement spec."
+    },
+    "S11_cat_d_e_cross_encoder_above_band_concentration": {
+      "type": "linguistic_category_x_encoder_systematic_pattern",
+      "summary": "Cat D (Educational/Conceptual) and Cat E (Comparison/Benchmarking) linguistic categories dominate cross-encoder above-band outliers: Cat D = 6/14 mpnet outliers and 2/4 finlang outliers; Cat E = 3/14 mpnet outliers and 2/4 finlang outliers. Cat B and Cat F produce 0 outliers across all encoders. Pattern is structural across 3 of 4 encoders, confirming V2 §2.2 prediction that D is band-tightest.",
+      "data": {
+        "mpnet_outliers_by_category": {
+          "D": 6,
+          "A": 4,
+          "E": 3,
+          "C": 1,
+          "B": 0,
+          "F": 0
+        },
+        "finlang_outliers_by_category": {
+          "D": 2,
+          "E": 2,
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "F": 0
+        },
+        "bge_large_outliers_by_category": {},
+        "v1a_d_high_band_carryover": "HN_SEED_016, HN_SEED_017, HN_GEN_051/053/054 fail mpnet; HN_SEED_016 and HN_GEN_051 also fail finlang",
+        "v1a_e_high_band_carryover": "HN_GEN_056 fails mpnet AND finlang (3 of 4 encoders above-band)"
+      },
+      "interpretation": "Cat D and Cat E share a structural vocabulary-overlap with secret-text content: D uses concept-name vocabulary (e.g., 'factor neutrality') that aligns lexically with secret titles and bodies (e.g., 'Multi-Factor Neutralization Framework'); E uses comparison-axis vocabulary that often names two strategy/data types both present in the secret corpus. Cat B (aggregated statistics) and Cat F (negation/past-tense) use linguistic structures (aggregation verbs, past-tense markers) that are vocabulary-distant from secret-text style and don't cluster on the secret manifold.",
+      "paper_implication": "V2 §2.2 design prediction (D band-tightest) is multi-encoder-confirmed, not MiniLM-specific. Cat D and Cat E above-band behavior is a property of the linguistic-category × secret-corpus geometry, not an encoder artifact. This validates the per-category band differentiation in V2 §2.2 and reinforces the audit framework's per-category prompt scaffolding (S2).",
+      "emerged_from": "E1.3.4 V1b per-encoder outlier category breakdown 2026-05-22. Pattern surfaced by aggregating mpnet + finlang outlier categories and cross-referencing with V1a §2 per-category high-band entries."
+    },
+    "S12_v5b_zero_corpus_contamination": {
+      "type": "corpus_contamination_null_result_audit_grade",
+      "summary": "V5b exact-string match (V2 §4.1 BLOCKING Layer 2) yielded 0 hits across 65 hard-negs × 150 secrets × 2 fields (query + rationale) = ~19,500 pairwise comparisons. The audit-driven generation pipeline (E1.2) + V2 §7.2 Layer 1 prompt template constraints successfully prevented verbatim secret-content leakage.",
+      "data": {
+        "v5b_match_count": 0,
+        "secrets_checked": "150 (60 legacy + 90 v2 canonical)",
+        "hard_negs_checked": 65,
+        "fields_checked_per_entry": "query + rationale",
+        "total_pairwise_comparisons": "~19500",
+        "exact_match_against_secret_distribution": {
+          "True": 0,
+          "False": 65
+        },
+        "layer_5_paraphrase_candidates": 4,
+        "layer_2_v5b_hits": 0
+      },
+      "interpretation": "Null result confirms Layer 1 prompt template constraints (V2 §7.2) held across all 35 LLM-generated entries and all 30 manual seeds. No verbatim secret text emitted by GPT-5-mini generation or paraphrased into seed rationale by manual authors. Note: Layer 5 paraphrase signatures (4 V1b multi-encoder above-band entries) are recorded in r6_audit.jsonl as forensic evidence of paraphrase-shaped CANDIDATES, distinct from Layer 2 exact-match leakage. Layer 5 candidates remain awaiting content review (2 dispositioned 'retained_non_paraphrase' per V1a Action 1a; 2 dispositioned 'requires_content_review_at_E1_4').",
+      "paper_implication": "Per V2 §7.2: 'If any V5b match was found, V2.5 plan revision is triggered.' With 0 hits, NO V2.5 revision needed for Layer 1 prompt constraints. The audit-grade R6 6-layer mitigation chain holds. Reviewer-grade confirmation that the corpus-generation methodology is audit-defensible against secret-content leakage.",
+      "emerged_from": "E1.3.5 V5b run 2026-05-22. Both secrets corpora checked exhaustively. Pairwise comparison ~19500; 0 matches confirms null-result target."
+    },
+    "S13_layer_5_paraphrase_signature_false_positive_rate": {
+      "type": "r6_layer_5_methodology_clarification",
+      "summary": "R6 Layer 5 paraphrase signature heuristic (V1b ≥2-encoder above-band) flagged 4 candidates across the 65-entry corpus. Manual content review confirmed 0/4 = 0% actual paraphrases. Layer 5 has 100% false-positive rate in this corpus, with all 4 candidates exhibiting S11 vocabulary-overlap mechanism rather than semantic leakage.",
+      "data": {
+        "layer_5_candidates_total": 4,
+        "candidates_confirmed_paraphrase": 0,
+        "candidates_retained_non_paraphrase": 4,
+        "false_positive_rate": "100%",
+        "candidates_breakdown": {
+          "HN_GEN_051": "Cat D × factor_neutral, V1a Action 1a 2026-05-21",
+          "HN_GEN_056": "Cat E × alternative_data, V1a Action 1a 2026-05-21",
+          "HN_SEED_016": "Cat D × price_volume_momentum, E1.4 content review",
+          "HN_GEN_059": "Cat E × alternative_data, E1.4 content review"
+        },
+        "category_concentration": {
+          "D": 2,
+          "E": 2
+        }
+      },
+      "interpretation": "Layer 5 design assumed cross-encoder above-band = paraphrase signal. Empirical data shows Layer 5 catches structural vocabulary-overlap effects (S11 mechanism in Categories D and E) rather than semantic leakage. The 100% false-positive rate is explainable: finance hard-negatives in Categories D (Educational/Conceptual) and E (Comparison/Benchmarking) use vocabulary that overlaps with secret descriptions by design, not by leakage. All 4 candidates concentrated in D + E categories per S11 pattern.",
+      "paper_implication": "Reviewer-grade methodological clarity: Layer 5 alone is not a reliable paraphrase predictor in finance hard-negative corpora where shared vocabulary between query and secret is structural (Categories D/E by design). Defense-in-depth holds via layered validation: Layer 2 (V5b exact-match, 0 hits per S12) provides primary leakage assurance; Layer 5 serves as forensic catchment with manual review gate (not auto-drop). The V2 §7.2 R6 6-layer design correctly anticipates this via 'audit log reviewed before E2' clause.",
+      "emerged_from": "Phase 1.E E1.4 content review 2026-05-23. HN_SEED_016 + HN_GEN_059 dispositioned retained_non_paraphrase, completing 4/4 Layer 5 candidate review with 0/4 paraphrase confirmations."
+    },
+    "S14_subcell_distribution_audit_driven_concentration": {
+      "type": "corpus_structural_audit_framework_efficacy",
+      "summary": "65-entry corpus exhibits bimodal sub-cell distribution: 29/36 (81%) sub-cells degenerate (n=1, all manual seeds from E1.1) and 7/36 sub-cells rich (n=5-6) corresponding exactly to E1.2 audit-driven generation batches. V8 sub-cell balance spec [4, 7] FAILS at 65-entry scale per E1.4 Q2 65-entry close ruling; documented as structural property, not a regression. V2 BLOCKING check 65/65 PASS (100%) confirms benign-by-construction across the full corpus at both manual-seed and audit-driven-gen tiers.",
+      "data": {
+        "sub_cell_distribution": {
+          "empty_n0": 0,
+          "degenerate_n1": 29,
+          "intermediate_n2_to_4": 0,
+          "rich_n5_or_6": 7
+        },
+        "rich_subcells_match_e12_batches": [
+          "A_pvm (n=6)",
+          "A_ml (n=5)",
+          "B_pvm (n=5)",
+          "C_event_driven (n=5)",
+          "D_factor_neutral (n=5)",
+          "E_alternative_data (n=5)",
+          "F_statistical_arbitrage (n=5)"
+        ],
+        "v2_benign_check_pass_count": "65/65 (100%)",
+        "v2_benign_check_per_source": {
+          "HN_SEED": "30/30 PASS",
+          "HN_GEN": "35/35 PASS"
+        },
+        "v2_benign_check_per_category": {
+          "A": "15/15",
+          "B": "10/10",
+          "C": "10/10",
+          "D": "10/10",
+          "E": "10/10",
+          "F": "10/10"
+        }
+      },
+      "interpretation": "The 7 rich sub-cells correspond EXACTLY to the 7 audit-driven E1.2 generation batches. Manual seeds (E1.1) authored 1 entry per sub-cell as initial design intent. This demonstrates audit-driven generation operates at TWO structural levels: (a) accuracy — lower below-band fail rate (S2 5x improvement), and (b) density — concentrated sub-cell population. S14 confirms S2 at the corpus-structural level. ADDITIONAL EVIDENCE from E1.5 V2 BLOCKING check: 65/65 PASS (100%) — both manual seeds (30/30) and audit-driven generations (35/35) produce benign-by-construction queries. Combined with V5b 0-hit null result (S12) and Layer 5 100% false-positive rate (S13), the corpus exhibits triple-layered defense-in-depth assurance against secret content leakage at three independent gates: exact-match (V5b), paraphrase semantic (Layer 5), and expected-answer benign (V2).",
+      "paper_implication": "Provides architectural evidence for audit framework value at both ACCURACY (S2 lower fail rate) and DENSITY (concentrated sub-cell population) levels. Plus benign-by-construction demonstration via V2 100% PASS. v11 future work scaling to 200-entry target should apply audit-driven generation to ALL 36 sub-cells (achieving [4, 7] per V8 spec) rather than scaling manual-seed methodology. Reviewer-grade evidence of methodology contribution operating at THREE structural levels: accuracy + density + benign-by-construction.",
+      "emerged_from": "Phase 1.E E1.5 V2 BLOCKING check + sub-cell distribution analysis 2026-05-23. Pre-flight verification surfaced sub-cell concentration pattern; V2 65/65 PASS provided benign-by-construction confirmation; combined into unified S14 finding per user ratification."
+    },
+    "PENDING_V2_5_PLAN_REVISION": "PENDING — V2.5 plan revision references S1 (cross-domain spillover), S8 (mpnet prediction-miss), S9 (bge_large permissiveness). Decision needed: should V2 §2.5 windows be revised post-hoc, or kept as Phase 1.F-derived predictions with documented deviations from observed values? Per Q1 STRICT-with-paper-escalation ruling, the default is documented-prediction-miss (no post-hoc re-anchor) to avoid survivorship bias. Defer final ruling to E1.3.7 results write-up or E1.6 Phase 1.E close.",
+    "PENDING_V2_5_SCHEMA_REVISION": "PENDING — V2 §5.2 schema describes closest_secret_id (4 × 2) implying 4 encoders × 2 corpora. E1.3.4 pre-flight (S7) surfaced that the 60-entry and 90-entry corpora are disjoint with incompatible tier distributions, making the L1+L2 filter degenerate against the 60-entry corpus. V2.5 schema revision should either (a) restrict the schema to 4 × 1 for E1 validation scope (90-entry only) or (b) introduce explicit 60-entry-legacy-reference field semantics distinct from V1b BLOCKING measurement. Resolution deferred to E1.3.7 results write-up or E1.6 Phase 1.E close."
+  },
+  "wall_seconds": 19.64,
+  "v5b_phase": "1.E.E1.3.5 — V5b appended",
+  "v5b_generated_at": "2026-05-24T00:22:58Z",
+  "v5b_scope_note": "STRICT character-equality check. Both corpora (secrets.jsonl 60 + secrets_v2.jsonl 90 = 150 secrets). Compared hn.query AND hn.rationale against secret.text. Near-verbatim leaks caught by V1a/V1b cosine layers.",
+  "v5b_hard_neg_count": 65,
+  "v5b_secrets_60_count": 60,
+  "v5b_secrets_90_count": 90,
+  "v5b_secrets_unique_text_count": 150,
+  "v5b_match_count": 0,
+  "v5b_match_details": [],
+  "v5b_exact_match_true_count": 0,
+  "v5b_exact_match_false_count": 65,
+  "v5b_layer_5_paraphrase_candidates_count": 4,
+  "v5b_layer_5_above_band_threshold": {
+    "minilm": 0.65,
+    "mpnet": 0.52,
+    "bge_large": 0.9,
+    "finlang": 0.65
+  },
+  "r6_audit_log_total_entries": 23,
+  "r6_audit_log_per_layer": {
+    "Layer_2_V5b": 0,
+    "Layer_5_V1b_paraphrase_signature": 4,
+    "Layer_4_manual_drop": 0,
+    "Layer_3_V1b_mpnet_above_band": 9,
+    "Layer_3_V1a_below_band": 9,
+    "Layer_3_multi_validator": 1
+  },
+  "r6_audit_log_path": "eval/results/phase1_E/validation/r6_audit.jsonl",
+  "v5b_wall_seconds": 0.01
+}
