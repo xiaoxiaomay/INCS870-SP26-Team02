@@ -596,28 +596,87 @@ DOCUMENTED_FINDINGS: Dict[str, Any] = {
             "finding per user ratification."
         ),
     },
-    "PENDING_V2_5_PLAN_REVISION": (
-        "PENDING — V2.5 plan revision references S1 (cross-domain "
-        "spillover), S8 (mpnet prediction-miss), S9 (bge_large "
-        "permissiveness). Decision needed: should V2 §2.5 windows be "
-        "revised post-hoc, or kept as Phase 1.F-derived predictions with "
-        "documented deviations from observed values? Per Q1 STRICT-with-"
-        "paper-escalation ruling, the default is documented-prediction-"
-        "miss (no post-hoc re-anchor) to avoid survivorship bias. Defer "
-        "final ruling to E1.3.7 results write-up or E1.6 Phase 1.E close."
-    ),
-    "PENDING_V2_5_SCHEMA_REVISION": (
-        "PENDING — V2 §5.2 schema describes closest_secret_id (4 × 2) "
-        "implying 4 encoders × 2 corpora. E1.3.4 pre-flight (S7) surfaced "
-        "that the 60-entry and 90-entry corpora are disjoint with "
-        "incompatible tier distributions, making the L1+L2 filter "
-        "degenerate against the 60-entry corpus. V2.5 schema revision "
-        "should either (a) restrict the schema to 4 × 1 for E1 validation "
-        "scope (90-entry only) or (b) introduce explicit "
-        "60-entry-legacy-reference field semantics distinct from V1b "
-        "BLOCKING measurement. Resolution deferred to E1.3.7 results "
-        "write-up or E1.6 Phase 1.E close."
-    ),
+    "RESOLVED_V2_5_PLAN_REVISION": {
+        "type": "v2_plan_revision_decision",
+        "decision": (
+            "Document-only (Option B). V2 §2.5 windows preserved as-is. "
+            "S1/S8/S9 stand as paper findings about Phase 1.F prediction "
+            "calibration."
+        ),
+        "rationale": (
+            "Survivorship bias prevention: post-hoc window adjustment "
+            "based on observed data would invite reviewer critique of "
+            "methodology integrity. Consistency: aligns with V1a Option "
+            "B precedent (retain outliers as observations) + V1b STRICT-"
+            "with-paper-escalation precedent (escalate as finding, not "
+            "patch). v10 paper §VI presents honest prediction-miss "
+            "reporting rather than refit-to-data."
+        ),
+        "constituent_findings": [
+            "S1_cross_domain_spillover",
+            "S8_mpnet_expected_band_prediction_miss",
+            "S9_bge_large_band_permissiveness_null_result",
+        ],
+        "options_considered": {
+            "A_numeric_reanchor":  "Rejected — survivorship bias risk",
+            "B_document_only":     "ADOPTED — reviewer-grade epistemic honesty",
+            "C_hybrid_selective":  "Rejected — inconsistent treatment risk",
+        },
+        "paper_implication": (
+            "v10 §VI methodology can claim: 'Phase 1.F-derived encoder "
+            "bands predicted hard-negative cosines. Observed values "
+            "deviated for mpnet (+0.18 per S8) and showed null result "
+            "for bge_large (S9). We documented these as honest reporting "
+            "of prediction calibration rather than post-hoc window "
+            "refit. Cross-domain spillover (S1) is documented as "
+            "previously unanticipated failure mode.'"
+        ),
+        "v11_future_work": (
+            "Recalibrate encoder bands with full 200-entry corpus + "
+            "cross-domain spillover anticipation. v11 V2.5 plan would "
+            "incorporate observed-distribution data as starting point, "
+            "not post-hoc adjustment."
+        ),
+        "resolved_at": "2026-05-24 Phase 1.E E1.6 Part 2",
+    },
+    "RESOLVED_V2_5_SCHEMA_REVISION": {
+        "type": "v2_schema_revision_decision",
+        "decision": (
+            "Document-only (Option B). V2 §5.2 4×2 schema preserved "
+            "as-is. S7 stands as paper finding about spec design flaw "
+            "caught at implementation."
+        ),
+        "rationale": (
+            "V2 plan history sanctity: V2 plan documented at specific "
+            "point in time (2026-05-11 V2 ratification). View-before-"
+            "implement discipline caught spec design assumption flaw "
+            "(60-entry vs 90-entry disjointness vs implicit subset "
+            "semantics). Retroactively revising V2 plan would obscure "
+            "the discovery timeline. Consistency with Option B on plan "
+            "revision."
+        ),
+        "constituent_findings": ["S7_corpus_version_disjointness"],
+        "options_considered": {
+            "A_formal_revision": "Rejected — V2 plan history retrofit risk",
+            "B_document_only":   "ADOPTED — view-before-implement evidence preserved",
+        },
+        "paper_implication": (
+            "v10 §VI methodology can claim: 'Our view-before-implement "
+            "discipline caught a V2 plan design assumption flaw (S7): "
+            "60-entry and 90-entry corpora are disjoint, not subset/"
+            "superset as implicit in §5.2 closest_secret_id (4×2) "
+            "schema. We documented this as a methodology finding rather "
+            "than retroactively revising the V2 plan, preserving "
+            "discovery timeline as evidence of engineering rigor.'"
+        ),
+        "v11_future_work": (
+            "Clean v11 schema design incorporating S7 lessons: 4×1 "
+            "(4 encoders × 90-entry primary corpus) with 60-entry as "
+            "separate legacy reference if backward-compatibility "
+            "required. v11 plan won't carry V2 design flaw."
+        ),
+        "resolved_at": "2026-05-24 Phase 1.E E1.6 Part 2",
+    },
 }
 
 
