@@ -1,0 +1,147 @@
+{
+  "schema_version": "phase1G_state_v1",
+  "started_at": "2026-05-24T17:55:14Z",
+  "last_updated_at": "2026-05-24T20:44:35Z",
+  "n_samples_target_per_cell": 4,
+  "phase_cap_usd": 1.0,
+  "per_cell_cap_usd": 0.15,
+  "stop_at_phase_pct": 0.9,
+  "phase_1g_cumulative_cost_usd": 0.3443,
+  "per_cell_cumulative_cost_usd": {
+    "minilm_60entry": 0.0947,
+    "minilm_90entry": 0.07669999999999999,
+    "mpnet_60entry": 0.0697,
+    "mpnet_90entry": 0.0866,
+    "bge_large_60entry": 0.0166,
+    "bge_large_90entry": 0.0,
+    "finlang_60entry": 0.0,
+    "finlang_90entry": 0.0
+  },
+  "completed_samples": [
+    {
+      "cell_label": "minilm_60entry",
+      "sample_id": 2,
+      "cost_usd": 0.0234,
+      "wall_seconds": 649.1,
+      "completed_at": "2026-05-24T18:06:03Z"
+    },
+    {
+      "cell_label": "minilm_60entry",
+      "sample_id": 3,
+      "cost_usd": 0.0237,
+      "wall_seconds": 667.9,
+      "completed_at": "2026-05-24T18:29:17Z"
+    },
+    {
+      "cell_label": "minilm_60entry",
+      "sample_id": 4,
+      "cost_usd": 0.0237,
+      "wall_seconds": 626.5,
+      "completed_at": "2026-05-24T18:39:43Z"
+    },
+    {
+      "cell_label": "minilm_60entry",
+      "sample_id": 5,
+      "cost_usd": 0.0239,
+      "wall_seconds": 585.0,
+      "completed_at": "2026-05-24T18:49:28Z"
+    },
+    {
+      "cell_label": "minilm_90entry",
+      "sample_id": 2,
+      "cost_usd": 0.0194,
+      "wall_seconds": 477.6,
+      "completed_at": "2026-05-24T18:57:26Z"
+    },
+    {
+      "cell_label": "minilm_90entry",
+      "sample_id": 3,
+      "cost_usd": 0.0193,
+      "wall_seconds": 552.7,
+      "completed_at": "2026-05-24T19:06:39Z"
+    },
+    {
+      "cell_label": "minilm_90entry",
+      "sample_id": 4,
+      "cost_usd": 0.0192,
+      "wall_seconds": 507.6,
+      "completed_at": "2026-05-24T19:15:06Z"
+    },
+    {
+      "cell_label": "minilm_90entry",
+      "sample_id": 5,
+      "cost_usd": 0.0188,
+      "wall_seconds": 465.3,
+      "completed_at": "2026-05-24T19:22:51Z"
+    },
+    {
+      "cell_label": "mpnet_60entry",
+      "sample_id": 2,
+      "cost_usd": 0.018,
+      "wall_seconds": 454.0,
+      "completed_at": "2026-05-24T19:30:25Z"
+    },
+    {
+      "cell_label": "mpnet_60entry",
+      "sample_id": 3,
+      "cost_usd": 0.0174,
+      "wall_seconds": 429.5,
+      "completed_at": "2026-05-24T19:37:35Z"
+    },
+    {
+      "cell_label": "mpnet_60entry",
+      "sample_id": 4,
+      "cost_usd": 0.017,
+      "wall_seconds": 417.0,
+      "completed_at": "2026-05-24T19:44:32Z"
+    },
+    {
+      "cell_label": "mpnet_60entry",
+      "sample_id": 5,
+      "cost_usd": 0.0173,
+      "wall_seconds": 414.5,
+      "completed_at": "2026-05-24T19:51:26Z"
+    },
+    {
+      "cell_label": "mpnet_90entry",
+      "sample_id": 2,
+      "cost_usd": 0.0214,
+      "wall_seconds": 532.1,
+      "completed_at": "2026-05-24T20:00:19Z"
+    },
+    {
+      "cell_label": "mpnet_90entry",
+      "sample_id": 3,
+      "cost_usd": 0.0215,
+      "wall_seconds": 627.7,
+      "completed_at": "2026-05-24T20:10:46Z"
+    },
+    {
+      "cell_label": "mpnet_90entry",
+      "sample_id": 4,
+      "cost_usd": 0.0219,
+      "wall_seconds": 567.9,
+      "completed_at": "2026-05-24T20:20:14Z"
+    },
+    {
+      "cell_label": "mpnet_90entry",
+      "sample_id": 5,
+      "cost_usd": 0.0218,
+      "wall_seconds": 579.1,
+      "completed_at": "2026-05-24T20:29:53Z"
+    },
+    {
+      "cell_label": "bge_large_60entry",
+      "sample_id": 2,
+      "cost_usd": 0.0166,
+      "wall_seconds": 454.8,
+      "completed_at": "2026-05-24T20:37:28Z"
+    }
+  ],
+  "last_attempted_sample": {
+    "cell_label": "bge_large_60entry",
+    "sample_id": 3,
+    "subprocess_started_at": "2026-05-24T20:37:28Z",
+    "subprocess_completed_at": null
+  }
+}
