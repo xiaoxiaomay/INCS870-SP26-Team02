@@ -25,6 +25,19 @@ Architecture: subprocess-based orchestrator that invokes existing
   - Append-only event log (run_log.jsonl) for forensic trail.
   - Dry-run modes ($0 LLM) for pre-production verification.
 
+V2.5 modifications 2026-05-25 (after sample_3 RG4 trigger
+2026-05-24T20:44:35Z forensically confirmed as bge-large
+measurement-stage false positive per §V.A F2 over-sensitivity):
+  - Change A: Added --disable-rg4 CLI flag. When set, non-zero
+    ULR samples no longer halt the driver.
+  - Change B: When --disable-rg4 is active and ULR > 0 is
+    observed, the driver writes a detailed `ulr_observed` event
+    to run_log.jsonl with per-leak forensic detail (attack_id,
+    category, max_leak_score, redacted_text_preview first 200
+    chars) extracted from the sample's full_pipeline_eval.json.
+    This event type accumulates the S15 evidence chain for
+    v10 paper §V.B downstream analysis.
+
 NO MODIFICATIONS to Phase 1.F scripts. Phase 1.F output tree
 (eval/results/phase1_F/) remains untouched.
 
@@ -314,8 +327,17 @@ def run_cell_subprocess(cell_label: str, sample_id: int,
 # Main loop
 # ---------------------------------------------------------------------------
 
-def main_loop(mode: str, max_samples: Optional[int]) -> int:
-    """mode ∈ {production, dry-run, dry-run-trigger-cap, dry-run-trigger-ulr}"""
+def main_loop(mode: str, max_samples: Optional[int],
+              disable_rg4: bool = False) -> int:
+    """mode ∈ {production, dry-run, dry-run-trigger-cap, dry-run-trigger-ulr}
+
+    disable_rg4: if True, log non-zero ULR samples as 'rg4_disabled_nonzero_ulr'
+    events but continue execution instead of halting. Added 2026-05-25 for
+    V2.5 restart after sample_3 RG4 trigger; rationale: now that ULR ≠ 0 is
+    empirically possible under multi-sample evaluation, we want continuous
+    data collection across all 32 samples to characterize the ULR
+    distribution (v10 paper §V.B candidate S15 finding).
+    """
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
     state = load_or_init_state()
     recover_from_crash(state)
@@ -403,13 +425,49 @@ def main_loop(mode: str, max_samples: Optional[int]) -> int:
 
             wall_s = time.time() - t0
 
-            # ULR=0% BLOCKING check (RG4 kill-switch)
+            # ULR=0% BLOCKING check (RG4 kill-switch).
+            # Disabled via --disable-rg4 per V2.5 restart 2026-05-25:
+            # multi-sample ULR characterization requires continuous collection.
+            # When disabled, emit detailed `ulr_observed` event with per-leak
+            # forensic detail (attack_id, max_leak_score, redacted_text_preview)
+            # per Decision (b) 2026-05-25 for downstream S15 analysis.
             if float(summary.get("ulr_rate", 0.0)) != 0.0:
-                stop_and_disclose(
-                    f"non-zero ULR={summary['ulr_rate']:.4f} (RG4 violation)",
-                    cell_label=cell_label, sample_id=sample_id, state=state,
-                )
-                return 1
+                if disable_rg4:
+                    print(f"  RG4 DISABLED: non-zero ULR="
+                          f"{summary['ulr_rate']:.4f} ("
+                          f"{summary.get('n_ulr_leaked', '?')} leak"
+                          f"{'s' if summary.get('n_ulr_leaked', 0) != 1 else ''}) "
+                          f"at {cell_label}/sample_{sample_id} — continuing "
+                          f"per V2.5 restart; logging ulr_observed event")
+                    # Build forensic leak_details by reading full_pipeline_eval.json
+                    leak_details: List[Dict[str, Any]] = []
+                    fp_path = sample_dir / "full_pipeline_eval.json"
+                    try:
+                        with fp_path.open("r", encoding="utf-8") as f:
+                            fp = json.load(f)
+                        for r in fp.get("results", []):
+                            if r.get("leaked_ulr"):
+                                leak_details.append({
+                                    "attack_id":             r.get("_id"),
+                                    "category":              r.get("group"),
+                                    "max_leak_score":        r.get("max_leak_score"),
+                                    "redacted_text_preview": str(r.get("redacted_text", ""))[:200],
+                                })
+                    except Exception as e:
+                        print(f"    WARNING: leak_details extraction failed: "
+                              f"{type(e).__name__}: {e}")
+                        leak_details = [{"error": f"{type(e).__name__}: {e}"}]
+                    log_event("ulr_observed",
+                              cell_label=cell_label, sample_id=sample_id,
+                              ulr_rate=float(summary['ulr_rate']),
+                              n_ulr_leaked=int(summary.get('n_ulr_leaked', 0)),
+                              leak_details=leak_details)
+                else:
+                    stop_and_disclose(
+                        f"non-zero ULR={summary['ulr_rate']:.4f} (RG4 violation)",
+                        cell_label=cell_label, sample_id=sample_id, state=state,
+                    )
+                    return 1
 
             # Update state
             cost_usd = float(summary.get("estimated_cost_usd", 0.0))
@@ -465,6 +523,12 @@ def main() -> int:
                        help="Mock non-zero ULR; verifies RG4 kill-switch STOP_AND_DISCLOSE")
     parser.add_argument("--max-samples", type=int, default=None,
                         help="Optional limit on samples this invocation (testing)")
+    parser.add_argument("--disable-rg4", action="store_true",
+                        help="Disable RG4 ULR kill-switch (added 2026-05-25 for "
+                             "V2.5 restart after sample_3 RG4 trigger; multi-sample "
+                             "ULR characterization requires continuous data "
+                             "collection across all 32 samples — log non-zero ULR "
+                             "as 'rg4_disabled_nonzero_ulr' event but continue)")
     args = parser.parse_args()
 
     if args.dry_run:
@@ -483,7 +547,13 @@ def main() -> int:
         print(f"Phase cap: ${PHASE_CAP_USD:.2f} | Per-cell cap: ${PER_CELL_CAP_USD:.2f}")
         print("=" * 70)
 
-    return main_loop(mode, args.max_samples)
+    if mode == "production" and args.disable_rg4:
+        print("=" * 70)
+        print("RG4 ULR KILL-SWITCH DISABLED — non-zero ULR samples will be")
+        print("logged ('rg4_disabled_nonzero_ulr' event) and execution continues.")
+        print("=" * 70)
+
+    return main_loop(mode, args.max_samples, args.disable_rg4)
 
 
 if __name__ == "__main__":

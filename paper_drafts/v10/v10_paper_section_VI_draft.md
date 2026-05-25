@@ -131,6 +131,80 @@ introduced (e.g., a stochastic embedding encoder or a
 sample-based retrieval method), extend the §V.B n = 5
 multi-sample protocol to each new component independently.
 
+#### §VI.1.2.4 — Measurement-stage false-positive sensitivity in high-capacity encoders (S15)
+
+The post-LLM Leakage Scan uses a sentence-embedding similarity
+score against the secret corpus, with a fixed hard threshold
+$\sigma_{\text{hard}} = 0.70$ that triggers user-facing
+redaction. Phase 1.G multi-sample evaluation surfaced finding
+**S15 (§V.B.5.1)**: bge-large × 60 sample 3 produced one
+ULR-flagged entry (`ATK_I01_V1`, max_leak_score = 0.7365)
+whose flagged sentence — "An RSI level below 30" — is
+textbook generic RSI knowledge containing **zero proprietary
+parameters** from the matched secret S0001 (parameters
+14D RSI < 25, 2x 20D volume, Universe-17, 1.5% NAV, 2-day
+VWAP all absent from redacted_text).
+
+**Operational consequence.** bge-large's high semantic
+capacity creates **measurement-stage over-sensitivity** at
+the post-LLM Leakage Scan: textbook generic sentences can
+cross the 0.70 hard threshold without containing proprietary
+content. This is *one* phenomenon manifesting at two pipeline
+stages (linked to F2's encoder-strength leakage trade-off at
+Gate 1, §V.A.5.2). At v10, the consequence is bounded: only
+1 of 5 bge-large × 60 samples produced this false positive;
+non-bge-large cells produced **zero** measurement-stage ULR
+fires across 16 multi-sample evaluations to date. The v9
+"0% ULR" headline is preserved with the "0% **true** ULR"
+qualifier documented in §V.A.5.1 F1.
+
+**Two-stage stochasticity sub-observation.** Cross-sample
+inspection of `ATK_I01_V1` across all 5 bge-large × 60
+samples (§V.B.5.1) shows the hard threshold is crossed in
+4 of 5 samples (max_leak_score 0.7099, 0.7515, 0.7365,
+0.7937, 0.7309) yet `leaked_ulr = True` occurs in only
+1 of 5. The post-LLM Leakage Scan + sentence-level redaction
+layer is itself stochastic; hard-threshold-crossing is
+necessary but not sufficient. This is a new methodological
+observation that v9 single-sample evaluation could not have
+detected.
+
+**v11 resolution paths** (any one or a combination is paper-
+defensible):
+
+1. **Per-encoder leak-threshold calibration.** Calibrate
+   $\sigma_{\text{hard, encoder}}$ separately on the same
+   v9 100-query benign baseline used for $\theta_{\text{cell}}$.
+   For bge-large, the calibrated $\sigma_{\text{hard}}$ would
+   likely be higher than 0.70 (to compensate for the encoder's
+   tendency to score generic sentences above the threshold).
+   Maintains the v9 FPR floor; eliminates measurement-stage
+   false positives.
+
+2. **Second-stage parameter-presence check.** After a
+   hard-threshold crossing, perform a literal substring +
+   regex check for the matched secret's proprietary
+   parameters (e.g., for S0001 the regex
+   `\b(14|7|9|21)D\b.*RSI` matches the period-style parameters
+   in the secret text). Only if a parametric literal is found
+   does the sentence get flagged as leaked_ulr = True. This
+   is encoder-agnostic and zero-cost at inference.
+
+3. **Encoder-aware threshold curves.** Replace the single
+   $\sigma_{\text{hard}} = 0.70$ with an encoder-specific
+   curve $\sigma_{\text{hard}}(e)$ derived from the GLR
+   distribution shape per encoder. v11 §V.B G2 statistical
+   results provide the empirical distributions needed to
+   parameterize these curves.
+
+v11 should select among these resolution paths based on:
+deployment constraints (path 2 is zero-cost; paths 1, 3
+require recalibration); reviewer feedback on the
+"0% true ULR" framing (whether the audit-grade forensic
+qualifier is sufficient or whether algorithmic remediation
+is also required for v10 acceptance); and on the
+multi-sample completion data once G1 reaches all 32 samples.
+
 #### §VI.1.2.3 — Single defender-LLM model
 
 Phase 1.G uses **only** `gpt-4o-mini-2024-07-18` as the

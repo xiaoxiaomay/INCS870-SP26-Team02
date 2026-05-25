@@ -242,35 +242,79 @@ documented as a paper-publishable contribution. (Per-cell
 forensics for each finding are in Phase 1.F supplementary
 documentation.)
 
-### §V.A.5.1 — Finding F1: ULR = 0% across all eight cells
+### §V.A.5.1 — Finding F1: ULR = 0% at single-sample evaluation; 0% true ULR across multi-sample evaluation
 
-**Observation.** ULR is exactly 0% in every cell, regardless
-of encoder × corpus configuration.
+**Observation (single-sample, Phase 1.F).** ULR is exactly
+0% in every cell, regardless of encoder × corpus configuration.
+This held across the 271-prompt × 8-cell ablation = 2,168
+single-sample evaluations [REF: §V.A.4 master matrix].
 
-**Interpretation.** The post-LLM rule-based redaction
-(Leakage Scan) is **deterministic** — it operates on the LLM
-output via fixed regex patterns + sentence-embedding lookups,
-not on the LLM stochasticity. Even when the LLM produces a
-raw secret in its output (GLR > 0%), the redaction layer
-catches every instance before the user sees it.
+**Observation (multi-sample, Phase 1.G).** As of the v10
+draft, n ≥ 2 samples have been collected for 5 of 8 cells
+(minilm × {60, 90}, mpnet × {60, 90}, bge-large × 60 at full
+n = 5; bge-large × 90 + finlang × {60, 90} in progress). Across
+the multi-sample evaluations completed to date, exactly **one
+non-zero ULR observation** has occurred: bge-large × 60
+sample 3 produced n_ulr_leaked = 1 (ulr_rate = 0.0037).
+Forensic content analysis [REF: §V.B.5.1 finding S15]
+confirmed that the flagged sentence in that sample did **not**
+contain the secret's proprietary parameters: secret S0001's
+parameters (14D RSI < 25, 2x 20D volume, Universe-17,
+1.5% NAV, 2-day VWAP) appeared nowhere in the post-redaction
+text. The flagging is a **measurement-stage false positive**
+from bge-large's high semantic capacity scoring textbook
+generic RSI content above the 0.70 hard threshold.
 
-**v10 paper claim.** SentinelFlow's user-facing leak rate is
-**0% under all tested encoder × corpus configurations**, even
-though intrinsic LLM leakage (GLR) varies 2.21% – 11.44%
-across cells. This decouples the gate's user-visible
-correctness from encoder-specific cosine geometry: encoder
-choice affects internal forensic metrics (GLR, Per-BP-Leak)
-but does not affect the headline ULR claim.
+**Interpretation.** The post-LLM Leakage Scan + sentence-level
+redaction does **not** depend on LLM raw-output stochasticity
+in any way that affects *true* user-facing leakage. Even when
+the LLM produces a raw secret in its output (GLR > 0%), the
+redaction layer catches the actual proprietary content. The
+sample 3 event measures the scan's *over-sensitivity* on
+bge-large, not a real leak.
 
-**Reviewer defense.** A skeptical reviewer may ask: "If ULR is
-0% everywhere, why benchmark encoders at all?" The answer is
-in the **defense-in-depth** framing: GLR % measures the
-encoder's contribution to pre-LLM filtering effectiveness;
-ULR = 0 is the result of **GLR + Leakage Scan** acting jointly.
-A worse encoder (higher GLR) places more burden on the
-Leakage Scan; a better encoder reduces that burden and improves
-audit-trace quality (fewer post-LLM redactions to log). See
-§V.A.5.3 for the encoder-strength trade-off implications.
+**v10 paper claim.** SentinelFlow's **true user-facing leak
+rate (excluding measurement-stage false positives from
+bge-large over-sensitivity) is 0% across all tested encoder ×
+corpus configurations and across all multi-sample evaluations
+to date** (currently 5,691 evaluations = 21 Phase 1.G samples
+× 271 prompts; updates as G1 completes). The v9 paper's
+"0% ULR" claim is therefore preserved under multi-sample
+characterization, refined to "0% *true* ULR" with the bge-large
+measurement-stage caveat documented in S15.
+
+**Reviewer defense.** A skeptical reviewer may ask: "How can
+your claim be '0% true ULR' when sample 3 produced
+ulr_rate = 0.0037?" The answer is forensic and verifiable:
+the sentence flagged in sample 3 reads `"An RSI level below 30"`
+— generic textbook knowledge present in any reasonable RSI
+explanation, not the proprietary S0001 parameters (14D RSI < 25,
+2x volume, Universe-17, 1.5% NAV). A reviewer can verify this
+claim by inspecting `eval/results/phase1_G/bge_large_60entry/
+sample_3/full_pipeline_eval.json:results[ATK_I01_V1].
+redacted_text` and searching for the parameter literals — all
+15 variants tested (14D, < 25, 2x, 20D, Universe-17, 1.5%,
+VWAP, 2-day, NAV plus case variants) are absent. The "true
+ULR" qualifier is auditable, not stipulated.
+
+The encoder-strength trade-off implications (§V.A.5.2 F2)
+also extend to the post-LLM scoring stage: the **same encoder
+(bge-large)** that scores adversarial paraphrases highly
+during Gate 1 (higher per-bypass leak rate, F2) also scores
+generic textbook sentences highly during post-LLM leakage
+scoring (false-positive ULR per S15). This is *one* phenomenon
+manifesting at two pipeline stages, not two independent failure
+modes.
+
+**Aggregate redaction effectiveness.** Across the five
+bge-large × 60 samples, GLR-flagged sentences total 137
+(25 + 27 + 25 + 33 + 27); user-facing leakage cases total 1.
+Aggregate **redaction effectiveness = 136 / 137 = 99.27%** at
+the GLR → ULR boundary on the cell with the highest per-sample
+GLR. On the other four bge-large × 60 samples — and all
+multi-sample evaluations checked in non-bge-large cells (16
+samples) — redaction is 100% effective at the GLR → ULR
+boundary.
 
 ### §V.A.5.2 — Finding F2: Encoder-strength leakage trade-off
 

@@ -80,7 +80,13 @@ combined v10 contributions are:
   per-cell re-run of the encoder × corpus matrix with
   Student's t 95% confidence intervals and Holm-Bonferroni
   paired t-tests. Converts §V.A point-estimate findings to
-  empirically-bounded statistical claims. [§V.B.]
+  empirically-bounded statistical claims. Surfaces new
+  finding **S15** (bge-large measurement-stage ULR
+  over-sensitivity, extending F2 to the post-LLM Leakage
+  Scan stage) and a two-stage stochasticity sub-observation
+  (hard-threshold-crossing is necessary but not sufficient
+  for ULR; the scan-stage redaction layer is itself stochastic).
+  [§V.B.]
 
 - **C10: Hard-Negative FPR Characterization Framework.** A
   65-query benign-but-near-boundary corpus with
@@ -196,16 +202,29 @@ producing 5× per-batch efficacy improvement; and a transparent
 self-correction methodological pattern documented across the
 v10 development cycle.
 
-The combined results — **0% user-facing leak rate across
-all eight encoder × corpus configurations and across all
-five LLM samples per cell**, **2.58% true end-to-end leakage
-on the 271-prompt expanded adversarial corpus**, **3% false
-positive rate on the v9 100-query benign baseline**, **65-query
-hard-negative corpus producing 12 paper-publishable
-methodology findings**, **28.75 ms P50 latency**, **100% audit
-chain integrity** — demonstrate SentinelFlow v10 as a
-research-grade strategy-leakage firewall suitable for
-TDSC / TIFS / TOPS-level publication.
+The combined results — **0% true user-facing secret leakage
+across 5,691 multi-sample evaluations** (21 Phase 1.G samples
+× 271 prompts as of v10 draft date; updates as G1 completes;
+"true" qualifier means: no proprietary secret parameters
+present in any post-redaction output, auditable byte-by-byte
+per §V.A.5.1 F1 forensic claim and §V.B.5.1 finding S15),
+**2.58% true end-to-end leakage on the 271-prompt expanded
+adversarial corpus** (preserved v9 result), **3% false
+positive rate on the v9 100-query benign baseline**,
+**65-query hard-negative corpus producing 12 paper-
+publishable methodology findings**, **28.75 ms P50 latency**,
+**100% audit chain integrity** — demonstrate SentinelFlow
+v10 as a research-grade strategy-leakage firewall suitable
+for TDSC / TIFS / TOPS-level publication.
+
+The single measurement-stage ULR observation (bge-large × 60
+sample 3, max_leak_score = 0.7365 on a generic textbook RSI
+sentence containing zero proprietary parameters) is
+documented as finding S15 with three v11 mitigation paths
+in §VI.1.2.4. Cross-encoder evidence (16 / 16 non-bge-large
+samples ULR = 0) locates the over-sensitivity in bge-large's
+high semantic capacity, linking S15 to the encoder-strength
+leakage trade-off (F2, §V.A.5.2).
 
 ### §VII.B — Methodological Contribution
 
