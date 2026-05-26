@@ -1,21 +1,21 @@
 {
   "schema_version": "phase1G_state_v1",
   "started_at": "2026-05-24T17:55:14Z",
-  "last_updated_at": "2026-05-25T20:19:03Z",
+  "last_updated_at": "2026-05-26T00:37:52Z",
   "n_samples_target_per_cell": 4,
   "phase_cap_usd": 1.0,
   "per_cell_cap_usd": 0.15,
   "stop_at_phase_pct": 0.9,
-  "phase_1g_cumulative_cost_usd": 0.4401,
+  "phase_1g_cumulative_cost_usd": 0.6664,
   "per_cell_cumulative_cost_usd": {
     "minilm_60entry": 0.0947,
     "minilm_90entry": 0.07669999999999999,
     "mpnet_60entry": 0.0697,
     "mpnet_90entry": 0.0866,
     "bge_large_60entry": 0.033100000000000004,
-    "bge_large_90entry": 0.07930000000000001,
-    "finlang_60entry": 0.0,
-    "finlang_90entry": 0.0
+    "bge_large_90entry": 0.10560000000000001,
+    "finlang_60entry": 0.1031,
+    "finlang_90entry": 0.09690000000000001
   },
   "completed_samples": [
     {
@@ -164,12 +164,75 @@
       "cost_usd": 0.0267,
       "wall_seconds": 838.8,
       "completed_at": "2026-05-25T20:19:03Z"
+    },
+    {
+      "cell_label": "bge_large_90entry",
+      "sample_id": 5,
+      "cost_usd": 0.0263,
+      "wall_seconds": 934.6,
+      "completed_at": "2026-05-25T20:34:37Z"
+    },
+    {
+      "cell_label": "finlang_60entry",
+      "sample_id": 2,
+      "cost_usd": 0.0259,
+      "wall_seconds": 817.5,
+      "completed_at": "2026-05-25T20:48:15Z"
+    },
+    {
+      "cell_label": "finlang_60entry",
+      "sample_id": 3,
+      "cost_usd": 0.0255,
+      "wall_seconds": 772.8,
+      "completed_at": "2026-05-25T21:01:07Z"
+    },
+    {
+      "cell_label": "finlang_60entry",
+      "sample_id": 4,
+      "cost_usd": 0.0258,
+      "wall_seconds": 825.0,
+      "completed_at": "2026-05-25T21:14:52Z"
+    },
+    {
+      "cell_label": "finlang_60entry",
+      "sample_id": 5,
+      "cost_usd": 0.0259,
+      "wall_seconds": 598.0,
+      "completed_at": "2026-05-25T21:24:50Z"
+    },
+    {
+      "cell_label": "finlang_90entry",
+      "sample_id": 2,
+      "cost_usd": 0.0239,
+      "wall_seconds": 571.8,
+      "completed_at": "2026-05-25T21:34:22Z"
+    },
+    {
+      "cell_label": "finlang_90entry",
+      "sample_id": 3,
+      "cost_usd": 0.0246,
+      "wall_seconds": 639.6,
+      "completed_at": "2026-05-25T21:45:02Z"
+    },
+    {
+      "cell_label": "finlang_90entry",
+      "sample_id": 4,
+      "cost_usd": 0.024,
+      "wall_seconds": 9645.2,
+      "completed_at": "2026-05-26T00:25:47Z"
+    },
+    {
+      "cell_label": "finlang_90entry",
+      "sample_id": 5,
+      "cost_usd": 0.0244,
+      "wall_seconds": 724.7,
+      "completed_at": "2026-05-26T00:37:52Z"
     }
   ],
   "last_attempted_sample": {
-    "cell_label": "bge_large_90entry",
+    "cell_label": "finlang_90entry",
     "sample_id": 5,
-    "subprocess_started_at": "2026-05-25T20:19:03Z",
-    "subprocess_completed_at": null
+    "subprocess_started_at": "2026-05-26T00:25:47Z",
+    "subprocess_completed_at": "2026-05-26T00:37:52Z"
   }
 }

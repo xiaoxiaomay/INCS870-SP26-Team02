@@ -1,10 +1,10 @@
 # v10 Paper §V.A — Phase 1.F Encoder Ablation
 
-> **Draft status:** v0.1 working draft, 2026-05-24. Markdown
+> **Draft status:** v0.5 working draft, 2026-05-26. Markdown
 > source for v10 paper §V.A. LaTeX conversion deferred to
-> final-polish pass. [PLACEHOLDER] markers indicate fields
-> requiring values from Phase 1.G G2 statistical analysis
-> (multi-sample stochasticity probe, in progress).
+> final-polish pass. Phase 1.G G2 multi-sample statistical
+> aggregates (full n = 5 across all 8 cells) complete; F1
+> numerical claims grounded in 10,840 prompt-evaluations.
 >
 > **Section scope:** v10 §V (Methodology Validation and
 > Statistical Treatment) subsection A. Documents the four-
@@ -249,21 +249,23 @@ documentation.)
 This held across the 271-prompt × 8-cell ablation = 2,168
 single-sample evaluations [REF: §V.A.4 master matrix].
 
-**Observation (multi-sample, Phase 1.G).** As of the v10
-draft, n ≥ 2 samples have been collected for 5 of 8 cells
-(minilm × {60, 90}, mpnet × {60, 90}, bge-large × 60 at full
-n = 5; bge-large × 90 + finlang × {60, 90} in progress). Across
-the multi-sample evaluations completed to date, exactly **one
-non-zero ULR observation** has occurred: bge-large × 60
-sample 3 produced n_ulr_leaked = 1 (ulr_rate = 0.0037).
-Forensic content analysis [REF: §V.B.5.1 finding S15]
-confirmed that the flagged sentence in that sample did **not**
-contain the secret's proprietary parameters: secret S0001's
-parameters (14D RSI < 25, 2x 20D volume, Universe-17,
-1.5% NAV, 2-day VWAP) appeared nowhere in the post-redaction
-text. The flagging is a **measurement-stage false positive**
-from bge-large's high semantic capacity scoring textbook
-generic RSI content above the 0.70 hard threshold.
+**Observation (multi-sample, Phase 1.G).** Across all
+multi-sample evaluations completed (8 cells × 5 samples =
+40 total samples × 271 prompts = **10,840 prompt-
+evaluations**), exactly one non-zero ULR observation has
+occurred: bge-large × 60 sample 3 (1 / 10,840 = 0.0092%
+aggregate). All other 39 samples produce ULR = 0% exactly.
+
+Forensic content analysis (§V.B.5.1 finding S15) confirmed
+the bge-large × 60 sample 3 ULR = True flagging is a
+**measurement-stage false positive**: secret S0001's
+proprietary parameters (14D RSI < 25, 2x 20D volume,
+Universe-17, 1.5% NAV, 2-day VWAP) appeared **nowhere** in
+the post-redaction text. The single ULR flag was triggered
+by bge-large's high semantic capacity scoring textbook
+generic RSI content above the 0.70 hard threshold. The v10
+paper's "0% true ULR" claim is preserved with the auditable
+forensic qualifier.
 
 **Interpretation.** The post-LLM Leakage Scan + sentence-level
 redaction does **not** depend on LLM raw-output stochasticity
@@ -277,11 +279,12 @@ bge-large, not a real leak.
 rate (excluding measurement-stage false positives from
 bge-large over-sensitivity) is 0% across all tested encoder ×
 corpus configurations and across all multi-sample evaluations
-to date** (currently 5,691 evaluations = 21 Phase 1.G samples
-× 271 prompts; updates as G1 completes). The v9 paper's
-"0% ULR" claim is therefore preserved under multi-sample
-characterization, refined to "0% *true* ULR" with the bge-large
-measurement-stage caveat documented in S15.
+in scope** (10,840 evaluations = 40 total samples × 271
+prompts; 8 cells × n = 5 each; full G2 production completed
+2026-05-26). The v9 paper's "0% ULR" claim is therefore
+preserved under multi-sample characterization, refined to
+"0% *true* ULR" with the bge-large measurement-stage caveat
+documented in S15.
 
 **Reviewer defense.** A skeptical reviewer may ask: "How can
 your claim be '0% true ULR' when sample 3 produced
@@ -311,10 +314,17 @@ bge-large × 60 samples, GLR-flagged sentences total 137
 (25 + 27 + 25 + 33 + 27); user-facing leakage cases total 1.
 Aggregate **redaction effectiveness = 136 / 137 = 99.27%** at
 the GLR → ULR boundary on the cell with the highest per-sample
-GLR. On the other four bge-large × 60 samples — and all
-multi-sample evaluations checked in non-bge-large cells (16
-samples) — redaction is 100% effective at the GLR → ULR
-boundary.
+GLR. Across the remaining 35 multi-sample evaluations (4 of
+5 bge-large × 60 samples + all 5 bge-large × 90 + all 5
+samples each of MiniLM × {60, 90}, mpnet × {60, 90},
+FinLang × {60, 90} = 35 samples), GLR-flagged sentences
+total 546 and user-facing leakage cases total 0; **redaction
+is 100% effective** at the GLR → ULR boundary in all 35 of
+those samples. Aggregate across all 40 samples: 682 / 683
+= 99.85% redaction effectiveness (683 total GLR sentences
+across all cells × samples; 1 user-facing leak event
+forensically classified as measurement-stage false
+positive per S15).
 
 ### §V.A.5.2 — Finding F2: Encoder-strength leakage trade-off
 

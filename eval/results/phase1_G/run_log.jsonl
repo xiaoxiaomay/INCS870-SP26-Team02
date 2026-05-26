@@ -45,3 +45,21 @@
 {"event": "sample_start", "ts": "2026-05-25T20:05:04Z", "cell_label": "bge_large_90entry", "sample_id": 4}
 {"event": "sample_complete", "ts": "2026-05-25T20:19:03Z", "cell_label": "bge_large_90entry", "sample_id": 4, "cost_usd": 0.0267, "wall_seconds": 838.8}
 {"event": "sample_start", "ts": "2026-05-25T20:19:03Z", "cell_label": "bge_large_90entry", "sample_id": 5}
+{"event": "sample_complete", "ts": "2026-05-25T20:34:37Z", "cell_label": "bge_large_90entry", "sample_id": 5, "cost_usd": 0.0263, "wall_seconds": 934.6}
+{"event": "sample_start", "ts": "2026-05-25T20:34:37Z", "cell_label": "finlang_60entry", "sample_id": 2}
+{"event": "sample_complete", "ts": "2026-05-25T20:48:15Z", "cell_label": "finlang_60entry", "sample_id": 2, "cost_usd": 0.0259, "wall_seconds": 817.5}
+{"event": "sample_start", "ts": "2026-05-25T20:48:15Z", "cell_label": "finlang_60entry", "sample_id": 3}
+{"event": "sample_complete", "ts": "2026-05-25T21:01:07Z", "cell_label": "finlang_60entry", "sample_id": 3, "cost_usd": 0.0255, "wall_seconds": 772.8}
+{"event": "sample_start", "ts": "2026-05-25T21:01:07Z", "cell_label": "finlang_60entry", "sample_id": 4}
+{"event": "sample_complete", "ts": "2026-05-25T21:14:52Z", "cell_label": "finlang_60entry", "sample_id": 4, "cost_usd": 0.0258, "wall_seconds": 825.0}
+{"event": "sample_start", "ts": "2026-05-25T21:14:52Z", "cell_label": "finlang_60entry", "sample_id": 5}
+{"event": "sample_complete", "ts": "2026-05-25T21:24:50Z", "cell_label": "finlang_60entry", "sample_id": 5, "cost_usd": 0.0259, "wall_seconds": 598.0}
+{"event": "sample_start", "ts": "2026-05-25T21:24:50Z", "cell_label": "finlang_90entry", "sample_id": 2}
+{"event": "sample_complete", "ts": "2026-05-25T21:34:22Z", "cell_label": "finlang_90entry", "sample_id": 2, "cost_usd": 0.0239, "wall_seconds": 571.8}
+{"event": "sample_start", "ts": "2026-05-25T21:34:22Z", "cell_label": "finlang_90entry", "sample_id": 3}
+{"event": "sample_complete", "ts": "2026-05-25T21:45:02Z", "cell_label": "finlang_90entry", "sample_id": 3, "cost_usd": 0.0246, "wall_seconds": 639.6}
+{"event": "sample_start", "ts": "2026-05-25T21:45:02Z", "cell_label": "finlang_90entry", "sample_id": 4}
+{"event": "sample_complete", "ts": "2026-05-26T00:25:47Z", "cell_label": "finlang_90entry", "sample_id": 4, "cost_usd": 0.024, "wall_seconds": 9645.2}
+{"event": "sample_start", "ts": "2026-05-26T00:25:47Z", "cell_label": "finlang_90entry", "sample_id": 5}
+{"event": "sample_complete", "ts": "2026-05-26T00:37:52Z", "cell_label": "finlang_90entry", "sample_id": 5, "cost_usd": 0.0244, "wall_seconds": 724.7}
+{"event": "driver_complete", "ts": "2026-05-26T00:37:52Z", "n_samples": 30, "cumulative_cost": 0.6664}

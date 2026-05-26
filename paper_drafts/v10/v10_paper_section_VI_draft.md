@@ -97,12 +97,15 @@ freedom is 2.776 — relatively wide. A larger n (e.g., n = 10
 or n = 20) would tighten 95% CIs proportionally to 1 / √n.
 
 **Operational consequence.** Within-encoder corpus-delta
-paired t-tests at the +0.37 pp scale (MiniLM × 60 vs × 90
-GLR) may not achieve p < 0.05 even when a true effect
-exists. §V.B reports the empirical outcomes; close-call
-results that fail to reach significance at n = 5 are noted
-as "within the stochastic band at n = 5; revisit at higher
-n".
+paired t-tests at the (60 − 90) −1.40 pp scale (MiniLM ×
+60 vs × 90 GLR, n = 5 mean) achieve p = 0.0638 unadjusted
+and Holm rank 3 threshold 0.0250 — within the stochastic
+band at n = 5 (see §V.B.5.3 S17). G2 empirically confirms
+**1 of 4 within-encoder corpus tests** rejects H₀ under
+Holm-Bonferroni (FinLang only, p = 0.0011); the other
+three encoders' corpus effects are within the n = 5
+stochastic band and revisit at higher n is required for
+detection.
 
 **v11 resolution path.** Scale to n = 10 with
 Holm-Bonferroni-adjusted joint testing. Cost: $1.40 LLM
@@ -205,7 +208,7 @@ qualifier is sufficient or whether algorithmic remediation
 is also required for v10 acceptance); and on the
 multi-sample completion data once G1 reaches all 32 samples.
 
-#### §VI.1.2.3 — Single defender-LLM model
+#### §VI.1.2.5 — Single defender-LLM model
 
 Phase 1.G uses **only** `gpt-4o-mini-2024-07-18` as the
 defender LLM, pinned for full reproducibility within v10.
@@ -374,7 +377,7 @@ explicit resolution paths above:
 | Hard-neg corpus scale to 200 | §VI.1.1.1 | 1-2 weeks | <$0.40 LLM |
 | V3 parametric BLOCKING | §VI.1.1.2 | 1 week | $0 |
 | n = 10 stochasticity | §VI.1.2.1 | 2 days | $1.40 |
-| Cross-defender robustness | §VI.1.2.3 | 1 week | $6-9 |
+| Cross-defender robustness | §VI.1.2.5 | 1 week | $6-9 |
 | Cross-corpus hard-negs | §VI.1.3.3 | 1-2 weeks | <$0.40 |
 | Per-cell hard-FPR matrix | §VI.1.1.3 | 1 week | <$0.20 |
 

@@ -79,14 +79,32 @@ combined v10 contributions are:
 - **C9: Multi-Sample LLM Stochasticity Treatment.** Five-sample
   per-cell re-run of the encoder × corpus matrix with
   Student's t 95% confidence intervals and Holm-Bonferroni
-  paired t-tests. Converts §V.A point-estimate findings to
-  empirically-bounded statistical claims. Surfaces new
-  finding **S15** (bge-large measurement-stage ULR
-  over-sensitivity, extending F2 to the post-LLM Leakage
-  Scan stage) and a two-stage stochasticity sub-observation
-  (hard-threshold-crossing is necessary but not sufficient
-  for ULR; the scan-stage redaction layer is itself stochastic).
-  [§V.B.]
+  paired t-tests at FWER ≤ 0.05. Converts §V.A point-estimate
+  findings to empirically-bounded statistical claims.
+  Multi-sample evaluation comprises 40 total samples × 271
+  prompts = **10,840 prompt-evaluations**. Surfaces four new
+  findings:
+  - **S15** (bge-large measurement-stage ULR over-sensitivity,
+    extending F2 to the post-LLM Leakage Scan stage; 25 / 25
+    non-bge-large samples ULR = 0).
+  - **S16** (F2 cross-encoder ordering robustness with
+    corpus-90 middle-rank micro-exception: endpoints universal
+    10 / 10, sample 4 corpus-90 shows MiniLM ↔ mpnet swap at
+    the low end).
+  - **S17** (asymmetric within-encoder corpus deltas —
+    FinLang × 60 vs × 90 GLR significant at p = 0.0011 under
+    Holm-Bonferroni; three other encoders within stochastic
+    band at n = 5).
+  - **S19** (universal pre-LLM gate determinism: bypass
+    std = 0.0000 across the entire 8-cell × 5-sample matrix).
+  
+  The single non-zero ULR observation (bge-large × 60
+  sample 3) is forensically confirmed as measurement-stage
+  false positive (S15). A two-stage stochasticity
+  sub-observation (hard-threshold-crossing necessary but not
+  sufficient for ULR; the scan-stage redaction layer is
+  itself stochastic) surfaces from cross-sample inspection
+  of ATK_I01_V1. [§V.B.]
 
 - **C10: Hard-Negative FPR Characterization Framework.** A
   65-query benign-but-near-boundary corpus with
@@ -203,28 +221,41 @@ self-correction methodological pattern documented across the
 v10 development cycle.
 
 The combined results — **0% true user-facing secret leakage
-across 5,691 multi-sample evaluations** (21 Phase 1.G samples
-× 271 prompts as of v10 draft date; updates as G1 completes;
-"true" qualifier means: no proprietary secret parameters
-present in any post-redaction output, auditable byte-by-byte
-per §V.A.5.1 F1 forensic claim and §V.B.5.1 finding S15),
-**2.58% true end-to-end leakage on the 271-prompt expanded
-adversarial corpus** (preserved v9 result), **3% false
-positive rate on the v9 100-query benign baseline**,
-**65-query hard-negative corpus producing 12 paper-
-publishable methodology findings**, **28.75 ms P50 latency**,
-**100% audit chain integrity** — demonstrate SentinelFlow
-v10 as a research-grade strategy-leakage firewall suitable
-for TDSC / TIFS / TOPS-level publication.
+across 10,840 multi-sample evaluations** (40 total samples ×
+271 prompts; full n = 5 across all 8 encoder × corpus
+configurations; documented single measurement-stage
+false-positive flagging in bge-large × 60 sample 3
+[finding S15, §V.B.5.1] confirmed to contain zero
+proprietary content, auditable byte-by-byte per §V.A.5.1 F1
+forensic claim; aggregate redaction effectiveness 682 / 683
+= 99.85% across the full multi-sample matrix), **2.58% true
+end-to-end leakage on the 271-prompt expanded adversarial
+corpus** (preserved v9 result), **3% false positive rate on
+the v9 100-query benign baseline**, **65-query hard-negative
+corpus producing 12 paper-publishable methodology findings**,
+**28.75 ms P50 latency**, **100% audit chain integrity** —
+demonstrate SentinelFlow v10 as a research-grade strategy-
+leakage firewall suitable for TDSC / TIFS / TOPS-level
+publication.
 
 The single measurement-stage ULR observation (bge-large × 60
 sample 3, max_leak_score = 0.7365 on a generic textbook RSI
 sentence containing zero proprietary parameters) is
 documented as finding S15 with three v11 mitigation paths
-in §VI.1.2.4. Cross-encoder evidence (16 / 16 non-bge-large
-samples ULR = 0) locates the over-sensitivity in bge-large's
-high semantic capacity, linking S15 to the encoder-strength
-leakage trade-off (F2, §V.A.5.2).
+in §VI.1.2.4. Cross-encoder evidence (**25 / 25 non-bge-large
+samples ULR = 0** across MiniLM × {60, 90}, mpnet × {60, 90},
+FinLang × {60, 90}) locates the over-sensitivity in
+bge-large's high semantic capacity, linking S15 to the
+encoder-strength leakage trade-off (F2, §V.A.5.2). The full
+G2 statistical analysis surfaces three additional findings
+empirically grounded by n = 5 multi-sample evaluation: **S16**
+(F2 endpoint robustness 10 / 10 samples; corpus-90 sample 4
+MiniLM ↔ mpnet rank swap at the low end), **S17** (asymmetric
+within-encoder corpus deltas — FinLang × 60 vs × 90 GLR
+significant at p = 0.0011 under Holm-Bonferroni; three other
+encoders within the stochastic band at n = 5), and **S19**
+(universal pre-LLM gate determinism: bypass std = 0.0000
+across the entire 8-cell × 5-sample matrix).
 
 ### §VII.B — Methodological Contribution
 

@@ -1,0 +1,1490 @@
+{
+  "metadata": {
+    "generated_at": "2026-05-26T00:46:16.734612Z",
+    "data_root": "/Users/wuxiaoxiao/Downloads/sentinelflow/eval/results",
+    "alpha": 0.05,
+    "multiplicity_correction": "Holm-Bonferroni step-down (k=4)",
+    "cells_status": {
+      "minilm_60entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "minilm_90entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "mpnet_60entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "mpnet_90entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "bge_large_60entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "bge_large_90entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "finlang_60entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      },
+      "finlang_90entry": {
+        "n": 5,
+        "complete": true,
+        "missing_files": []
+      }
+    },
+    "n_cells_complete": 8,
+    "n_cells_partial": 0,
+    "n_cells_missing": 0
+  },
+  "per_cell_aggregates": {
+    "minilm_60entry": {
+      "bypass_rate": {
+        "values": [
+          0.476,
+          0.476,
+          0.476,
+          0.476,
+          0.476
+        ],
+        "mean": 0.476,
+        "std": 0.0,
+        "ci_low": 0.476,
+        "ci_high": 0.476,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.0221,
+          0.0221,
+          0.0258,
+          0.0074,
+          0.0221
+        ],
+        "mean": 0.0199,
+        "std": 0.007169030617872964,
+        "ci_low": 0.010998472779766656,
+        "ci_high": 0.028801527220233346,
+        "ci_half_width": 0.008901527220233345
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          6,
+          6,
+          7,
+          2,
+          6
+        ],
+        "mean": 5.4,
+        "std": 1.9493588689617927,
+        "sum": 27
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          129,
+          129,
+          129,
+          129,
+          129
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.046511627906976744,
+          0.046511627906976744,
+          0.05426356589147287,
+          0.015503875968992248,
+          0.046511627906976744
+        ],
+        "mean": 0.04186046511627907,
+        "std": 0.015111309061719324,
+        "ci_low": 0.023097296688611883,
+        "ci_high": 0.06062363354394626,
+        "ci_half_width": 0.018763168427667187
+      }
+    },
+    "minilm_90entry": {
+      "bypass_rate": {
+        "values": [
+          0.428,
+          0.428,
+          0.428,
+          0.428,
+          0.428
+        ],
+        "mean": 0.42800000000000005,
+        "std": 6.206335383118183e-17,
+        "ci_low": 0.428,
+        "ci_high": 0.4280000000000001,
+        "ci_half_width": 7.706183205996013e-17
+      },
+      "glr_rate": {
+        "values": [
+          0.0258,
+          0.0332,
+          0.0295,
+          0.0406,
+          0.0406
+        ],
+        "mean": 0.03394,
+        "std": 0.006618761213399376,
+        "ci_low": 0.025721722488614533,
+        "ci_high": 0.04215827751138546,
+        "ci_half_width": 0.008218277511385466
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          7,
+          9,
+          8,
+          11,
+          11
+        ],
+        "mean": 9.2,
+        "std": 1.7888543819998317,
+        "sum": 46
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          116,
+          116,
+          116,
+          116,
+          116
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.0603448275862069,
+          0.07758620689655173,
+          0.06896551724137931,
+          0.09482758620689655,
+          0.09482758620689655
+        ],
+        "mean": 0.07931034482758621,
+        "std": 0.015421158465515788,
+        "ci_low": 0.06016244755036006,
+        "ci_high": 0.09845824210481237,
+        "ci_half_width": 0.019147897277226156
+      }
+    },
+    "mpnet_60entry": {
+      "bypass_rate": {
+        "values": [
+          0.369,
+          0.369,
+          0.369,
+          0.369,
+          0.369
+        ],
+        "mean": 0.369,
+        "std": 0.0,
+        "ci_low": 0.369,
+        "ci_high": 0.369,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.0701,
+          0.0517,
+          0.048,
+          0.059,
+          0.0517
+        ],
+        "mean": 0.056100000000000004,
+        "std": 0.008785499416652418,
+        "ci_low": 0.045191361668102524,
+        "ci_high": 0.06700863833189748,
+        "ci_half_width": 0.010908638331897478
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          19,
+          14,
+          13,
+          16,
+          14
+        ],
+        "mean": 15.2,
+        "std": 2.3874672772626644,
+        "sum": 76
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.19,
+          0.14,
+          0.13,
+          0.16,
+          0.14
+        ],
+        "mean": 0.152,
+        "std": 0.023874672772626643,
+        "ci_low": 0.12235567834933385,
+        "ci_high": 0.18164432165066613,
+        "ci_half_width": 0.029644321650666144
+      }
+    },
+    "mpnet_90entry": {
+      "bypass_rate": {
+        "values": [
+          0.4945,
+          0.4945,
+          0.4945,
+          0.4945,
+          0.4945
+        ],
+        "mean": 0.49450000000000005,
+        "std": 6.206335383118183e-17,
+        "ci_low": 0.4945,
+        "ci_high": 0.4945000000000001,
+        "ci_half_width": 7.706183205996013e-17
+      },
+      "glr_rate": {
+        "values": [
+          0.0517,
+          0.0517,
+          0.048,
+          0.0443,
+          0.0554
+        ],
+        "mean": 0.05022,
+        "std": 0.00421864907286681,
+        "ci_low": 0.0449818553251656,
+        "ci_high": 0.055458144674834405,
+        "ci_half_width": 0.005238144674834406
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          14,
+          14,
+          13,
+          12,
+          15
+        ],
+        "mean": 13.6,
+        "std": 1.140175425099138,
+        "sum": 68
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          134,
+          134,
+          134,
+          134,
+          134
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.1044776119402985,
+          0.1044776119402985,
+          0.09701492537313433,
+          0.08955223880597014,
+          0.11194029850746269
+        ],
+        "mean": 0.10149253731343284,
+        "std": 0.008508771829098047,
+        "ci_low": 0.0909275016643114,
+        "ci_high": 0.11205757296255428,
+        "ci_half_width": 0.010565035649121436
+      }
+    },
+    "bge_large_60entry": {
+      "bypass_rate": {
+        "values": [
+          0.3653,
+          0.3653,
+          0.3653,
+          0.3653,
+          0.3653
+        ],
+        "mean": 0.3653,
+        "std": 0.0,
+        "ci_low": 0.3653,
+        "ci_high": 0.3653,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.0923,
+          0.0996,
+          0.0923,
+          0.1218,
+          0.0996
+        ],
+        "mean": 0.10112000000000002,
+        "std": 0.012122994679533606,
+        "ci_low": 0.08606731395600736,
+        "ci_high": 0.11617268604399267,
+        "ci_half_width": 0.015052686043992658
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0037,
+          0.0,
+          0.0
+        ],
+        "mean": 0.00074,
+        "std": 0.0016546903033498443,
+        "ci_low": -0.001314569377846367,
+        "ci_high": 0.0027945693778463673,
+        "ci_half_width": 0.002054569377846367
+      },
+      "n_glr_leaked": {
+        "values": [
+          25,
+          27,
+          25,
+          33,
+          27
+        ],
+        "mean": 27.4,
+        "std": 3.286335345030997,
+        "sum": 137
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "mean": 0.2,
+        "std": 0.44721359549995804,
+        "sum": 1
+      },
+      "n_bypass": {
+        "values": [
+          99,
+          99,
+          99,
+          99,
+          99
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.25252525252525254,
+          0.2727272727272727,
+          0.25252525252525254,
+          0.3333333333333333,
+          0.2727272727272727
+        ],
+        "mean": 0.2767676767676768,
+        "std": 0.0331953065154646,
+        "ci_low": 0.23555025975808552,
+        "ci_high": 0.317985093777268,
+        "ci_half_width": 0.04121741700959124
+      }
+    },
+    "bge_large_90entry": {
+      "bypass_rate": {
+        "values": [
+          0.5498,
+          0.5498,
+          0.5498,
+          0.5498,
+          0.5498
+        ],
+        "mean": 0.5498,
+        "std": 0.0,
+        "ci_low": 0.5498,
+        "ci_high": 0.5498,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.1144,
+          0.1181,
+          0.1107,
+          0.1181,
+          0.1328
+        ],
+        "mean": 0.11882,
+        "std": 0.008395653637448366,
+        "ci_low": 0.10839541913699188,
+        "ci_high": 0.1292445808630081,
+        "ci_half_width": 0.010424580863008114
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          31,
+          32,
+          30,
+          32,
+          36
+        ],
+        "mean": 32.2,
+        "std": 2.2803508501982757,
+        "sum": 161
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          149,
+          149,
+          149,
+          149,
+          149
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.2080536912751678,
+          0.21476510067114093,
+          0.20134228187919462,
+          0.21476510067114093,
+          0.24161073825503357
+        ],
+        "mean": 0.2161073825503356,
+        "std": 0.015304368122136088,
+        "ci_low": 0.19710449963782187,
+        "ci_high": 0.23511026546284933,
+        "ci_half_width": 0.01900288291251373
+      }
+    },
+    "finlang_60entry": {
+      "bypass_rate": {
+        "values": [
+          0.5424,
+          0.5424,
+          0.5424,
+          0.5424,
+          0.5424
+        ],
+        "mean": 0.5424,
+        "std": 0.0,
+        "ci_low": 0.5424,
+        "ci_high": 0.5424,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.0332,
+          0.0369,
+          0.0443,
+          0.0369,
+          0.0258
+        ],
+        "mean": 0.03541999999999999,
+        "std": 0.006721383786096432,
+        "ci_low": 0.027074299734693545,
+        "ci_high": 0.04376570026530644,
+        "ci_half_width": 0.00834570026530645
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          9,
+          10,
+          12,
+          10,
+          7
+        ],
+        "mean": 9.6,
+        "std": 1.816590212458495,
+        "sum": 48
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          147,
+          147,
+          147,
+          147,
+          147
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.061224489795918366,
+          0.06802721088435375,
+          0.08163265306122448,
+          0.06802721088435375,
+          0.047619047619047616
+        ],
+        "mean": 0.0653061224489796,
+        "std": 0.012357756547336701,
+        "ci_low": 0.04996194104558477,
+        "ci_high": 0.08065030385237443,
+        "ci_half_width": 0.015344181403394833
+      }
+    },
+    "finlang_90entry": {
+      "bypass_rate": {
+        "values": [
+          0.5387,
+          0.5387,
+          0.5387,
+          0.5387,
+          0.5387
+        ],
+        "mean": 0.5387,
+        "std": 0.0,
+        "ci_low": 0.5387,
+        "ci_high": 0.5387,
+        "ci_half_width": 0.0
+      },
+      "glr_rate": {
+        "values": [
+          0.0627,
+          0.1033,
+          0.0959,
+          0.0959,
+          0.0849
+        ],
+        "mean": 0.08854,
+        "std": 0.01586782908907201,
+        "ci_low": 0.06883748789044886,
+        "ci_high": 0.10824251210955113,
+        "ci_half_width": 0.019702512109551144
+      },
+      "ulr_rate": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "ci_half_width": 0.0
+      },
+      "n_glr_leaked": {
+        "values": [
+          17,
+          28,
+          26,
+          26,
+          23
+        ],
+        "mean": 24.0,
+        "std": 4.301162633521313,
+        "sum": 120
+      },
+      "n_ulr_leaked": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "sum": 0
+      },
+      "n_bypass": {
+        "values": [
+          146,
+          146,
+          146,
+          146,
+          146
+        ]
+      },
+      "n_attacks": {
+        "values": [
+          271,
+          271,
+          271,
+          271,
+          271
+        ]
+      },
+      "per_bp_leak_rate": {
+        "values": [
+          0.11643835616438356,
+          0.1917808219178082,
+          0.1780821917808219,
+          0.1780821917808219,
+          0.15753424657534246
+        ],
+        "mean": 0.1643835616438356,
+        "std": 0.029460018037817212,
+        "ci_low": 0.12780411785984447,
+        "ci_high": 0.20096300542782675,
+        "ci_half_width": 0.03657944378399113
+      }
+    }
+  },
+  "within_encoder_paired_tests": {
+    "encoders": [
+      "minilm",
+      "mpnet",
+      "bge_large",
+      "finlang"
+    ],
+    "primary_tests_glr": [
+      {
+        "samples_a": [
+          0.0221,
+          0.0221,
+          0.0258,
+          0.0074,
+          0.0221
+        ],
+        "samples_b": [
+          0.0258,
+          0.0332,
+          0.0295,
+          0.0406,
+          0.0406
+        ],
+        "differences": [
+          -0.0036999999999999984,
+          -0.011099999999999999,
+          -0.0036999999999999984,
+          -0.03319999999999999,
+          -0.018499999999999996
+        ],
+        "mean_diff": -0.014039999999999997,
+        "std_diff": 0.012343743354428588,
+        "t_statistic": -2.543344713403622,
+        "p_value_unadjusted": 0.0637540621236226,
+        "degenerate_zero_variance": false,
+        "encoder": "minilm",
+        "cell_a": "minilm_60entry",
+        "cell_b": "minilm_90entry",
+        "metric": "glr_rate",
+        "holm_rank": 3,
+        "holm_threshold": 0.025,
+        "significant_at_alpha_0_05": false
+      },
+      {
+        "samples_a": [
+          0.0701,
+          0.0517,
+          0.048,
+          0.059,
+          0.0517
+        ],
+        "samples_b": [
+          0.0517,
+          0.0517,
+          0.048,
+          0.0443,
+          0.0554
+        ],
+        "differences": [
+          0.018399999999999993,
+          0.0,
+          0.0,
+          0.014699999999999998,
+          -0.003699999999999995
+        ],
+        "mean_diff": 0.005879999999999999,
+        "std_diff": 0.00994318862337429,
+        "t_statistic": 1.3223202541678092,
+        "p_value_unadjusted": 0.2566031495663138,
+        "degenerate_zero_variance": false,
+        "encoder": "mpnet",
+        "cell_a": "mpnet_60entry",
+        "cell_b": "mpnet_90entry",
+        "metric": "glr_rate",
+        "holm_rank": 4,
+        "holm_threshold": 0.05,
+        "significant_at_alpha_0_05": false
+      },
+      {
+        "samples_a": [
+          0.0923,
+          0.0996,
+          0.0923,
+          0.1218,
+          0.0996
+        ],
+        "samples_b": [
+          0.1144,
+          0.1181,
+          0.1107,
+          0.1181,
+          0.1328
+        ],
+        "differences": [
+          -0.02210000000000001,
+          -0.018500000000000003,
+          -0.018400000000000014,
+          0.003700000000000009,
+          -0.03320000000000001
+        ],
+        "mean_diff": -0.017700000000000004,
+        "std_diff": 0.013404290357941377,
+        "t_statistic": -2.9526668062884838,
+        "p_value_unadjusted": 0.0418582368557469,
+        "degenerate_zero_variance": false,
+        "encoder": "bge_large",
+        "cell_a": "bge_large_60entry",
+        "cell_b": "bge_large_90entry",
+        "metric": "glr_rate",
+        "holm_rank": 2,
+        "holm_threshold": 0.016666666666666666,
+        "significant_at_alpha_0_05": false
+      },
+      {
+        "samples_a": [
+          0.0332,
+          0.0369,
+          0.0443,
+          0.0369,
+          0.0258
+        ],
+        "samples_b": [
+          0.0627,
+          0.1033,
+          0.0959,
+          0.0959,
+          0.0849
+        ],
+        "differences": [
+          -0.029500000000000005,
+          -0.0664,
+          -0.0516,
+          -0.059,
+          -0.0591
+        ],
+        "mean_diff": -0.05312,
+        "std_diff": 0.014203063049919896,
+        "t_statistic": -8.362979911256447,
+        "p_value_unadjusted": 0.0011179016492713204,
+        "degenerate_zero_variance": false,
+        "encoder": "finlang",
+        "cell_a": "finlang_60entry",
+        "cell_b": "finlang_90entry",
+        "metric": "glr_rate",
+        "holm_rank": 1,
+        "holm_threshold": 0.0125,
+        "significant_at_alpha_0_05": true
+      }
+    ],
+    "secondary_tests": [
+      {
+        "samples_a": [
+          0.476,
+          0.476,
+          0.476,
+          0.476,
+          0.476
+        ],
+        "samples_b": [
+          0.428,
+          0.428,
+          0.428,
+          0.428,
+          0.428
+        ],
+        "differences": [
+          0.04799999999999999,
+          0.04799999999999999,
+          0.04799999999999999,
+          0.04799999999999999,
+          0.04799999999999999
+        ],
+        "mean_diff": 0.04799999999999999,
+        "std_diff": 0.0,
+        "t_statistic": Infinity,
+        "p_value_unadjusted": 0.0,
+        "degenerate_zero_variance": true,
+        "encoder": "minilm",
+        "cell_a": "minilm_60entry",
+        "cell_b": "minilm_90entry",
+        "metric": "bypass_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.046511627906976744,
+          0.046511627906976744,
+          0.05426356589147287,
+          0.015503875968992248,
+          0.046511627906976744
+        ],
+        "samples_b": [
+          0.0603448275862069,
+          0.07758620689655173,
+          0.06896551724137931,
+          0.09482758620689655,
+          0.09482758620689655
+        ],
+        "differences": [
+          -0.013833199679230156,
+          -0.031074578989574983,
+          -0.014701951349906442,
+          -0.0793237102379043,
+          -0.0483159582999198
+        ],
+        "mean_diff": -0.03744987971130714,
+        "std_diff": 0.027328326085901817,
+        "t_statistic": -3.0642373235905267,
+        "p_value_unadjusted": 0.03750309998965726,
+        "degenerate_zero_variance": false,
+        "encoder": "minilm",
+        "cell_a": "minilm_60entry",
+        "cell_b": "minilm_90entry",
+        "metric": "per_bp_leak_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.369,
+          0.369,
+          0.369,
+          0.369,
+          0.369
+        ],
+        "samples_b": [
+          0.4945,
+          0.4945,
+          0.4945,
+          0.4945,
+          0.4945
+        ],
+        "differences": [
+          -0.1255,
+          -0.1255,
+          -0.1255,
+          -0.1255,
+          -0.1255
+        ],
+        "mean_diff": -0.1255,
+        "std_diff": 0.0,
+        "t_statistic": -Infinity,
+        "p_value_unadjusted": 0.0,
+        "degenerate_zero_variance": true,
+        "encoder": "mpnet",
+        "cell_a": "mpnet_60entry",
+        "cell_b": "mpnet_90entry",
+        "metric": "bypass_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.19,
+          0.14,
+          0.13,
+          0.16,
+          0.14
+        ],
+        "samples_b": [
+          0.1044776119402985,
+          0.1044776119402985,
+          0.09701492537313433,
+          0.08955223880597014,
+          0.11194029850746269
+        ],
+        "differences": [
+          0.0855223880597015,
+          0.03552238805970151,
+          0.032985074626865674,
+          0.07044776119402986,
+          0.028059701492537323
+        ],
+        "mean_diff": 0.050507462686567174,
+        "std_diff": 0.025783468691026525,
+        "t_statistic": 4.380253149472648,
+        "p_value_unadjusted": 0.011872561362905052,
+        "degenerate_zero_variance": false,
+        "encoder": "mpnet",
+        "cell_a": "mpnet_60entry",
+        "cell_b": "mpnet_90entry",
+        "metric": "per_bp_leak_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.3653,
+          0.3653,
+          0.3653,
+          0.3653,
+          0.3653
+        ],
+        "samples_b": [
+          0.5498,
+          0.5498,
+          0.5498,
+          0.5498,
+          0.5498
+        ],
+        "differences": [
+          -0.18449999999999994,
+          -0.18449999999999994,
+          -0.18449999999999994,
+          -0.18449999999999994,
+          -0.18449999999999994
+        ],
+        "mean_diff": -0.18449999999999994,
+        "std_diff": 0.0,
+        "t_statistic": -Infinity,
+        "p_value_unadjusted": 0.0,
+        "degenerate_zero_variance": true,
+        "encoder": "bge_large",
+        "cell_a": "bge_large_60entry",
+        "cell_b": "bge_large_90entry",
+        "metric": "bypass_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.25252525252525254,
+          0.2727272727272727,
+          0.25252525252525254,
+          0.3333333333333333,
+          0.2727272727272727
+        ],
+        "samples_b": [
+          0.2080536912751678,
+          0.21476510067114093,
+          0.20134228187919462,
+          0.21476510067114093,
+          0.24161073825503357
+        ],
+        "differences": [
+          0.04447156125008475,
+          0.05796217205613177,
+          0.051182970646057924,
+          0.11856823266219238,
+          0.031116534472239138
+        ],
+        "mean_diff": 0.060660294217341204,
+        "std_diff": 0.03385756073303913,
+        "t_statistic": 4.006211270640965,
+        "p_value_unadjusted": 0.016047015146553593,
+        "degenerate_zero_variance": false,
+        "encoder": "bge_large",
+        "cell_a": "bge_large_60entry",
+        "cell_b": "bge_large_90entry",
+        "metric": "per_bp_leak_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.5424,
+          0.5424,
+          0.5424,
+          0.5424,
+          0.5424
+        ],
+        "samples_b": [
+          0.5387,
+          0.5387,
+          0.5387,
+          0.5387,
+          0.5387
+        ],
+        "differences": [
+          0.0037000000000000366,
+          0.0037000000000000366,
+          0.0037000000000000366,
+          0.0037000000000000366,
+          0.0037000000000000366
+        ],
+        "mean_diff": 0.0037000000000000366,
+        "std_diff": 0.0,
+        "t_statistic": Infinity,
+        "p_value_unadjusted": 0.0,
+        "degenerate_zero_variance": true,
+        "encoder": "finlang",
+        "cell_a": "finlang_60entry",
+        "cell_b": "finlang_90entry",
+        "metric": "bypass_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      },
+      {
+        "samples_a": [
+          0.061224489795918366,
+          0.06802721088435375,
+          0.08163265306122448,
+          0.06802721088435375,
+          0.047619047619047616
+        ],
+        "samples_b": [
+          0.11643835616438356,
+          0.1917808219178082,
+          0.1780821917808219,
+          0.1780821917808219,
+          0.15753424657534246
+        ],
+        "differences": [
+          -0.05521386636846519,
+          -0.12375361103345446,
+          -0.09644953871959742,
+          -0.11005498089646816,
+          -0.10991519895629484
+        ],
+        "mean_diff": -0.09907743919485601,
+        "std_diff": 0.02635239930760239,
+        "t_statistic": -8.40697222633489,
+        "p_value_unadjusted": 0.0010957189212179538,
+        "degenerate_zero_variance": false,
+        "encoder": "finlang",
+        "cell_a": "finlang_60entry",
+        "cell_b": "finlang_90entry",
+        "metric": "per_bp_leak_rate",
+        "holm_rank": null,
+        "holm_threshold": null,
+        "significant_at_alpha_0_05": true
+      }
+    ]
+  },
+  "cross_encoder_ordering": {
+    "60_corpus": {
+      "corpus_size": "60",
+      "metric": "per_bp_leak_rate",
+      "prediction_F2": "minilm <= finlang ~= mpnet < bge_large",
+      "per_sample_rankings": {
+        "sample_1": {
+          "values": {
+            "minilm": 0.046511627906976744,
+            "mpnet": 0.19,
+            "bge_large": 0.25252525252525254,
+            "finlang": 0.061224489795918366
+          },
+          "rank": {
+            "minilm": 1,
+            "finlang": 2,
+            "mpnet": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_2": {
+          "values": {
+            "minilm": 0.046511627906976744,
+            "mpnet": 0.14,
+            "bge_large": 0.2727272727272727,
+            "finlang": 0.06802721088435375
+          },
+          "rank": {
+            "minilm": 1,
+            "finlang": 2,
+            "mpnet": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_3": {
+          "values": {
+            "minilm": 0.05426356589147287,
+            "mpnet": 0.13,
+            "bge_large": 0.25252525252525254,
+            "finlang": 0.08163265306122448
+          },
+          "rank": {
+            "minilm": 1,
+            "finlang": 2,
+            "mpnet": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_4": {
+          "values": {
+            "minilm": 0.015503875968992248,
+            "mpnet": 0.16,
+            "bge_large": 0.3333333333333333,
+            "finlang": 0.06802721088435375
+          },
+          "rank": {
+            "minilm": 1,
+            "finlang": 2,
+            "mpnet": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_5": {
+          "values": {
+            "minilm": 0.046511627906976744,
+            "mpnet": 0.14,
+            "bge_large": 0.2727272727272727,
+            "finlang": 0.047619047619047616
+          },
+          "rank": {
+            "minilm": 1,
+            "finlang": 2,
+            "mpnet": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        }
+      },
+      "prediction_holds_per_sample": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prediction_holds_aggregate": true,
+      "exception_samples": []
+    },
+    "90_corpus": {
+      "corpus_size": "90",
+      "metric": "per_bp_leak_rate",
+      "prediction_F2": "minilm <= finlang ~= mpnet < bge_large",
+      "per_sample_rankings": {
+        "sample_1": {
+          "values": {
+            "minilm": 0.0603448275862069,
+            "mpnet": 0.1044776119402985,
+            "bge_large": 0.2080536912751678,
+            "finlang": 0.11643835616438356
+          },
+          "rank": {
+            "minilm": 1,
+            "mpnet": 2,
+            "finlang": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_2": {
+          "values": {
+            "minilm": 0.07758620689655173,
+            "mpnet": 0.1044776119402985,
+            "bge_large": 0.21476510067114093,
+            "finlang": 0.1917808219178082
+          },
+          "rank": {
+            "minilm": 1,
+            "mpnet": 2,
+            "finlang": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_3": {
+          "values": {
+            "minilm": 0.06896551724137931,
+            "mpnet": 0.09701492537313433,
+            "bge_large": 0.20134228187919462,
+            "finlang": 0.1780821917808219
+          },
+          "rank": {
+            "minilm": 1,
+            "mpnet": 2,
+            "finlang": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_4": {
+          "values": {
+            "minilm": 0.09482758620689655,
+            "mpnet": 0.08955223880597014,
+            "bge_large": 0.21476510067114093,
+            "finlang": 0.1780821917808219
+          },
+          "rank": {
+            "mpnet": 1,
+            "minilm": 2,
+            "finlang": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        },
+        "sample_5": {
+          "values": {
+            "minilm": 0.09482758620689655,
+            "mpnet": 0.11194029850746269,
+            "bge_large": 0.24161073825503357,
+            "finlang": 0.15753424657534246
+          },
+          "rank": {
+            "minilm": 1,
+            "mpnet": 2,
+            "finlang": 3,
+            "bge_large": 4
+          },
+          "complete": true
+        }
+      },
+      "prediction_holds_per_sample": [
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "prediction_holds_aggregate": false,
+      "exception_samples": [
+        4
+      ]
+    }
+  },
+  "S15_predictive_claim": {
+    "prediction": "ULR fires concentrated on bge-large cells",
+    "ulr_fires_per_cell": {
+      "minilm_60entry": 0,
+      "minilm_90entry": 0,
+      "mpnet_60entry": 0,
+      "mpnet_90entry": 0,
+      "bge_large_60entry": 1,
+      "bge_large_90entry": 0,
+      "finlang_60entry": 0,
+      "finlang_90entry": 0
+    },
+    "non_bge_large_ulr_total": 0,
+    "bge_large_ulr_total": 1,
+    "claim_holds": true,
+    "evidence": "bge-large total ULR fires: 1; non-bge-large total: 0"
+  }
+}

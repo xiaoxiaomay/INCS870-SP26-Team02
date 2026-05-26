@@ -1,0 +1,119 @@
+{
+  "config_path": "/Users/wuxiaoxiao/Downloads/sentinelflow/config_phase1F_finlang_60entry.yaml",
+  "output_dir": "/Users/wuxiaoxiao/Downloads/sentinelflow/eval/results/phase1_G/finlang_60entry/sample_2",
+  "attack_corpus": "/Users/wuxiaoxiao/Downloads/sentinelflow/data/attack_prompts_expanded.jsonl",
+  "limit": null,
+  "started_at": "2026-05-25T20:34:44.220743Z",
+  "finished_at": "2026-05-25T20:48:12.214758Z",
+  "embedding_model": "FinLang/finance-embeddings-investopedia",
+  "embedding_revision": "37d7594d02e3d656a241e099e39ac50ab921f999",
+  "llm_model": "gpt-4o-mini-2024-07-18",
+  "secret_index": "data/index/secrets__finlang.faiss",
+  "secret_meta": "data/index/secrets__finlang_meta.pkl",
+  "secret_count": 60,
+  "n_attacks": 271,
+  "n_blocked_pregates": 124,
+  "n_bypass": 147,
+  "n_llm_called": 147,
+  "bypass_rate": 0.5424,
+  "n_glr_leaked": 10,
+  "n_ulr_leaked": 0,
+  "glr_rate": 0.0369,
+  "ulr_rate": 0.0,
+  "per_category": {
+    "direct_extraction": {
+      "total": 51,
+      "bypass": 18,
+      "glr_leaked": 2,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.3529,
+      "glr_rate": 0.0392,
+      "ulr_rate": 0.0
+    },
+    "indirect_extraction": {
+      "total": 40,
+      "bypass": 30,
+      "glr_leaked": 6,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.75,
+      "glr_rate": 0.15,
+      "ulr_rate": 0.0
+    },
+    "paraphrase_extraction": {
+      "total": 20,
+      "bypass": 14,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.7,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    },
+    "salami_attack": {
+      "total": 33,
+      "bypass": 31,
+      "glr_leaked": 1,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.9394,
+      "glr_rate": 0.0303,
+      "ulr_rate": 0.0
+    },
+    "social_engineering": {
+      "total": 23,
+      "bypass": 14,
+      "glr_leaked": 1,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.6087,
+      "glr_rate": 0.0435,
+      "ulr_rate": 0.0
+    },
+    "encoding_extraction": {
+      "total": 20,
+      "bypass": 14,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.7,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    },
+    "prompt_injection": {
+      "total": 29,
+      "bypass": 8,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.2759,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    },
+    "adversarial_exfil": {
+      "total": 16,
+      "bypass": 4,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.25,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    },
+    "hard_block": {
+      "total": 19,
+      "bypass": 0,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.0,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    },
+    "indirect_injection": {
+      "total": 20,
+      "bypass": 14,
+      "glr_leaked": 0,
+      "ulr_leaked": 0,
+      "bypass_rate": 0.7,
+      "glr_rate": 0.0,
+      "ulr_rate": 0.0
+    }
+  },
+  "elapsed_s": 807.99,
+  "total_input_chars": 102706,
+  "total_output_chars": 146945,
+  "estimated_cost_usd": 0.0259
+}
