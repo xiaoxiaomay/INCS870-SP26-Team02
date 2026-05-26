@@ -2,7 +2,7 @@
 scripts/validate_hard_negatives.py — Phase 1.E E1.3 validator
 
 Implements the V1a / V1b / V5b checks defined in PHASE_1E_PLAN_V2.md §4
-against the hard-negative seed corpus (data/benchmark/hard_negatives_seeds_draft.jsonl).
+against the hard-negative seed corpus (data/benchmark/hard_negatives.jsonl).
 
 This file covers E1.3.1 (infrastructure verification, --check-only) and
 E1.3.2 (V1a: per-category MiniLM cosine band, --run-v1a). V1b (multi-encoder)
@@ -22,11 +22,15 @@ Conventions reused without modification:
 
 Outputs:
 - eval/results/phase1_E/validation/v1a_<timestamp>.json — full report.
-- data/benchmark/hard_negatives_seeds_draft.jsonl — atomic in-place update
+- data/benchmark/hard_negatives.jsonl — atomic in-place update
   populating closest_secret_id_minilm_90 + closest_cosine_minilm_90 +
   expected_minilm_band (E1.3.2 only).
-- data/benchmark/hard_negatives_seeds_draft.jsonl.bak — backup of pre-V1a
-  corpus, created before the atomic write.
+- data/benchmark/hard_negatives.jsonl.bak — runtime backup of corpus,
+  created before the atomic write (path derived from HARD_NEG_PATH at
+  runtime). A pre-rename historical artifact
+  data/benchmark/hard_negatives_seeds_draft.jsonl.bak also exists on
+  disk from Phase 1.E E1.3.2 and is preserved unchanged per V2 §5.1
+  rename audit note (2026-05-26).
 
 Field semantics (per V2 §5.2 + §5.3 dual-convention):
 
@@ -67,7 +71,7 @@ sys.path.insert(0, str(REPO_ROOT))
 from core.config_loader import PINNED_REVISIONS  # noqa: E402
 
 
-HARD_NEG_PATH = REPO_ROOT / "data" / "benchmark" / "hard_negatives_seeds_draft.jsonl"
+HARD_NEG_PATH = REPO_ROOT / "data" / "benchmark" / "hard_negatives.jsonl"
 SECRETS_V2_PATH = REPO_ROOT / "data" / "secrets" / "secrets_v2.jsonl"  # 90-entry v2 canonical
 SECRETS_60_PATH = REPO_ROOT / "data" / "secrets" / "secrets.jsonl"     # 60-entry legacy
 OUTPUT_DIR = REPO_ROOT / "eval" / "results" / "phase1_E" / "validation"

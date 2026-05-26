@@ -5,7 +5,7 @@ Phase 1.E E1.2 — Hard-negative query generator.
 Single sub-cell (category × domain) batch generation via OpenAI
 GPT-5 mini (pinned at core/config_loader.py:PINNED_OPENAI_GENERATION_MODEL_E1_2).
 Output schema matches E1.1 manual seeds in
-data/benchmark/hard_negatives_seeds_draft.jsonl exactly (10 fields).
+data/benchmark/hard_negatives.jsonl exactly (10 fields).
 
 Usage:
     python3 scripts/generate_hard_negatives.py \\
@@ -31,7 +31,7 @@ from scripts.repro_full_pipeline import (
     PRICE_OUTPUT_PER_1M_GPT5MINI,
 )
 
-DEFAULT_SEEDS_PATH = REPO_ROOT / "data" / "benchmark" / "hard_negatives_seeds_draft.jsonl"
+DEFAULT_SEEDS_PATH = REPO_ROOT / "data" / "benchmark" / "hard_negatives.jsonl"
 
 
 # ---------------------------------------------------------------------------
@@ -471,7 +471,7 @@ def main() -> int:
         "--output-path",
         type=Path,
         default=DEFAULT_SEEDS_PATH,
-        help="JSONL file to append to (default: data/benchmark/hard_negatives_seeds_draft.jsonl).",
+        help="JSONL file to append to (default: data/benchmark/hard_negatives.jsonl).",
     )
     parser.add_argument(
         "--dry-run",

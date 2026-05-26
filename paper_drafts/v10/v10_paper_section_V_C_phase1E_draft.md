@@ -666,15 +666,17 @@ artifacts are:
 
 - **Validator script:** `scripts/validate_hard_negatives.py`
   (**1832 LOC**; 4-mode CLI: check-only / V1a / V1b / V5b).
-- **Final corpus:** `data/benchmark/hard_negatives_seeds_draft.jsonl`
-  (65 entries × 22 fields). **[NEEDS_HUMAN_REVIEW]** V2 §5.1
-  prescribes final rename to `hard_negatives.jsonl`; the rename
-  has NOT yet been executed in the codebase. Validator code
-  constants in `scripts/validate_hard_negatives.py` and
-  `scripts/generate_hard_negatives.py` still reference the
-  draft path. The rename commands are documented in
-  `PHASE_1E_E1_6_RESULTS.md` §4.3 for user manual execution
-  (deferred at Phase 1.E close).
+- **Final corpus:** `data/benchmark/hard_negatives.jsonl`
+  (65 entries × 22 fields; renamed from
+  `hard_negatives_seeds_draft.jsonl` per V2 §5.1 spec on
+  2026-05-26, post-Phase-1.E close and pre-LaTeX
+  conversion). Historical Phase 1.E execution-log RESULTS
+  documents reference the original draft name as the file
+  was named at the time of Phase 1.E execution; the
+  pre-rename `.bak` and `.preV1a` backup files retain
+  their original on-disk names for audit-trail integrity.
+  See `paper_drafts/v10/CLAUDE_CODE_CORPUS_RENAME_NOTE.md`
+  for the surgical-rename scope rationale (Approach A).
 - **Per-phase RESULTS docs:** `PHASE_1E_E1_1_RESULTS.md`,
   `PHASE_1E_E1_2_RESULTS.md`, ..., `PHASE_1E_E1_6_RESULTS.md`,
   and master `PHASE_1E_RESULTS.md`.
