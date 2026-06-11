@@ -1,0 +1,8 @@
+{
+  "query": "How do ETFs differ from mutual funds?",
+  "response": "ETFs (Exchange-Traded Funds) and mutual funds are both investment vehicles that pool money from multiple investors to purchase a diversified portfolio of assets, but they have several key differences:\n\n1. **Trading**: ETFs are traded on stock exchanges like individual stocks, meaning they can be bought and sold throughout the trading day at market prices. Mutual funds, on the other hand, are bought and sold at the end of the trading day at the net asset value (NAV).\n\n2. **Management Style**: Many ETFs are passively managed, tracking an index, while mutual funds can be actively managed, where fund managers make investment decisions to try to outperform the market.\n\n3. **Fees**: ETFs generally have lower expense ratios compared to mutual funds, especially actively managed ones. However, investors may incur brokerage fees when buying or selling ETFs.\n\n4. **Minimum Investment**: Mutual funds often have minimum investment requirements, while ETFs can be purchased in single shares, making them more accessible for smaller investors.\n\n5. **Tax Efficiency**: ETFs tend to be more tax-efficient due to their structure, which allows for in-kind redemptions that can minimize capital gains distributions compared to mutual funds.\n\nThese differences can influence an investor's choice between the two based on their investment strategy, trading preferences, and cost considerations.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 262
+  }
+}

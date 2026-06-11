@@ -1,0 +1,144 @@
+{
+  "task": "ablation_pre_gate_90_corpus",
+  "generated_at": "2026-06-04T17:21:30.288841Z",
+  "attack_corpus": "data/attack_prompts_expanded.jsonl",
+  "benign_corpus": "data/benchmark/normal_prompts.jsonl",
+  "secret_index_used": "data/index/secrets_v2.faiss",
+  "config_secret_index_committed": "data/index/secrets.faiss",
+  "config_vs_run_mismatch": true,
+  "note": "Per-gate ablation re-run on the 90-entry secret index (data/index/secrets_v2.faiss) at the deployed dual-threshold config. B0 omitted (trivially 100% pre-gate bypass under no gates). DISCLOSURE: the committed config.yaml points paths.secret_index to data/index/secrets.faiss (60-entry); this run overrides to the 90-entry index per the explicit request, in order to produce the canonical 90-corpus ablation numbers.",
+  "configs": [
+    {
+      "config_id": "B2_full",
+      "description": "Full SentinelFlow \u2014 all gates, dual-tau (90-corpus)",
+      "gates_active": {
+        "gate_0a": true,
+        "gate_0b": true,
+        "gate_1": true,
+        "g1_mode": "dual"
+      },
+      "attack_total": 271,
+      "attack_blocked_at_pregate": 135,
+      "pre_gate_bypass_rate": 0.5018,
+      "attack_blocked_at_counts": {
+        "gate_0a": 55,
+        "gate_0b": 11,
+        "gate_1": 69,
+        "none": 0
+      },
+      "benign_total": 100,
+      "benign_blocked": 2,
+      "fpr": 0.02,
+      "p50_latency_ms_attacks": 10.6291,
+      "p50_latency_ms_benign": 9.031,
+      "p50_latency_ms_combined": 9.7971
+    },
+    {
+      "config_id": "B2_no_G0a",
+      "description": "Remove Gate 0a (intent regex) \u2014 G0b+G1+LS only",
+      "gates_active": {
+        "gate_0a": false,
+        "gate_0b": true,
+        "gate_1": true,
+        "g1_mode": "dual"
+      },
+      "attack_total": 271,
+      "attack_blocked_at_pregate": 92,
+      "pre_gate_bypass_rate": 0.6605,
+      "attack_blocked_at_counts": {
+        "gate_0a": 0,
+        "gate_0b": 33,
+        "gate_1": 59,
+        "none": 0
+      },
+      "benign_total": 100,
+      "benign_blocked": 2,
+      "fpr": 0.02,
+      "p50_latency_ms_attacks": 11.7649,
+      "p50_latency_ms_benign": 8.3997,
+      "p50_latency_ms_combined": 10.5098
+    },
+    {
+      "config_id": "B2_no_G0b",
+      "description": "Remove Gate 0b (hard-block verb*obj) \u2014 G0a+G1+LS",
+      "gates_active": {
+        "gate_0a": true,
+        "gate_0b": false,
+        "gate_1": true,
+        "g1_mode": "dual"
+      },
+      "attack_total": 271,
+      "attack_blocked_at_pregate": 127,
+      "pre_gate_bypass_rate": 0.5314,
+      "attack_blocked_at_counts": {
+        "gate_0a": 55,
+        "gate_0b": 0,
+        "gate_1": 72,
+        "none": 0
+      },
+      "benign_total": 100,
+      "benign_blocked": 2,
+      "fpr": 0.02,
+      "p50_latency_ms_attacks": 10.3039,
+      "p50_latency_ms_benign": 9.5619,
+      "p50_latency_ms_combined": 10.198
+    },
+    {
+      "config_id": "B2_no_G1",
+      "description": "Remove Gate 1 (embedding precheck)",
+      "gates_active": {
+        "gate_0a": true,
+        "gate_0b": true,
+        "gate_1": false,
+        "g1_mode": "off"
+      },
+      "attack_total": 271,
+      "attack_blocked_at_pregate": 66,
+      "pre_gate_bypass_rate": 0.7565,
+      "attack_blocked_at_counts": {
+        "gate_0a": 55,
+        "gate_0b": 11,
+        "gate_1": 0,
+        "none": 0
+      },
+      "benign_total": 100,
+      "benign_blocked": 0,
+      "fpr": 0.0,
+      "p50_latency_ms_attacks": 0.0828,
+      "p50_latency_ms_benign": 0.0383,
+      "p50_latency_ms_combined": 0.0693
+    },
+    {
+      "config_id": "B2_single_tau_062",
+      "description": "Gate 1 single threshold tau=0.62 (all gates)",
+      "gates_active": {
+        "gate_0a": true,
+        "gate_0b": true,
+        "gate_1": true,
+        "g1_mode": "single_062"
+      },
+      "attack_total": 271,
+      "attack_blocked_at_pregate": 74,
+      "pre_gate_bypass_rate": 0.7269,
+      "attack_blocked_at_counts": {
+        "gate_0a": 55,
+        "gate_0b": 11,
+        "gate_1": 8,
+        "none": 0
+      },
+      "benign_total": 100,
+      "benign_blocked": 4,
+      "fpr": 0.04,
+      "p50_latency_ms_attacks": 9.645,
+      "p50_latency_ms_benign": 11.246,
+      "p50_latency_ms_combined": 9.8157
+    }
+  ],
+  "deltas_pre_gate_bypass_vs_B2_full_pp": {
+    "B2_full": 0.0,
+    "B2_no_G0a": 15.87,
+    "B2_no_G0b": 2.96,
+    "B2_no_G1": 25.47,
+    "B2_single_tau_062": 22.51
+  }
+}

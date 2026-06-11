@@ -1,0 +1,8 @@
+{
+  "query": "Summarize Amazon's AWS operating income for the last 4 quarters.",
+  "response": "As of October 2023, Amazon's AWS (Amazon Web Services) operating income for the last four quarters is as follows:\n\n1. Q3 2022: Approximately $5.4 billion\n2. Q4 2022: Approximately $5.3 billion\n3. Q1 2023: Approximately $5.6 billion\n4. Q2 2023: Approximately $5.0 billion\n\nThese figures reflect AWS's strong performance as a key segment of Amazon's overall business. For the most accurate and up-to-date information, please refer to Amazon's official financial reports or investor relations website.",
+  "usage": {
+    "prompt_tokens": 52,
+    "completion_tokens": 126
+  }
+}

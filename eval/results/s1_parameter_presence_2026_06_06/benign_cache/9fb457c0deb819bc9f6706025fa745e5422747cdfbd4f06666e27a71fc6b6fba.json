@@ -1,0 +1,8 @@
+{
+  "query": "What is the significance of the 200-day moving average?",
+  "response": "The 200-day moving average (200 DMA) is a widely used technical indicator in financial markets that helps traders and investors identify the long-term trend of a security's price. Its significance includes:\n\n1. **Trend Identification**: A price above the 200 DMA suggests an uptrend, while a price below indicates a downtrend.\n\n2. **Support and Resistance**: The 200 DMA often acts as a support level in an uptrend and a resistance level in a downtrend.\n\n3. **Signal Generation**: Crossovers between the price and the 200 DMA can signal potential buy or sell opportunities. For example, when the price crosses above the 200 DMA, it may indicate a bullish signal, and vice versa.\n\n4. **Market Sentiment**: Many traders watch the 200 DMA, so it can influence market sentiment and trading behavior.\n\nOverall, the 200-day moving average is a key tool for assessing the overall health and direction of a security's price movement over a longer time frame.",
+  "usage": {
+    "prompt_tokens": 49,
+    "completion_tokens": 204
+  }
+}

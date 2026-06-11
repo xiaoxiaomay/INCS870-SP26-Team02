@@ -1,0 +1,8 @@
+{
+  "query": "What is working capital and why does it matter?",
+  "response": "Working capital is a financial metric that represents the difference between a company's current assets and current liabilities. It is calculated using the formula:\n\n**Working Capital = Current Assets - Current Liabilities**\n\nCurrent assets include cash, accounts receivable, inventory, and other assets expected to be converted into cash within a year. Current liabilities are obligations the company needs to settle within the same timeframe, such as accounts payable and short-term debt.\n\n**Importance of Working Capital:**\n\n1. **Liquidity Management:** It indicates a company's ability to meet short-term obligations and manage day-to-day operations.\n2. **Operational Efficiency:** Adequate working capital ensures that a business can maintain smooth operations without interruptions due to cash flow issues.\n3. **Financial Health:** Positive working capital is often a sign of financial stability, while negative working capital may indicate potential liquidity problems.\n4. **Investment Opportunities:** Sufficient working capital allows a company to take advantage of growth opportunities and invest in new projects without relying on external financing.\n\nIn summary, working capital is crucial for maintaining operational efficiency and financial health, making it a key indicator for investors and management.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 223
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What is a margin call and when does it occur?",
+  "response": "A margin call is a demand from a broker to an investor to deposit additional funds or securities into their margin account to maintain the minimum required equity level. It occurs when the value of the securities in the margin account falls below a certain threshold, typically due to a decline in the market value of the investments. This situation can arise when the equity in the account drops below the broker's maintenance margin requirement, which is usually set between 25% to 40% of the total value of the securities purchased on margin. If the investor fails to meet the margin call, the broker may liquidate some or all of the investor's holdings to cover the shortfall.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 132
+  }
+}

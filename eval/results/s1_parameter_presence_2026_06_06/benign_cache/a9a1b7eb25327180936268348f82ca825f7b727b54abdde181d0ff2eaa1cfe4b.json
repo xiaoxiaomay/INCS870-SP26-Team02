@@ -1,0 +1,8 @@
+{
+  "query": "What is the difference between growth and value investing?",
+  "response": "Growth investing and value investing are two distinct investment strategies:\n\n1. **Growth Investing**: This strategy focuses on companies that are expected to grow at an above-average rate compared to their industry or the overall market. Growth investors look for stocks with strong potential for future earnings growth, often prioritizing companies that reinvest profits to fuel expansion. These stocks typically have higher price-to-earnings (P/E) ratios and may not pay dividends, as profits are reinvested.\n\n2. **Value Investing**: This approach involves identifying undervalued stocks that are trading for less than their intrinsic value. Value investors seek companies with strong fundamentals that are temporarily out of favor, believing that the market will eventually recognize their true worth. These stocks often have lower P/E ratios and may pay dividends, providing income while waiting for the stock price to appreciate.\n\nIn summary, growth investing emphasizes future potential and capital appreciation, while value investing focuses on current undervaluation and fundamental strength.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 194
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What is a credit default swap (CDS)?",
+  "response": "A credit default swap (CDS) is a financial derivative that allows an investor to \"swap\" or transfer the credit risk of a borrower to another party. In a CDS agreement, the buyer pays periodic premiums to the seller in exchange for a promise that the seller will compensate the buyer in the event of a default or other credit event (such as bankruptcy) involving the underlying asset, typically a bond or loan. CDS are often used for hedging credit risk or for speculative purposes.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 97
+  }
+}

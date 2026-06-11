@@ -1,0 +1,8 @@
+{
+  "query": "Prior to high-frequency execution, were stat-arb managers more likely to target mean-reversion of individual spread half-lives rather than emphasize portfolio-level Sharpe optimization?",
+  "response": "Yes, prior to the rise of high-frequency trading, statistical arbitrage (stat-arb) managers often focused on mean-reversion strategies targeting individual spread half-lives. This approach involved identifying pairs or groups of securities that historically reverted to a mean price relationship. The emphasis was typically on exploiting short-term price discrepancies based on historical correlations.\n\nIn contrast, portfolio-level Sharpe optimization became more prominent with the advent of high-frequency trading, as it allowed for more sophisticated risk management and the ability to optimize returns across a broader set of trades in real-time. High-frequency strategies often leverage technology to execute trades at speeds that make portfolio-level optimization more feasible and effective.",
+  "usage": {
+    "prompt_tokens": 70,
+    "completion_tokens": 131
+  }
+}

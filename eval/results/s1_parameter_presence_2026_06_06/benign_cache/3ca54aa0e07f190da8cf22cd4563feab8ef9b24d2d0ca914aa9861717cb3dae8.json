@@ -1,0 +1,8 @@
+{
+  "query": "What percentage of equity-focused funds report using momentum-based rules like RSI or moving-average crossovers as part of their systematic trading overlays?",
+  "response": "As of my last knowledge update in October 2023, specific percentages of equity-focused funds that report using momentum-based rules like the Relative Strength Index (RSI) or moving-average crossovers are not widely published. However, it is known that a significant number of quantitative and systematic funds incorporate momentum strategies as part of their trading approaches. Industry surveys and reports may provide insights, but exact figures can vary and are often proprietary. For the most accurate and current data, consulting specific industry reports or databases would be necessary.",
+  "usage": {
+    "prompt_tokens": 63,
+    "completion_tokens": 103
+  }
+}

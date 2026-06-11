@@ -1,0 +1,166 @@
+{
+  "task": "S1 parameter-presence — final (honest negative result, exact-literal, matcher intentionally not upgraded)",
+  "gt": "L1 independent-judge label (non-circular); distinct from §IV-J substring GT (same-class match, near-circular)",
+  "recall_144": {
+    "cosine_only": {
+      "judge2_all": {
+        "n": 15,
+        "caught": 4,
+        "recall": 0.2667
+      },
+      "judge2_verbatim": {
+        "n": 8,
+        "caught": 2,
+        "recall": 0.25
+      },
+      "judge2_paraphrase": {
+        "n": 7,
+        "caught": 2,
+        "recall": 0.2857
+      },
+      "judge_ge1": {
+        "n": 16,
+        "caught": 4,
+        "recall": 0.25
+      }
+    },
+    "s1_single": {
+      "judge2_all": {
+        "n": 15,
+        "caught": 4,
+        "recall": 0.2667
+      },
+      "judge2_verbatim": {
+        "n": 8,
+        "caught": 2,
+        "recall": 0.25
+      },
+      "judge2_paraphrase": {
+        "n": 7,
+        "caught": 2,
+        "recall": 0.2857
+      },
+      "judge_ge1": {
+        "n": 16,
+        "caught": 4,
+        "recall": 0.25
+      }
+    },
+    "s1_cooc": {
+      "judge2_all": {
+        "n": 15,
+        "caught": 2,
+        "recall": 0.1333
+      },
+      "judge2_verbatim": {
+        "n": 8,
+        "caught": 2,
+        "recall": 0.25
+      },
+      "judge2_paraphrase": {
+        "n": 7,
+        "caught": 0,
+        "recall": 0.0
+      },
+      "judge_ge1": {
+        "n": 16,
+        "caught": 2,
+        "recall": 0.125
+      }
+    },
+    "union_single": {
+      "judge2_all": {
+        "n": 15,
+        "caught": 5,
+        "recall": 0.3333
+      },
+      "judge2_verbatim": {
+        "n": 8,
+        "caught": 2,
+        "recall": 0.25
+      },
+      "judge2_paraphrase": {
+        "n": 7,
+        "caught": 3,
+        "recall": 0.4286
+      },
+      "judge_ge1": {
+        "n": 16,
+        "caught": 5,
+        "recall": 0.3125
+      }
+    },
+    "union_cooc": {
+      "judge2_all": {
+        "n": 15,
+        "caught": 4,
+        "recall": 0.2667
+      },
+      "judge2_verbatim": {
+        "n": 8,
+        "caught": 2,
+        "recall": 0.25
+      },
+      "judge2_paraphrase": {
+        "n": 7,
+        "caught": 2,
+        "recall": 0.2857
+      },
+      "judge_ge1": {
+        "n": 16,
+        "caught": 4,
+        "recall": 0.25
+      }
+    }
+  },
+  "cohorts_144": {
+    "judge2_all": 15,
+    "judge2_verbatim": 8,
+    "judge2_paraphrase": 7,
+    "judge_ge1": 16
+  },
+  "attribution": {
+    "now_hit": 2,
+    "still_miss": 6,
+    "A_structural": 6,
+    "B_over_deletion": 0
+  },
+  "benign_fpr": {
+    "generation": "path (b): gpt-4o-mini-2024-07-18, temp=0, general-knowledge (PostgreSQL 18.220.95.90 unreachable; deployed RAG fallback). System prompt: financial analyst.",
+    "n_api_calls": 0,
+    "gen_cost_usd": 0.0,
+    "overall": {
+      "n": 165,
+      "single_hit_overredact": 0,
+      "single_hit_fpr": 0.0,
+      "cooccurrence_overredact": 0,
+      "cooccurrence_fpr": 0.0
+    },
+    "normal": {
+      "n": 100,
+      "single_hit_overredact": 0,
+      "single_hit_fpr": 0.0,
+      "cooccurrence_overredact": 0,
+      "cooccurrence_fpr": 0.0
+    },
+    "hard_negative": {
+      "n": 65,
+      "single_hit_overredact": 0,
+      "single_hit_fpr": 0.0,
+      "cooccurrence_overredact": 0,
+      "cooccurrence_fpr": 0.0
+    },
+    "flagged_samples": []
+  },
+  "coverage": {
+    "single_hit": "56/60",
+    "cooccurrence": "34/60",
+    "zero_strong": [
+      "S0007",
+      "S0018",
+      "S0033",
+      "S0040"
+    ]
+  },
+  "matcher_note": "exact normalized-substring (R5: symbol/word-op/unit/period only). Structure-aware / proximity matching intentionally NOT implemented — would regress S1 into a hand-built similarity detector and risk overfitting to the few test samples."
+}

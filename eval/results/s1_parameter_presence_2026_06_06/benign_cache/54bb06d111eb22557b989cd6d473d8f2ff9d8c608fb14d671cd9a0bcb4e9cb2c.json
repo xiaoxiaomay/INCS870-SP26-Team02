@@ -1,0 +1,8 @@
+{
+  "query": "What's the typical holding period for merger-arbitrage positions at large multi-strategy hedge funds?",
+  "response": "The typical holding period for merger-arbitrage positions at large multi-strategy hedge funds generally ranges from a few months to a year. This duration can vary based on the specifics of the merger, including regulatory approvals, deal complexity, and market conditions. Hedge funds often aim to close positions once the merger is completed or if the deal is deemed unlikely to go through.",
+  "usage": {
+    "prompt_tokens": 56,
+    "completion_tokens": 73
+  }
+}

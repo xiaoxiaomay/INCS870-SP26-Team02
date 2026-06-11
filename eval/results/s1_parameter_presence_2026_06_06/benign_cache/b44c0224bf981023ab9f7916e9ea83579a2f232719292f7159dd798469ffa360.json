@@ -1,0 +1,8 @@
+{
+  "query": "Explain the difference between fiscal and monetary policy.",
+  "response": "Fiscal policy refers to the use of government spending and taxation to influence the economy. It is typically enacted by the legislative and executive branches of government and aims to manage economic growth, reduce unemployment, and control inflation.\n\nMonetary policy, on the other hand, involves the management of a country's money supply and interest rates, primarily conducted by a central bank (such as the Federal Reserve in the U.S.). Its goals include controlling inflation, stabilizing the currency, and achieving full employment.\n\nIn summary, fiscal policy is about government budget decisions, while monetary policy focuses on the banking system and money supply management.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 121
+  }
+}

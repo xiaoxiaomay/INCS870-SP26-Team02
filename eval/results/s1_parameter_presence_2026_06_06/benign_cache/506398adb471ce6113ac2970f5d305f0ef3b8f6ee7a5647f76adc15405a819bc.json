@@ -1,0 +1,8 @@
+{
+  "query": "What are the Fama-French factors?",
+  "response": "The Fama-French factors are a set of three factors used in asset pricing models to explain stock returns. They were developed by economists Eugene Fama and Kenneth French. The three factors are:\n\n1. **Market Risk (Market Premium)**: The excess return of the market over the risk-free rate, representing the overall market risk.\n\n2. **Size (SMB - Small Minus Big)**: The return difference between small-cap stocks and large-cap stocks. This factor captures the size effect, where smaller companies tend to outperform larger companies over time.\n\n3. **Value (HML - High Minus Low)**: The return difference between value stocks (high book-to-market ratio) and growth stocks (low book-to-market ratio). This factor reflects the value effect, where value stocks tend to outperform growth stocks.\n\nIn 2015, Fama and French expanded their model to include two additional factors: profitability (RMW - Robust Minus Weak) and investment (CMA - Conservative Minus Aggressive), resulting in a five-factor model.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 207
+  }
+}

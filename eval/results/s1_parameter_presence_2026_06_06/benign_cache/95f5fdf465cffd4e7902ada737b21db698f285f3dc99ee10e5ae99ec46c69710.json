@@ -1,0 +1,8 @@
+{
+  "query": "What is EBITDA and why do investors care?",
+  "response": "EBITDA stands for Earnings Before Interest, Taxes, Depreciation, and Amortization. It is a financial metric used to evaluate a company's operating performance by focusing on earnings generated from core business operations, excluding the effects of capital structure, tax rates, and non-cash accounting items.\n\nInvestors care about EBITDA for several reasons:\n\n1. **Operational Performance**: It provides a clearer view of a company's operational efficiency and profitability by stripping out non-operational factors.\n\n2. **Comparability**: EBITDA allows for easier comparison between companies in the same industry, as it removes the effects of financing and accounting decisions.\n\n3. **Cash Flow Indicator**: While not a direct measure of cash flow, EBITDA is often used as a proxy for cash generated from operations, which is important for assessing a company's ability to meet its financial obligations.\n\n4. **Valuation**: Investors often use EBITDA in valuation multiples (like EV/EBITDA) to assess whether a company is overvalued or undervalued relative to its peers.\n\nOverall, EBITDA is a useful tool for investors to gauge a company's financial health and operational performance.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 228
+  }
+}

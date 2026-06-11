@@ -1,0 +1,8 @@
+{
+  "query": "What is the difference between systematic and idiosyncratic risk?",
+  "response": "Systematic risk refers to the inherent risk that affects the entire market or a broad segment of the market, such as economic downturns, interest rate changes, or geopolitical events. This type of risk cannot be eliminated through diversification.\n\nIdiosyncratic risk, on the other hand, is specific to a particular company or industry. It includes risks related to individual business operations, management decisions, or sector-specific events. Unlike systematic risk, idiosyncratic risk can be mitigated through diversification by holding a variety of investments.",
+  "usage": {
+    "prompt_tokens": 51,
+    "completion_tokens": 106
+  }
+}

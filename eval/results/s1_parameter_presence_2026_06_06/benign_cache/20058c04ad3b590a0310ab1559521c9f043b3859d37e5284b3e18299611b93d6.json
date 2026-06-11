@@ -1,0 +1,8 @@
+{
+  "query": "What is a stop-loss and why do traders use it?",
+  "response": "A stop-loss is a risk management tool used by traders to limit potential losses on a position. It is an order placed with a broker to sell a security when it reaches a certain price, known as the stop-loss price. \n\nTraders use stop-loss orders to:\n\n1. **Protect Capital**: By automatically selling a security at a predetermined price, traders can prevent further losses if the market moves against them.\n2. **Reduce Emotional Decision-Making**: Stop-loss orders help traders stick to their trading plan and avoid making impulsive decisions based on fear or greed.\n3. **Manage Risk**: They allow traders to define their risk tolerance and manage their overall portfolio risk effectively.\n\nOverall, stop-loss orders are a crucial part of a disciplined trading strategy.",
+  "usage": {
+    "prompt_tokens": 49,
+    "completion_tokens": 153
+  }
+}

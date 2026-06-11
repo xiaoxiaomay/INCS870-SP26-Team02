@@ -66,6 +66,19 @@ class SentinelEngine:
         # Track per-session salami tightening deltas
         self._session_salami_delta: Dict[str, float] = {}
 
+        # 7. S1 parameter-presence check (post-LLM, OR-parallel with cosine scan).
+        #    Default OFF for backward compatibility — only an explicit config
+        #    (parameter_presence_check.enabled) turns it on; existing eval paths
+        #    are unaffected. Does NOT modify scan_text; redaction is OR-combined.
+        self.s1_enabled = False
+        s1_cfg = self.cfg.get("parameter_presence_check", {}) or {}
+        if s1_cfg.get("enabled", False):
+            from scripts import parameter_presence as _s1mod
+            self._s1 = _s1mod
+            self._s1_frozen = _s1mod.load_frozen_literals()
+            self.s1_mode = str(s1_cfg.get("mode", "co_occurrence"))
+            self.s1_enabled = True
+
     def _db_retrieve(self, query_vec: np.ndarray, top_k: int = 5) -> List[Dict]:
         """从 PostgreSQL 执行向量检索，并返回标准化的文档格式"""
         if self.db_conn is None:
@@ -95,6 +108,50 @@ class SentinelEngine:
                 })
             # print(f"the results are : --------{results}")
             return results
+
+    def _apply_s1(self, raw_answer: str, leak_res: Dict[str, Any]) -> Dict[str, Any]:
+        """S1 OR-parallel post-LLM parameter-presence redaction.
+
+        Detection over the whole response via check_all (runtime does not know the
+        target secret); on trigger, OR-redact at sentence level on top of whatever
+        the cosine scan already redacted. scan_text is never modified. No-op unless
+        S1 is enabled. Returns the (possibly updated) leak_res.
+        """
+        if not self.s1_enabled:
+            return leak_res
+        s1 = self._s1.check_all(raw_answer, frozen=self._s1_frozen)
+        s1_hit = s1["hit_cooccurrence"] if self.s1_mode == "co_occurrence" else s1["hit_single"]
+        leak_res["summary"]["s1_enabled"] = True
+        leak_res["summary"]["s1_mode"] = self.s1_mode
+        leak_res["summary"]["s1_hit"] = bool(s1_hit)
+        leak_res["summary"]["s1_by_secret"] = s1["by_secret"]
+        if not s1_hit:
+            return leak_res
+        # Literals that justify the trigger (co-occurrence: only secrets with >=2).
+        if self.s1_mode == "co_occurrence":
+            lits = {l for m in s1["by_secret"].values() if len(m) >= 2 for l in m}
+        else:
+            lits = {l for m in s1["by_secret"].values() for l in m}
+        rows = leak_res.get("sentences") or []
+        out, s1_idx = [], []
+        for row in rows:
+            txt = row.get("text") or row.get("sentence") or ""
+            scan_redacted = row.get("decision") in {"redact", "block"}
+            norm = self._s1.normalize(txt)
+            s1_match = any(l in norm for l in lits)
+            if scan_redacted or s1_match:
+                out.append("[REDACTED]")
+                if s1_match and not scan_redacted:
+                    s1_idx.append(row.get("sent_index"))
+            else:
+                out.append(txt)
+        combined = " ".join(out).strip()
+        if not combined or combined.replace("[REDACTED]", "").strip() == "":
+            combined = "I do not have enough information."
+        leak_res["redacted_text"] = combined
+        leak_res["summary"]["leakage_flag"] = True
+        leak_res["summary"]["s1_redacted_sentence_indices"] = s1_idx
+        return leak_res
 
     def run_query(self, query: str) -> Dict[str, Any]:
         """主入口：执行完整的安全 RAG 管道"""
@@ -343,6 +400,7 @@ class SentinelEngine:
                 grounding_enabled=False,
                 grounding_scores=None, grounding_top_docs=None,
             )
+            leak_res = self._apply_s1(raw_answer, leak_res)  # S1 OR-parallel (no-op unless enabled)
 
             self.writer.append("leakage_scan", {
                 "session_id": session_id,
@@ -462,6 +520,7 @@ class SentinelEngine:
                 dfp_enabled=dfp_cfg.get("enabled", False), dfp_config=dfp_cfg,
                 grounding_scores=g_scores, grounding_top_docs=g_top_docs,
             )
+            leak_res = self._apply_s1(raw_answer, leak_res)  # S1 OR-parallel (no-op unless enabled)
 
             self.writer.append("leakage_scan", {
                 "session_id": session_id,

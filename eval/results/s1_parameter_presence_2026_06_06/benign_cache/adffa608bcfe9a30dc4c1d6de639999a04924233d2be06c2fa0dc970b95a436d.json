@@ -1,0 +1,8 @@
+{
+  "query": "What does the term 'alternative data' encompass in the modern systematic trading lexicon?",
+  "response": "In the context of modern systematic trading, 'alternative data' refers to non-traditional data sources that can provide insights and inform trading strategies. This can include a wide range of data types, such as:\n\n1. **Social Media Data**: Sentiment analysis from platforms like Twitter or Reddit.\n2. **Web Scraping Data**: Information gathered from websites, such as product prices or reviews.\n3. **Geolocation Data**: Movement patterns from mobile devices or foot traffic analytics.\n4. **Satellite Imagery**: Data on agricultural yields, shipping activity, or retail foot traffic.\n5. **Credit Card Transactions**: Consumer spending patterns and trends.\n6. **News and Media Analytics**: Coverage and sentiment from news articles and reports.\n7. **IoT Data**: Information from connected devices, such as energy consumption or vehicle usage.\n\nThese data sources are often used to gain a competitive edge by uncovering trends and signals that traditional financial metrics may not capture.",
+  "usage": {
+    "prompt_tokens": 54,
+    "completion_tokens": 197
+  }
+}

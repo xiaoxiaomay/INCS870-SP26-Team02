@@ -1,0 +1,8 @@
+{
+  "query": "How does GOOGL generate most of its revenue?",
+  "response": "GOOGL, or Alphabet Inc., primarily generates most of its revenue through advertising. The company operates various platforms, including Google Search, YouTube, and Google Display Network, where it sells ad placements. The majority of its revenue comes from Google Ads, which allows businesses to display ads to users based on their search queries and online behavior. Additionally, GOOGL earns revenue from cloud services, hardware sales, and other ventures, but advertising remains the dominant source.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 93
+  }
+}

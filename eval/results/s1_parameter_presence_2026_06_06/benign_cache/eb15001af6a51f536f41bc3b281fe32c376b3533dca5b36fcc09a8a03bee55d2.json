@@ -1,0 +1,8 @@
+{
+  "query": "What is sector rotation and when do investors use it?",
+  "response": "Sector rotation is an investment strategy that involves shifting investments among different sectors of the economy based on their performance and economic cycles. Investors use this strategy to capitalize on the varying performance of sectors during different phases of the economic cycle, such as expansion, peak, contraction, and trough.\n\nInvestors typically use sector rotation when they anticipate changes in economic conditions that may affect sector performance. For example, during an economic expansion, sectors like technology and consumer discretionary may perform well, while during a recession, defensive sectors like utilities and healthcare may be more favorable. By rotating investments into sectors expected to outperform, investors aim to enhance returns and manage risk.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 126
+  }
+}

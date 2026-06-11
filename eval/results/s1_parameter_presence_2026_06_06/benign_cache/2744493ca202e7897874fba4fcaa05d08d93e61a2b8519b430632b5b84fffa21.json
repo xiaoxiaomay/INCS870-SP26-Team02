@@ -1,0 +1,8 @@
+{
+  "query": "Many teams use feature importance drift monitors — is that a typical early warning signal before triggering full model retraining?",
+  "response": "Yes, feature importance drift monitors are commonly used as an early warning signal in machine learning workflows. They help identify changes in the significance of features over time, which may indicate that the model's performance could degrade. If significant drift is detected, it can prompt teams to investigate further and potentially trigger a full model retraining to ensure the model remains accurate and relevant. This proactive approach helps maintain model performance in dynamic environments.",
+  "usage": {
+    "prompt_tokens": 59,
+    "completion_tokens": 83
+  }
+}

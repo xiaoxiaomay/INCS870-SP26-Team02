@@ -1,0 +1,8 @@
+{
+  "query": "What is a dividend and how is it different from buybacks?",
+  "response": "A dividend is a payment made by a corporation to its shareholders, typically in the form of cash or additional shares, as a distribution of profits. Dividends are usually paid on a regular basis, such as quarterly or annually, and are often seen as a way for companies to return value to their investors.\n\nBuybacks, or share repurchases, occur when a company buys back its own shares from the marketplace. This reduces the number of outstanding shares, which can increase the value of remaining shares and improve financial metrics like earnings per share (EPS). Buybacks can be a way for companies to return capital to shareholders, but they do not provide immediate cash to investors like dividends do.\n\nIn summary, dividends provide direct cash or shares to shareholders, while buybacks reduce the number of shares in circulation, potentially increasing the value of remaining shares.",
+  "usage": {
+    "prompt_tokens": 50,
+    "completion_tokens": 168
+  }
+}

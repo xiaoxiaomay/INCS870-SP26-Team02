@@ -1,0 +1,8 @@
+{
+  "query": "How do analysts use DCF models to value companies?",
+  "response": "Analysts use Discounted Cash Flow (DCF) models to value companies by estimating the present value of expected future cash flows. The process typically involves the following steps:\n\n1. **Forecasting Cash Flows**: Analysts project the company's free cash flows (FCF) for a specific period, usually 5 to 10 years. This involves estimating revenues, expenses, taxes, and changes in working capital.\n\n2. **Calculating Terminal Value**: After the forecast period, analysts estimate the terminal value, which represents the value of the company beyond the forecast period. This can be done using the Gordon Growth Model or an exit multiple approach.\n\n3. **Discount Rate**: Analysts determine an appropriate discount rate, often using the Weighted Average Cost of Capital (WACC), which reflects the risk of the investment and the cost of capital.\n\n4. **Discounting Cash Flows**: The projected cash flows and terminal value are discounted back to their present value using the discount rate.\n\n5. **Summing Present Values**: The present values of the forecasted cash flows and the terminal value are summed to arrive at the total enterprise value of the company.\n\n6. **Adjusting for Debt and Cash**: Finally, analysts adjust the enterprise value by subtracting any outstanding debt and adding cash or cash equivalents to derive the equity value.\n\nThis DCF valuation provides a comprehensive view of a company's intrinsic value based on its expected future performance.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 288
+  }
+}

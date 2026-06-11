@@ -1,0 +1,8 @@
+{
+  "query": "What are Treasury Inflation-Protected Securities (TIPS)?",
+  "response": "Treasury Inflation-Protected Securities (TIPS) are U.S. government bonds designed to protect investors from inflation. The principal value of TIPS increases with inflation and decreases with deflation, as measured by the Consumer Price Index (CPI). Interest payments, or coupon payments, are made semiannually and are applied to the adjusted principal, meaning they can vary based on inflation changes. At maturity, investors receive either the original principal or the inflation-adjusted principal, whichever is higher. TIPS are considered a low-risk investment and are often used as a hedge against inflation.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 116
+  }
+}

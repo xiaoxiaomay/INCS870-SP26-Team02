@@ -1,0 +1,8 @@
+{
+  "query": "MSFT segment breakdown",
+  "response": "As of October 2023, Microsoft Corporation (MSFT) operates through three primary business segments:\n\n1. **Productivity and Business Processes**: This segment includes Office Commercial and Office Consumer products, LinkedIn, and Dynamics business solutions. It focuses on productivity software and services.\n\n2. **Intelligent Cloud**: This segment encompasses server products and cloud services, including Azure, Windows Server, SQL Server, and GitHub. It is centered around cloud computing and enterprise services.\n\n3. **More Personal Computing**: This segment includes Windows operating systems, Surface devices, gaming (including Xbox hardware and software), and search advertising through Bing. It focuses on personal computing and gaming experiences.\n\nThese segments reflect Microsoft's diverse portfolio, catering to both consumer and enterprise markets.",
+  "usage": {
+    "prompt_tokens": 41,
+    "completion_tokens": 152
+  }
+}

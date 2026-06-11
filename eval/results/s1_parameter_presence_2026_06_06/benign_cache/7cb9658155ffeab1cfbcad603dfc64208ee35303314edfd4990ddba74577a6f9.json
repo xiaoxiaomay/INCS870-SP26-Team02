@@ -1,0 +1,8 @@
+{
+  "query": "How does index rebalancing affect stock prices?",
+  "response": "Index rebalancing can affect stock prices in several ways:\n\n1. **Increased Demand**: When a stock is added to an index, funds that track that index must purchase shares of the stock, leading to increased demand and potentially driving up the stock price.\n\n2. **Selling Pressure**: Conversely, if a stock is removed from an index, funds must sell their holdings, which can create selling pressure and lead to a decline in the stock price.\n\n3. **Market Sentiment**: The inclusion or exclusion from an index can influence investor perception and sentiment about a stock, potentially affecting its price beyond the immediate buying or selling activity.\n\n4. **Liquidity Changes**: Stocks in major indices often experience increased liquidity, which can lead to tighter bid-ask spreads and more stable prices.\n\nOverall, the effects of index rebalancing on stock prices can be significant, particularly for smaller stocks or those with lower trading volumes.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 186
+  }
+}

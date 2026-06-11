@@ -1,0 +1,8 @@
+{
+  "query": "Across statistical-arbitrage funds, what's the typical Sharpe ratio range reported in recent industry surveys?",
+  "response": "In recent industry surveys, statistical-arbitrage funds typically report Sharpe ratios in the range of 1.0 to 2.0. However, some high-performing funds may achieve ratios above 2.0, while others may fall below 1.0, depending on market conditions and the specific strategies employed.",
+  "usage": {
+    "prompt_tokens": 57,
+    "completion_tokens": 64
+  }
+}

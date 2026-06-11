@@ -1,0 +1,8 @@
+{
+  "query": "What happens to bond prices when yields rise?",
+  "response": "When yields rise, bond prices typically fall. This inverse relationship occurs because as new bonds are issued with higher yields, existing bonds with lower yields become less attractive to investors. Consequently, the prices of existing bonds must decrease to offer a competitive yield relative to the new bonds.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 54
+  }
+}

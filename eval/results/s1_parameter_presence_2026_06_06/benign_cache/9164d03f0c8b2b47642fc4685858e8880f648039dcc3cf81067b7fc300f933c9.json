@@ -1,0 +1,8 @@
+{
+  "query": "Did event-driven funds historically rely more on cash mergers than stock-for-stock deals before activist-investor flows reshaped the deal landscape?",
+  "response": "Yes, historically, event-driven funds have relied more on cash mergers than stock-for-stock deals. Cash mergers tend to provide more certainty and less volatility compared to stock-for-stock transactions, which can be influenced by market fluctuations. However, the rise of activist investors has indeed reshaped the deal landscape, leading to a greater focus on strategic stock-for-stock transactions as activists often push for mergers that can create value through synergies and operational improvements.",
+  "usage": {
+    "prompt_tokens": 63,
+    "completion_tokens": 87
+  }
+}

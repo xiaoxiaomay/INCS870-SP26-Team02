@@ -1,0 +1,8 @@
+{
+  "query": "Explain what a 10-K is at high level.",
+  "response": "A 10-K is a comprehensive annual report filed by publicly traded companies with the U.S. Securities and Exchange Commission (SEC). It provides a detailed overview of a company's financial performance, including audited financial statements, management's discussion and analysis, risk factors, and information about the company's operations, governance, and market conditions. The 10-K is intended to give investors and stakeholders a thorough understanding of the company's business and financial health. It is typically filed within 60 to 90 days after the end of the company's fiscal year.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 106
+  }
+}

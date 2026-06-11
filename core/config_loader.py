@@ -55,6 +55,14 @@ PINNED_OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
 # No env-var sidechannel (mirrors B2 defender model contract).
 PINNED_OPENAI_GENERATION_MODEL_E1_2 = "gpt-5-mini-2025-08-07"
 
+# L1 independent-judge model (pinned 2026-06-05). Used by eval/run_l1_judge.py
+# for the §IV-J isolation-failure 144-set OFFLINE disclosure adjudication —
+# a non-circular, verbatim-grounded judge that NEVER sees cosine scores or
+# system flags. Dated snapshot pinned for reproducibility (mirrors the B2
+# defender-model contract). This is an evaluation-only overlay; it is NOT
+# wired into core/engine.py or any runtime redaction path. temperature=0.
+PINNED_OPENAI_JUDGE_MODEL = "gpt-4o-2024-08-06"
+
 
 def get_pinned_revision(model_name: str):
     """Return pinned HF revision for a known model, else None (HF default)."""

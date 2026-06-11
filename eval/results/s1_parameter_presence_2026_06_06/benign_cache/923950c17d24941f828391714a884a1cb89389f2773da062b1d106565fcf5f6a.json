@@ -1,0 +1,8 @@
+{
+  "query": "What is return on equity (ROE) and why does it matter?",
+  "response": "Return on Equity (ROE) is a financial metric that measures a company's profitability in relation to shareholders' equity. It is calculated by dividing net income by average shareholders' equity, expressed as a percentage:\n\n\\[ \\text{ROE} = \\left( \\frac{\\text{Net Income}}{\\text{Average Shareholders' Equity}} \\right) \\times 100 \\]\n\nROE matters because it indicates how effectively a company is using shareholders' funds to generate profits. A higher ROE suggests that the company is efficient in converting equity investments into profit, which can attract investors and signal strong financial health. It is also useful for comparing the profitability of companies within the same industry.",
+  "usage": {
+    "prompt_tokens": 52,
+    "completion_tokens": 139
+  }
+}

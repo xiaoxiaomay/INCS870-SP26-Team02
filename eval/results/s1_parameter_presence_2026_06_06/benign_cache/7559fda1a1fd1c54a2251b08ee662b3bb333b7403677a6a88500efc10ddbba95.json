@@ -1,0 +1,8 @@
+{
+  "query": "What are the main components of GDP?",
+  "response": "The main components of Gross Domestic Product (GDP) are:\n\n1. **Consumption (C)**: This includes all private expenditures by households and non-profit institutions on goods and services.\n\n2. **Investment (I)**: This encompasses business investments in equipment and structures, residential construction, and changes in business inventories.\n\n3. **Government Spending (G)**: This includes government expenditures on goods and services that government consumes for providing public services, as well as government investment on infrastructure.\n\n4. **Net Exports (NX)**: This is calculated as exports minus imports. It reflects the value of goods and services produced domestically and sold abroad, minus those produced abroad and sold domestically.\n\nThe formula for GDP can be summarized as: **GDP = C + I + G + (X - M)**, where X represents exports and M represents imports.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 170
+  }
+}

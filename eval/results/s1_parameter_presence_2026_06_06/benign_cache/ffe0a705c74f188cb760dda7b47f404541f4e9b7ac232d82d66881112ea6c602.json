@@ -1,0 +1,8 @@
+{
+  "query": "Explain the efficient market hypothesis and its forms.",
+  "response": "The Efficient Market Hypothesis (EMH) is a financial theory that asserts that asset prices fully reflect all available information at any given time. This means that it is impossible to consistently achieve higher returns than the average market return on a risk-adjusted basis, as any new information is quickly incorporated into stock prices.\n\nEMH is categorized into three forms:\n\n1. **Weak Form**: This form suggests that all past trading information is already reflected in stock prices. Therefore, technical analysis, which relies on historical price and volume data, cannot consistently predict future price movements.\n\n2. **Semi-Strong Form**: This form posits that all publicly available information, including financial statements, news releases, and economic data, is reflected in stock prices. As a result, neither fundamental analysis nor technical analysis can provide an advantage in predicting stock price movements.\n\n3. **Strong Form**: This form asserts that all information, both public and private (insider information), is reflected in stock prices. Under this hypothesis, even insider trading cannot yield consistent excess returns, as all information is already accounted for in the market prices.\n\nOverall, the EMH suggests that markets are efficient, and investors cannot consistently outperform the market through any form of analysis.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 247
+  }
+}

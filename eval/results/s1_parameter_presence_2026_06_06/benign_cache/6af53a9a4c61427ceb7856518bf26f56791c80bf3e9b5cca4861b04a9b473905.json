@@ -1,0 +1,8 @@
+{
+  "query": "How do you read a company's cash flow statement?",
+  "response": "A cash flow statement is divided into three main sections: \n\n1. **Operating Activities**: This section shows cash generated or used in the core business operations. It includes cash receipts from sales and cash payments for operating expenses. Key components include net income, adjustments for non-cash items (like depreciation), and changes in working capital (like accounts receivable and inventory).\n\n2. **Investing Activities**: This section reflects cash flows related to the acquisition and disposal of long-term assets, such as property, equipment, and investments. Cash outflows for purchasing assets and inflows from selling them are recorded here.\n\n3. **Financing Activities**: This section details cash flows from transactions with the company’s owners and creditors. It includes cash received from issuing stock or debt and cash paid for dividends or repaying debt.\n\nTo analyze a cash flow statement, look for trends in cash flow from operating activities, assess the company's ability to generate cash, and evaluate how it funds its investments and manages its financing. Positive cash flow from operations is generally a good sign, while consistent negative cash flow may indicate financial trouble.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 223
+  }
+}

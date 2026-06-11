@@ -1,0 +1,8 @@
+{
+  "query": "What's the average gross leverage reported by US-based market-neutral equity hedge funds in the 2024 reporting cycle?",
+  "response": "As of my last knowledge update in October 2023, specific data for the average gross leverage reported by US-based market-neutral equity hedge funds in the 2024 reporting cycle is not available. Typically, gross leverage for these funds can vary widely based on market conditions and individual fund strategies. For the most accurate and up-to-date figures, it is advisable to consult industry reports from financial research firms or hedge fund databases that track these metrics.",
+  "usage": {
+    "prompt_tokens": 59,
+    "completion_tokens": 88
+  }
+}

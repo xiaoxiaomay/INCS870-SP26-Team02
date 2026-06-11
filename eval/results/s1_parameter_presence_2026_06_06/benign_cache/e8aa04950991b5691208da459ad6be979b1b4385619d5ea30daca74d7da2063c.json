@@ -1,0 +1,8 @@
+{
+  "query": "What fraction of surveys report that momentum signals are risk-managed with volatility scaling rather than fixed position sizes among systematic managers?",
+  "response": "While specific survey results can vary, it is generally reported that a significant portion of systematic managers utilize volatility scaling for risk management in momentum strategies. According to various industry surveys, around 60-70% of systematic managers may employ volatility scaling rather than fixed position sizes. However, for precise figures, it is advisable to refer to the latest industry reports or surveys from financial research firms.",
+  "usage": {
+    "prompt_tokens": 60,
+    "completion_tokens": 76
+  }
+}

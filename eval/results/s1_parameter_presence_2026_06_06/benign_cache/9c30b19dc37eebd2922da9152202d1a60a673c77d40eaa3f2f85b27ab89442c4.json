@@ -1,0 +1,8 @@
+{
+  "query": "Explain the concept of operating leverage.",
+  "response": "Operating leverage refers to the degree to which a company can increase its operating income by increasing revenue. It is a financial concept that measures the proportion of fixed costs in a company's cost structure. \n\nWhen a company has high operating leverage, a small change in sales can lead to a larger change in operating income (EBIT). This is because fixed costs remain constant regardless of sales volume, so as sales increase, the fixed costs are spread over a larger number of units, enhancing profitability.\n\nConversely, high operating leverage also means that if sales decline, the impact on operating income can be significant, potentially leading to losses. Companies with high operating leverage typically have higher risk but also the potential for higher returns when sales are strong. \n\nOperating leverage can be quantified using the degree of operating leverage (DOL) formula, which is calculated at a certain level of sales.",
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 172
+  }
+}

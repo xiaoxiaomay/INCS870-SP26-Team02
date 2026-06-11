@@ -1,0 +1,8 @@
+{
+  "query": "In the era of early quant funds, did cointegration-based pairs approaches dominate statistical-arbitrage research before multi-factor neutralization practices emerged?",
+  "response": "Yes, in the early days of quantitative funds, cointegration-based pairs trading strategies were prominent in statistical arbitrage research. These strategies focused on identifying pairs of assets that moved together over time, allowing traders to exploit temporary divergences in their prices. However, as the field evolved, multi-factor models and neutralization practices gained traction. These approaches aimed to account for various risk factors and reduce exposure to systematic risks, leading to more robust and diversified trading strategies. Thus, while cointegration-based methods were foundational, the emergence of multi-factor approaches marked a significant evolution in quantitative finance.",
+  "usage": {
+    "prompt_tokens": 65,
+    "completion_tokens": 115
+  }
+}

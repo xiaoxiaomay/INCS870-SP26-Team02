@@ -1,0 +1,8 @@
+{
+  "query": "How does beta measure systematic risk?",
+  "response": "Beta measures systematic risk by quantifying the sensitivity of a security's returns to the overall market's returns. It indicates how much the price of a security is expected to move in relation to market movements. \n\n- A beta of 1 means the security's price moves with the market.\n- A beta greater than 1 indicates higher volatility than the market (more risk).\n- A beta less than 1 indicates lower volatility than the market (less risk).\n\nInvestors use beta to assess the risk associated with a security relative to the market, helping them make informed investment decisions.",
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 115
+  }
+}

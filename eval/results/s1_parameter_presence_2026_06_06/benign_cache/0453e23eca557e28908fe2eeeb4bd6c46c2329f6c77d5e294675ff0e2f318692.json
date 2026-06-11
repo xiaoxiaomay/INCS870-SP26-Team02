@@ -1,0 +1,8 @@
+{
+  "query": "What is a hedge fund and how does it differ from traditional asset management?",
+  "response": "A hedge fund is an investment vehicle that pools capital from accredited investors and institutional investors to invest in a variety of assets, often employing complex strategies, including leverage, short selling, and derivatives, to achieve high returns. Hedge funds typically have more flexibility in their investment strategies compared to traditional asset management.\n\nThe key differences between hedge funds and traditional asset management include:\n\n1. **Investment Strategies**: Hedge funds can use a wider range of strategies, including short selling and derivatives, while traditional asset managers usually focus on long-only equity and fixed-income investments.\n\n2. **Investor Base**: Hedge funds generally cater to accredited investors and institutions, while traditional asset management firms often serve a broader range of clients, including retail investors.\n\n3. **Liquidity**: Hedge funds may have lock-up periods and less frequent redemption opportunities, whereas traditional mutual funds typically offer daily liquidity.\n\n4. **Fee Structure**: Hedge funds often charge higher fees, including a management fee and a performance fee (commonly \"2 and 20\"), while traditional asset managers usually charge a flat management fee.\n\n5. **Regulation**: Hedge funds are less regulated than traditional mutual funds, allowing for more flexibility in their operations and investment choices.",
+  "usage": {
+    "prompt_tokens": 52,
+    "completion_tokens": 241
+  }
+}

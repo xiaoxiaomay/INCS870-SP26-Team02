@@ -1,0 +1,8 @@
+{
+  "query": "Were market-neutral hedge funds historically agnostic to value-vs-growth tilts, or did they actively hedge those style exposures?",
+  "response": "Historically, market-neutral hedge funds have aimed to be agnostic to value versus growth tilts by employing strategies that seek to eliminate systematic risk and focus on relative value opportunities. These funds typically use long/short equity strategies, where they take long positions in undervalued stocks and short positions in overvalued stocks, regardless of whether those stocks are classified as value or growth. \n\nHowever, some market-neutral funds may actively hedge style exposures if they believe that certain market conditions favor one style over the other. Overall, the degree of style exposure management can vary by fund and strategy, but the general goal is to maintain a neutral stance to market movements and style biases.",
+  "usage": {
+    "prompt_tokens": 62,
+    "completion_tokens": 134
+  }
+}

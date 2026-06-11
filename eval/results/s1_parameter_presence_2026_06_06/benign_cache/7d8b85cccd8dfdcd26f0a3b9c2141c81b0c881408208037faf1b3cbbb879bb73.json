@@ -1,0 +1,8 @@
+{
+  "query": "What are META's main advertising revenue drivers?",
+  "response": "META's main advertising revenue drivers include:\n\n1. **User Engagement**: High levels of user engagement on platforms like Facebook and Instagram lead to more ad impressions and clicks.\n\n2. **Targeted Advertising**: META utilizes extensive user data to offer highly targeted advertising options, allowing advertisers to reach specific demographics and interests.\n\n3. **Ad Formats**: A variety of ad formats, including video ads, stories, and carousel ads, provide advertisers with multiple ways to engage users.\n\n4. **E-commerce Integration**: Features like shoppable posts and ads enhance the ability for businesses to drive sales directly through the platform.\n\n5. **Mobile Advertising**: A significant portion of META's ad revenue comes from mobile devices, capitalizing on the growing trend of mobile internet usage.\n\n6. **Advertising Tools and Analytics**: META provides robust tools for advertisers to track performance and optimize campaigns, which can lead to higher ad spending.\n\nThese factors collectively contribute to META's strong advertising revenue performance.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 196
+  }
+}

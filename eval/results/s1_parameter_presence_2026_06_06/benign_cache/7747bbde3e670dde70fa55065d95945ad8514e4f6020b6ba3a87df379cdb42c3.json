@@ -1,0 +1,8 @@
+{
+  "query": "What is enterprise value and how is it calculated?",
+  "response": "Enterprise value (EV) is a measure of a company's total value, often used as a comprehensive alternative to market capitalization. It reflects the market value of a business, taking into account not just its equity but also its debt and cash reserves.\n\nThe formula to calculate enterprise value is:\n\n\\[ \\text{EV} = \\text{Market Capitalization} + \\text{Total Debt} - \\text{Cash and Cash Equivalents} \\]\n\nWhere:\n- **Market Capitalization** is the total market value of a company's outstanding shares.\n- **Total Debt** includes both short-term and long-term debt.\n- **Cash and Cash Equivalents** are liquid assets that can be quickly converted to cash.\n\nThis calculation provides a clearer picture of a company's value, especially when comparing firms with different capital structures.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 163
+  }
+}

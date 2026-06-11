@@ -1,0 +1,8 @@
+{
+  "query": "What's a common approach to adjusting position size when momentum fades but short-term RSI remains in overbought territory across multi-horizon strategies?",
+  "response": "A common approach to adjusting position size when momentum fades but the short-term Relative Strength Index (RSI) remains in overbought territory is to implement a risk management strategy that includes the following steps:\n\n1. **Reduce Position Size**: Decrease the size of your position to mitigate risk, especially if the momentum indicators suggest a potential reversal.\n\n2. **Trailing Stop Loss**: Use a trailing stop loss to lock in profits while allowing for some flexibility in case the momentum resumes.\n\n3. **Diversification**: Consider reallocating some capital to other assets or strategies that may not be in overbought territory, thereby spreading risk.\n\n4. **Time Horizon Adjustment**: Shift focus to longer-term indicators or strategies that may provide a clearer picture of the asset's potential, rather than relying solely on short-term RSI.\n\n5. **Monitor Volume**: Pay attention to trading volume; a decrease in volume alongside fading momentum can signal a weakening trend, warranting further position size reduction.\n\n6. **Technical Analysis**: Use additional technical indicators (e.g., moving averages, MACD) to confirm signals before making adjustments to position size.\n\nBy combining these strategies, you can better manage risk while navigating the complexities of market momentum and overbought conditions.",
+  "usage": {
+    "prompt_tokens": 64,
+    "completion_tokens": 252
+  }
+}

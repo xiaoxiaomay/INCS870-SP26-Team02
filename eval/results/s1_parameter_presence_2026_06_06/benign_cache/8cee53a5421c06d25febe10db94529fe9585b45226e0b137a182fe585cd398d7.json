@@ -1,0 +1,8 @@
+{
+  "query": "Explain the yield curve and what an inversion signals.",
+  "response": "The yield curve is a graphical representation that shows the relationship between interest rates (or yields) of bonds with different maturities, typically government bonds. It usually slopes upward, indicating that longer-term bonds have higher yields than shorter-term ones, reflecting the risks associated with time, such as inflation and uncertainty.\n\nAn inverted yield curve occurs when short-term interest rates are higher than long-term rates. This inversion is often viewed as a signal of an impending economic recession. It suggests that investors expect slower economic growth or lower inflation in the future, leading them to seek the safety of long-term bonds, which drives their yields down. Historically, an inverted yield curve has preceded many recessions, making it a closely watched economic indicator.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 143
+  }
+}

@@ -37,8 +37,8 @@ db:
   port : 5432
 
 paths:
-  secret_index: "data/index/secrets.faiss"
-  secret_meta:  "data/index/secrets_meta.pkl"
+  secret_index: "data/index/secrets_v2.faiss"
+  secret_meta:  "data/index/secrets_v2_meta.pkl"
   docs_dir : "datasource/docs" # internal documents
 
 rag:
@@ -327,6 +327,16 @@ leakage:
   cascade_k: 2
   action: "redact"
   top_k_secrets: 1
+
+# -------------------------
+# S1: Hybrid parameter-presence check (post-LLM, OR-parallel with leakage scan)
+# Literal hard-match of proprietary numeric conditions; redact on (cosine scan) OR (S1).
+# Default OFF — only an explicit enable turns it on; does not affect existing eval paths.
+# mode: "co_occurrence" (>=2 strong literals of same secret) | "single_hit"
+# -------------------------
+parameter_presence_check:
+  enabled: false
+  mode: "co_occurrence"
 
 # -------------------------
 # Digital Fingerprinting (DFP)

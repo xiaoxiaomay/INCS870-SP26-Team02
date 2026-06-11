@@ -1,0 +1,8 @@
+{
+  "query": "Explain the difference between technical and fundamental analysis.",
+  "response": "Technical analysis and fundamental analysis are two distinct approaches used to evaluate securities and make investment decisions.\n\n1. **Technical Analysis**: This method focuses on analyzing historical price movements and trading volumes through charts and technical indicators. Technical analysts believe that past price patterns can predict future price movements. They often use tools like moving averages, trend lines, and various oscillators to identify trends and potential entry or exit points.\n\n2. **Fundamental Analysis**: This approach involves evaluating a company's financial health and intrinsic value by examining its financial statements, management, industry position, and economic factors. Fundamental analysts look at metrics such as earnings, revenue, profit margins, and economic indicators to determine whether a stock is undervalued or overvalued relative to its true worth.\n\nIn summary, technical analysis is primarily concerned with price movements and market trends, while fundamental analysis focuses on the underlying financial health and value of a company.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 180
+  }
+}

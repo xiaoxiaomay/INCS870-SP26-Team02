@@ -1,0 +1,8 @@
+{
+  "query": "What is alpha in portfolio management?",
+  "response": "Alpha in portfolio management is a measure of an investment's performance relative to a benchmark index. It represents the excess return that a portfolio or investment generates compared to the expected return based on its risk level, as indicated by its beta. A positive alpha indicates that the investment has outperformed the benchmark, while a negative alpha suggests underperformance. Alpha is often used by investors to assess the skill of a portfolio manager in generating returns beyond what would be expected given the level of risk taken.",
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 96
+  }
+}

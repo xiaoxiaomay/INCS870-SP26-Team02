@@ -1,0 +1,8 @@
+{
+  "query": "How do pharmaceutical companies typically generate revenue?",
+  "response": "Pharmaceutical companies typically generate revenue through several key channels:\n\n1. **Prescription Drug Sales**: The primary source of revenue comes from the sale of prescription medications to healthcare providers, hospitals, and pharmacies.\n\n2. **Over-the-Counter (OTC) Products**: Some companies also sell non-prescription medications directly to consumers.\n\n3. **Licensing and Royalties**: Pharmaceutical companies may license their drugs or technologies to other companies, receiving upfront payments and ongoing royalties.\n\n4. **Research and Development (R&D) Partnerships**: Collaborations with other firms or research institutions can lead to shared development costs and revenue from successful products.\n\n5. **Generic Drug Sales**: Some companies produce generic versions of branded drugs after patents expire, generating revenue from lower-cost alternatives.\n\n6. **Biologics and Specialty Drugs**: These often have higher price points and can contribute significantly to revenue, especially in areas like oncology and rare diseases.\n\n7. **Government Contracts and Grants**: Some companies receive funding from government entities for research or to supply medications for public health initiatives.\n\n8. **International Sales**: Expanding into global markets can provide additional revenue streams, especially in emerging markets.\n\nOverall, the combination of these revenue streams allows pharmaceutical companies to sustain their operations and invest in future drug development.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 260
+  }
+}

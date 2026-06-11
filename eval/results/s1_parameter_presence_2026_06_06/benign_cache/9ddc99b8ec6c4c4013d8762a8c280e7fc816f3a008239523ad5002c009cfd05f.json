@@ -1,0 +1,8 @@
+{
+  "query": "How does the consumer price index (CPI) work?",
+  "response": "The Consumer Price Index (CPI) measures the average change over time in the prices paid by urban consumers for a market basket of consumer goods and services. Here's how it works:\n\n1. **Basket of Goods**: The CPI is based on a representative sample of goods and services, which includes categories like food, housing, clothing, transportation, and medical care.\n\n2. **Data Collection**: Prices for these items are collected regularly from various locations and retailers across the country.\n\n3. **Weighting**: Each item in the basket is assigned a weight based on its importance in the average consumer's spending. More commonly purchased items have a higher weight.\n\n4. **Calculation**: The CPI is calculated by comparing the current cost of the basket to the cost in a base year. The formula is:\n   \\[\n   \\text{CPI} = \\left( \\frac{\\text{Cost of Basket in Current Year}}{\\text{Cost of Basket in Base Year}} \\right) \\times 100\n   \\]\n\n5. **Inflation Measurement**: Changes in the CPI over time indicate inflation or deflation. A rising CPI suggests that prices are increasing, while a falling CPI indicates decreasing prices.\n\n6. **Economic Indicator**: The CPI is widely used by policymakers, economists, and analysts to assess price stability, guide monetary policy, and adjust income payments (like Social Security) for inflation.\n\nOverall, the CPI serves as a key indicator of the cost of living and economic health.",
+  "usage": {
+    "prompt_tokens": 49,
+    "completion_tokens": 304
+  }
+}

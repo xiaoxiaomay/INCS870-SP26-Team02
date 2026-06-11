@@ -1,0 +1,8 @@
+{
+  "query": "Explain SEC filing requirements for public companies.",
+  "response": "Public companies in the United States are required to file various forms with the Securities and Exchange Commission (SEC) to ensure transparency and protect investors. Key filing requirements include:\n\n1. **Form 10-K**: An annual report that provides a comprehensive overview of the company's financial performance, including audited financial statements, management discussion, and risk factors.\n\n2. **Form 10-Q**: A quarterly report that includes unaudited financial statements and provides updates on the company's financial condition and operations.\n\n3. **Form 8-K**: A current report used to disclose significant events or changes that may be of interest to shareholders, such as mergers, acquisitions, or changes in executive leadership.\n\n4. **Proxy Statements (DEF 14A)**: Filed before shareholder meetings, these documents provide information on matters to be voted on, including executive compensation and board member elections.\n\n5. **Form S-1**: Used for registering new securities with the SEC, typically in connection with an initial public offering (IPO).\n\n6. **Form S-3**: A simplified registration form for companies that meet certain criteria, allowing them to offer securities more easily.\n\n7. **Form 4**: Filed by insiders (executives and directors) to report their transactions in the company's stock.\n\nThese filings must adhere to specific deadlines and are made available to the public through the SEC's EDGAR database. Compliance with these requirements is crucial for maintaining investor trust and market integrity.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 292
+  }
+}

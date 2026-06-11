@@ -1,0 +1,8 @@
+{
+  "query": "Were statistical-arbitrage programs historically calibrated with simple half-life and spread thresholds prior to adoption of large-scale cross-sectional factor neutralization?",
+  "response": "Yes, historically, statistical arbitrage programs often utilized simple half-life and spread thresholds for calibration. These methods focused on mean reversion strategies, where traders would identify price discrepancies based on historical price relationships. The half-life refers to the time it takes for a price spread to revert to its mean, while spread thresholds determine the entry and exit points for trades. \n\nAs the field evolved, many firms adopted more sophisticated techniques, including large-scale cross-sectional factor neutralization, to enhance performance and reduce risk by accounting for multiple factors simultaneously. This shift allowed for more robust strategies that could adapt to changing market conditions.",
+  "usage": {
+    "prompt_tokens": 64,
+    "completion_tokens": 121
+  }
+}

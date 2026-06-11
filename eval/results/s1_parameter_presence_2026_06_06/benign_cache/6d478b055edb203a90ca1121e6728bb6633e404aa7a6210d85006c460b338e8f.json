@@ -1,0 +1,8 @@
+{
+  "query": "What lookback windows are standard for cointegration-based pairs trading in US equity markets?",
+  "response": "In cointegration-based pairs trading, standard lookback windows typically range from 30 to 120 days. A common practice is to use a 60-day lookback period for estimating the cointegration relationship between pairs of stocks. However, the optimal lookback window can vary based on the specific characteristics of the stocks being analyzed and market conditions. It's important to backtest different windows to determine the most effective one for a given strategy.",
+  "usage": {
+    "prompt_tokens": 54,
+    "completion_tokens": 86
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What is quantitative easing and how does it work?",
+  "response": "Quantitative easing (QE) is a monetary policy used by central banks to stimulate the economy when traditional monetary policy tools, like lowering interest rates, become ineffective, typically during periods of low inflation or economic downturns.\n\nHere's how it works:\n\n1. **Asset Purchases**: The central bank buys financial assets, such as government bonds and mortgage-backed securities, from the market. This increases the money supply in the economy.\n\n2. **Lower Interest Rates**: By purchasing these assets, the central bank increases their prices, which lowers their yields (interest rates). Lower yields on bonds lead to lower interest rates across the economy, making borrowing cheaper.\n\n3. **Encouraging Lending and Investment**: With lower interest rates, banks are incentivized to lend more, and businesses and consumers are more likely to borrow and spend, stimulating economic activity.\n\n4. **Wealth Effect**: As asset prices rise due to increased demand from the central bank's purchases, individuals and businesses may feel wealthier, leading to increased spending.\n\n5. **Inflation Targeting**: QE aims to raise inflation to a target level, as higher inflation can help reduce the real burden of debt and encourage spending.\n\nOverall, QE is intended to support economic growth and stabilize financial markets during periods of economic distress.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 259
+  }
+}

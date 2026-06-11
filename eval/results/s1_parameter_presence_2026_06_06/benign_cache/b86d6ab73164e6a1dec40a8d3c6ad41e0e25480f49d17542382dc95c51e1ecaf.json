@@ -1,0 +1,8 @@
+{
+  "query": "Explain modern portfolio theory in simple terms.",
+  "response": "Modern Portfolio Theory (MPT) is an investment theory that helps investors create a portfolio of assets that maximizes returns for a given level of risk. Here are the key points in simple terms:\n\n1. **Diversification**: MPT emphasizes the importance of diversifying investments across different assets (like stocks, bonds, and real estate) to reduce risk. By spreading investments, the negative performance of one asset can be offset by the positive performance of others.\n\n2. **Risk and Return**: MPT suggests that there is a trade-off between risk and return. Generally, higher potential returns come with higher risk. Investors need to find a balance that aligns with their risk tolerance.\n\n3. **Efficient Frontier**: MPT introduces the concept of the \"efficient frontier,\" which is a curve that represents the best possible return for a given level of risk. Portfolios on this curve are considered optimal.\n\n4. **Expected Returns**: Investors use historical data to estimate the expected returns of different assets and their correlations with each other to build an efficient portfolio.\n\nIn summary, MPT provides a framework for investors to make informed decisions about how to allocate their assets to achieve the best possible returns while managing risk.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 243
+  }
+}

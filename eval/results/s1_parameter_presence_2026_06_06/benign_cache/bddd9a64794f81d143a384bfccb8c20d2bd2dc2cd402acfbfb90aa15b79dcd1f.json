@@ -1,0 +1,8 @@
+{
+  "query": "Explain the concept of dollar-cost averaging.",
+  "response": "Dollar-cost averaging is an investment strategy where an investor consistently invests a fixed amount of money into a particular asset or portfolio at regular intervals, regardless of the asset's price. This approach helps to reduce the impact of market volatility, as it allows the investor to buy more shares when prices are low and fewer shares when prices are high. Over time, this can lead to a lower average cost per share, potentially enhancing long-term returns. It is often used in retirement accounts and mutual fund investments.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 98
+  }
+}

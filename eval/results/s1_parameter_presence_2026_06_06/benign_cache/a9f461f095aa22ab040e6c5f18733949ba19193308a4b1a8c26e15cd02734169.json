@@ -1,0 +1,8 @@
+{
+  "query": "How do ESG factors influence investment decisions?",
+  "response": "ESG factors—Environmental, Social, and Governance—influence investment decisions by providing a framework for assessing the sustainability and ethical impact of an investment. Investors consider these factors for several reasons:\n\n1. **Risk Management**: Companies with strong ESG practices may be less exposed to regulatory fines, reputational damage, and operational disruptions, which can mitigate investment risks.\n\n2. **Performance Potential**: Research suggests that companies with robust ESG practices can outperform their peers in the long term, as they may be better positioned to adapt to changing market conditions and consumer preferences.\n\n3. **Investor Demand**: There is a growing demand from institutional and retail investors for sustainable investment options, leading funds to incorporate ESG criteria to attract capital.\n\n4. **Regulatory Compliance**: Increasing regulations around sustainability and corporate governance compel investors to consider ESG factors to ensure compliance and avoid potential liabilities.\n\n5. **Long-term Value Creation**: ESG factors can indicate a company's commitment to sustainable practices, which can lead to long-term value creation and resilience against market volatility.\n\nOverall, integrating ESG factors into investment analysis helps investors align their portfolios with their values and long-term financial goals.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 229
+  }
+}

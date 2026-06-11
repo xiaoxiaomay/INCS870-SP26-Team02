@@ -1,0 +1,8 @@
+{
+  "query": "How do convertible bonds work?",
+  "response": "Convertible bonds are a type of hybrid security that combines features of both debt and equity. Here’s how they work:\n\n1. **Debt Instrument**: Convertible bonds are issued by companies as a form of debt. Investors lend money to the issuer in exchange for periodic interest payments (coupons) and the return of the principal at maturity.\n\n2. **Conversion Feature**: The key feature of convertible bonds is that they can be converted into a predetermined number of the company's shares at specific times during the bond's life. This conversion ratio is set at the time of issuance.\n\n3. **Interest Payments**: While the bond is held, investors receive regular interest payments, which are typically lower than those of non-convertible bonds due to the added value of the conversion option.\n\n4. **Conversion Price**: The conversion price is the price at which the bond can be converted into shares. If the company's stock price rises above this price, bondholders may choose to convert their bonds into equity, potentially benefiting from capital appreciation.\n\n5. **Maturity**: If the bond is not converted before maturity, the issuer repays the principal amount to the bondholders.\n\n6. **Risk and Reward**: Convertible bonds offer investors the potential for capital gains if the company's stock performs well, while also providing downside protection through fixed interest payments.\n\nOverall, convertible bonds provide a way for investors to participate in the equity upside of a company while still receiving fixed income.",
+  "usage": {
+    "prompt_tokens": 43,
+    "completion_tokens": 291
+  }
+}

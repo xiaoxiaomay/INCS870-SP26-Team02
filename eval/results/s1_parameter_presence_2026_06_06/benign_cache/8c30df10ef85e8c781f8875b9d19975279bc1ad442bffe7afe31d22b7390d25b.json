@@ -1,0 +1,8 @@
+{
+  "query": "What categories of alternative data are most commonly adopted by mid-sized systematic funds today?",
+  "response": "Mid-sized systematic funds commonly adopt several categories of alternative data, including:\n\n1. **Market Data**: This includes non-traditional market signals such as order book data, transaction data, and sentiment analysis from social media.\n\n2. **Geolocation Data**: Data derived from mobile devices to track foot traffic patterns, which can provide insights into consumer behavior and retail performance.\n\n3. **Web Scraping Data**: Information gathered from websites, including pricing data, product availability, and consumer reviews.\n\n4. **Satellite Imagery**: Used for tracking agricultural yields, monitoring shipping activity, and assessing economic activity in various sectors.\n\n5. **Credit Card Transaction Data**: Insights into consumer spending habits and trends across different sectors.\n\n6. **News and Sentiment Analysis**: Data derived from news articles, press releases, and social media to gauge market sentiment and potential impacts on stock prices.\n\n7. **Supply Chain Data**: Information on logistics, shipping, and inventory levels that can indicate economic trends and company performance.\n\nThese categories help funds enhance their investment strategies and improve decision-making processes.",
+  "usage": {
+    "prompt_tokens": 53,
+    "completion_tokens": 218
+  }
+}

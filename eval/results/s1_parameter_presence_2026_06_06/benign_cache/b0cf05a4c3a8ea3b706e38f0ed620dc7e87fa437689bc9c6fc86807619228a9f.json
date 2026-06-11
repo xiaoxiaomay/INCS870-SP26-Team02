@@ -1,0 +1,8 @@
+{
+  "query": "What is the Black-Scholes model used for?",
+  "response": "The Black-Scholes model is used for pricing European-style options. It provides a mathematical formula to calculate the theoretical price of options based on factors such as the underlying asset's price, the strike price, time to expiration, risk-free interest rate, and the asset's volatility. The model helps traders and investors assess the fair value of options and make informed trading decisions.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 73
+  }
+}

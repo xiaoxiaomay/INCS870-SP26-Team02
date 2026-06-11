@@ -1,0 +1,8 @@
+{
+  "query": "According to AIMA or PivotalPath industry surveys, what fraction of quant hedge funds have integrated machine-learning models into core alpha generation?",
+  "response": "As of my last knowledge update in October 2023, specific survey results from AIMA or PivotalPath regarding the fraction of quant hedge funds that have integrated machine-learning models into core alpha generation were not publicly available. However, it is widely recognized that a significant number of quant hedge funds are increasingly adopting machine learning techniques as part of their investment strategies. For the most accurate and up-to-date statistics, I recommend checking the latest reports directly from AIMA or PivotalPath.",
+  "usage": {
+    "prompt_tokens": 65,
+    "completion_tokens": 98
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What are the key provisions of Dodd-Frank that affect banks?",
+  "response": "The Dodd-Frank Wall Street Reform and Consumer Protection Act, enacted in 2010, introduced several key provisions that affect banks, including:\n\n1. **Volcker Rule**: Prohibits banks from engaging in proprietary trading and limits their investments in hedge funds and private equity funds to reduce risk.\n\n2. **Capital Requirements**: Established stricter capital requirements for banks to ensure they maintain sufficient capital reserves to absorb losses.\n\n3. **Stress Testing**: Requires large banks to undergo annual stress tests to assess their ability to withstand economic downturns.\n\n4. **Consumer Financial Protection Bureau (CFPB)**: Created the CFPB to oversee consumer financial products and protect consumers from unfair practices.\n\n5. **Orderly Liquidation Authority**: Provides a framework for the orderly liquidation of failing financial institutions to prevent systemic risk.\n\n6. **Derivatives Regulation**: Increased regulation of derivatives markets, requiring many derivatives to be traded on exchanges and cleared through central counterparties.\n\n7. **Enhanced Reporting Requirements**: Imposed more stringent reporting and disclosure requirements for banks to improve transparency.\n\nThese provisions aim to increase financial stability, protect consumers, and reduce the risk of future financial crises.",
+  "usage": {
+    "prompt_tokens": 51,
+    "completion_tokens": 236
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "Did quant shops used to focus on isolated pair-level cointegration signals rather than constructing diversified, factor-neutral stat-arb portfolios in earlier decades?",
+  "response": "Yes, in earlier decades, many quantitative trading firms, or quant shops, primarily focused on isolated pair-level cointegration signals. This approach involved identifying pairs of assets that exhibited a stable, long-term relationship, allowing traders to exploit price discrepancies between them. Over time, the focus has shifted towards constructing diversified, factor-neutral statistical arbitrage portfolios. This evolution reflects a broader understanding of risk management and the importance of diversification in enhancing returns while mitigating risk.",
+  "usage": {
+    "prompt_tokens": 65,
+    "completion_tokens": 89
+  }
+}

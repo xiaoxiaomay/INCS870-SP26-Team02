@@ -1,0 +1,8 @@
+{
+  "query": "Explain the concept of duration in fixed income.",
+  "response": "Duration is a measure of the sensitivity of a fixed income security's price to changes in interest rates. It represents the weighted average time until cash flows (coupon payments and principal repayment) are received. There are different types of duration, with the most common being Macaulay duration and modified duration.\n\n1. **Macaulay Duration**: This is the weighted average time to receive the bond's cash flows, expressed in years. It considers the present value of each cash flow.\n\n2. **Modified Duration**: This adjusts Macaulay duration to account for changes in yield. It estimates the percentage change in the bond's price for a 1% change in yield. A higher modified duration indicates greater sensitivity to interest rate changes.\n\nIn general, the longer the duration, the more sensitive the bond's price is to interest rate fluctuations. Duration is a key concept for bond investors as it helps assess interest rate risk and manage a bond portfolio's exposure to rate changes.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 194
+  }
+}

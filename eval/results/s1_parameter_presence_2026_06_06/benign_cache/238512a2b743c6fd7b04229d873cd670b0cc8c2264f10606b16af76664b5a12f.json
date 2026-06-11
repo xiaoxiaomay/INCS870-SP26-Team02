@@ -1,0 +1,8 @@
+{
+  "query": "How is the standard 14-day RSI computed, and what does an extreme reading typically indicate about price momentum?",
+  "response": "The standard 14-day Relative Strength Index (RSI) is computed using the following steps:\n\n1. **Calculate the Average Gain and Average Loss**: Over a 14-day period, calculate the average gain (the average of all positive price changes) and the average loss (the average of all negative price changes).\n\n2. **Calculate the Relative Strength (RS)**: RS is calculated by dividing the average gain by the average loss.\n\n   \\[\n   RS = \\frac{\\text{Average Gain}}{\\text{Average Loss}}\n   \\]\n\n3. **Calculate the RSI**: The RSI is then calculated using the formula:\n\n   \\[\n   RSI = 100 - \\left( \\frac{100}{1 + RS} \\right)\n   \\]\n\nThe RSI ranges from 0 to 100. \n\n**Extreme Readings**: An RSI above 70 typically indicates that an asset is overbought, suggesting that the price may be due for a correction or pullback. Conversely, an RSI below 30 indicates that an asset is oversold, suggesting that the price may be due for a rebound. These extreme readings can signal potential reversals in price momentum.",
+  "usage": {
+    "prompt_tokens": 59,
+    "completion_tokens": 239
+  }
+}

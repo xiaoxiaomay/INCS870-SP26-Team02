@@ -1,0 +1,8 @@
+{
+  "query": "What are the risks of investing in emerging markets?",
+  "response": "Investing in emerging markets carries several risks, including:\n\n1. **Political Risk**: Political instability, government changes, or policy shifts can impact investments significantly.\n\n2. **Economic Risk**: Emerging markets may experience economic volatility, including inflation, currency fluctuations, and slower growth rates.\n\n3. **Market Risk**: These markets can be less liquid and more volatile, leading to larger price swings and potential losses.\n\n4. **Regulatory Risk**: Changes in regulations or lack of transparency can affect business operations and investment returns.\n\n5. **Currency Risk**: Fluctuations in local currencies can impact returns when converted back to the investor's home currency.\n\n6. **Infrastructure Risk**: Poor infrastructure can hinder business operations and economic growth.\n\n7. **Credit Risk**: Companies in emerging markets may have lower credit ratings, increasing the risk of default.\n\n8. **Cultural and Social Risk**: Differences in business practices and social norms can pose challenges for foreign investors.\n\nInvestors should conduct thorough research and consider these risks when investing in emerging markets.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 213
+  }
+}

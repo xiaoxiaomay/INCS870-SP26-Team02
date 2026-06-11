@@ -1,0 +1,8 @@
+{
+  "query": "What is a breakout strategy? Explain conceptually.",
+  "response": "A breakout strategy is a trading approach that aims to capitalize on significant price movements when an asset breaks through established support or resistance levels. Conceptually, traders identify key price points where the asset has historically struggled to move above (resistance) or below (support). \n\nWhen the price breaks through these levels, it is often seen as a signal that the asset may continue to move in the direction of the breakout, leading to potential profit opportunities. Traders typically use various technical indicators, volume analysis, and chart patterns to confirm the breakout and manage risk through stop-loss orders. The strategy is based on the idea that once a price level is breached, it can lead to increased momentum and volatility, making it a favorable time to enter a trade.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 147
+  }
+}

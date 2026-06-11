@@ -1,0 +1,8 @@
+{
+  "query": "What is a MACD indicator?",
+  "response": "The MACD (Moving Average Convergence Divergence) indicator is a popular technical analysis tool used to identify potential buy and sell signals in financial markets. It consists of two moving averages (the MACD line and the signal line) and a histogram that represents the difference between these two lines. \n\n1. **MACD Line**: Calculated by subtracting the 26-period Exponential Moving Average (EMA) from the 12-period EMA.\n2. **Signal Line**: A 9-period EMA of the MACD line.\n3. **Histogram**: The difference between the MACD line and the signal line, which helps visualize momentum.\n\nTraders look for crossovers between the MACD line and the signal line, as well as divergences from price trends, to make trading decisions.",
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 161
+  }
+}

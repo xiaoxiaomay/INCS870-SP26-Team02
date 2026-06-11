@@ -1,0 +1,8 @@
+{
+  "query": "What are the key financial ratios for evaluating a bank?",
+  "response": "Key financial ratios for evaluating a bank include:\n\n1. **Capital Adequacy Ratio (CAR)**: Measures a bank's capital in relation to its risk-weighted assets, indicating its ability to absorb losses.\n\n2. **Tier 1 Capital Ratio**: A subset of CAR, it assesses a bank's core equity capital against its total risk-weighted assets.\n\n3. **Return on Assets (ROA)**: Indicates how efficiently a bank is using its assets to generate profit, calculated as net income divided by total assets.\n\n4. **Return on Equity (ROE)**: Measures profitability by revealing how much profit a bank generates with the money shareholders have invested, calculated as net income divided by shareholder equity.\n\n5. **Net Interest Margin (NIM)**: Reflects the difference between interest income generated and interest paid out, relative to the bank's interest-earning assets.\n\n6. **Loan-to-Deposit Ratio (LDR)**: Indicates a bank's liquidity by comparing its total loans to its total deposits, showing how much of its deposits are being used for loans.\n\n7. **Non-Performing Loans (NPL) Ratio**: Measures the proportion of loans that are in default or close to being in default, indicating asset quality.\n\n8. **Efficiency Ratio**: Evaluates a bank's overhead as a percentage of its revenue, indicating how well it is managing its operating expenses.\n\nThese ratios provide insights into a bank's financial health, profitability, risk management, and operational efficiency.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 302
+  }
+}

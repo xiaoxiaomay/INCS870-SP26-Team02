@@ -1,0 +1,8 @@
+{
+  "query": "What are the key differences between active and passive investing?",
+  "response": "Active investing involves a strategy where investors or fund managers make specific investments with the goal of outperforming a benchmark index. This approach often includes frequent buying and selling of securities based on research, market trends, and economic indicators.\n\nPassive investing, on the other hand, aims to replicate the performance of a specific index or benchmark by investing in the same securities that comprise that index. This strategy typically involves less frequent trading and lower management fees, as it does not require active decision-making.\n\nKey differences include:\n\n1. **Management Style**: Active investing involves hands-on management, while passive investing follows a buy-and-hold strategy.\n2. **Cost**: Active funds generally have higher fees due to management costs, while passive funds have lower fees.\n3. **Performance Goals**: Active investors seek to outperform the market, whereas passive investors aim to match market performance.\n4. **Risk**: Active investing may involve higher risk due to frequent trading and market timing, while passive investing is generally considered less risky as it diversifies across an index.\n\nOverall, the choice between active and passive investing depends on an investor's goals, risk tolerance, and investment strategy.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 231
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What are the main revenue streams for Goldman Sachs?",
+  "response": "Goldman Sachs has several main revenue streams, which include:\n\n1. **Investment Banking**: This includes advisory services for mergers and acquisitions (M&A), underwriting of equity and debt securities, and other capital-raising activities.\n\n2. **Trading and Principal Investments**: Revenue generated from trading activities in various financial instruments, including equities, fixed income, currencies, and commodities. This also includes gains from proprietary trading and investments in private equity and real estate.\n\n3. **Asset Management**: Fees earned from managing assets for institutional and individual clients, including mutual funds, hedge funds, and private wealth management services.\n\n4. **Consumer and Wealth Management**: This segment includes services provided to individual clients, such as personal loans, credit cards, and wealth management services.\n\nThese revenue streams contribute to Goldman Sachs' overall financial performance and are influenced by market conditions, client activity, and economic trends.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 178
+  }
+}

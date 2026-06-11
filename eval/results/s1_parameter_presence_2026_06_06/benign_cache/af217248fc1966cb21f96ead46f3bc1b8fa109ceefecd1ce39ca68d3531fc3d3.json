@@ -1,0 +1,8 @@
+{
+  "query": "What is the current P/E ratio for the S&P 500?",
+  "response": "As of my last update in October 2023, the P/E ratio for the S&P 500 typically fluctuates over time. For the most accurate and current P/E ratio, I recommend checking a reliable financial news website or a stock market data platform, as these figures can change frequently based on market conditions.",
+  "usage": {
+    "prompt_tokens": 51,
+    "completion_tokens": 63
+  }
+}

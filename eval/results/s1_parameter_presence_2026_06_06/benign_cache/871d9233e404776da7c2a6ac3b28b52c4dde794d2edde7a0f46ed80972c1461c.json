@@ -1,0 +1,8 @@
+{
+  "query": "How does the Federal Reserve set interest rates?",
+  "response": "The Federal Reserve sets interest rates primarily through its monetary policy tools, particularly the federal funds rate, which is the interest rate at which banks lend to each other overnight. The process involves several key steps:\n\n1. **Federal Open Market Committee (FOMC) Meetings**: The FOMC meets regularly (typically eight times a year) to assess economic conditions and determine the appropriate stance of monetary policy.\n\n2. **Economic Indicators**: The FOMC reviews various economic indicators, including inflation rates, employment data, GDP growth, and other financial metrics to gauge the health of the economy.\n\n3. **Target Rate Setting**: Based on its assessment, the FOMC sets a target range for the federal funds rate. This target influences other interest rates in the economy, including those for loans and mortgages.\n\n4. **Open Market Operations**: The Federal Reserve conducts open market operations by buying or selling government securities to adjust the amount of reserves in the banking system. This action helps to align the actual federal funds rate with the target rate.\n\n5. **Communication**: The Fed communicates its decisions and rationale to the public and markets, which helps to manage expectations and influence economic behavior.\n\nBy adjusting the federal funds rate, the Federal Reserve aims to control inflation, manage employment levels, and stabilize the economy.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 263
+  }
+}

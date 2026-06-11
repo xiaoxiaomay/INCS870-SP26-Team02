@@ -1,0 +1,8 @@
+{
+  "query": "What sector cap percentages are common in 130/30 long-short equity strategies?",
+  "response": "In 130/30 long-short equity strategies, sector cap percentages can vary based on the specific strategy and market conditions, but a common approach is to align the long and short positions with the overall market capitalization of the sectors. Typically, the long positions might reflect the sector weights of a benchmark index (like the S&P 500), while the short positions may be adjusted based on the manager's views.\n\nFor example, if a sector represents 20% of the benchmark index, a 130/30 strategy might have approximately 26% long exposure and 6% short exposure in that sector, maintaining a net exposure that aligns with the benchmark. However, the actual percentages can differ based on the fund's investment philosophy, risk tolerance, and market outlook.",
+  "usage": {
+    "prompt_tokens": 53,
+    "completion_tokens": 152
+  }
+}

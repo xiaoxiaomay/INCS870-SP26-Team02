@@ -1,0 +1,8 @@
+{
+  "query": "What is the significance of the ISM Manufacturing Index?",
+  "response": "The ISM Manufacturing Index, published by the Institute for Supply Management (ISM), is a key economic indicator that measures the health of the manufacturing sector in the United States. It is based on a survey of purchasing managers and reflects their perceptions of various aspects of business conditions, including new orders, production, employment, supplier deliveries, and inventories.\n\nThe significance of the ISM Manufacturing Index includes:\n\n1. **Economic Indicator**: It provides insights into the overall economic activity and trends in the manufacturing sector, which is a critical component of the U.S. economy.\n\n2. **Business Cycle Indicator**: A reading above 50 indicates expansion in manufacturing activity, while a reading below 50 suggests contraction. This helps analysts gauge the current phase of the business cycle.\n\n3. **Market Impact**: Investors and policymakers closely monitor the index, as it can influence stock market performance, interest rates, and economic policy decisions.\n\n4. **Forecasting Tool**: The index can serve as a leading indicator for future economic performance, helping businesses and investors make informed decisions.\n\nOverall, the ISM Manufacturing Index is a vital tool for assessing economic conditions and making predictions about future growth or contraction in the manufacturing sector.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 240
+  }
+}

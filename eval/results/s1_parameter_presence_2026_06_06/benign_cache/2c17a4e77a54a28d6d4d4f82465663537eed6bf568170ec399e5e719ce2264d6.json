@@ -1,0 +1,8 @@
+{
+  "query": "Historically, did statistical-arbitrage strategies rely more on simple pairs trading and cointegration tests before large-scale factor-neutral portfolio construction became common?",
+  "response": "Yes, historically, statistical arbitrage strategies primarily relied on simpler methods such as pairs trading and cointegration tests. These approaches focused on identifying relationships between pairs of assets that exhibited mean-reverting behavior. As the field evolved, especially with advancements in technology and data analysis, the focus shifted towards more complex factor-neutral portfolio construction techniques. This allowed for the incorporation of multiple factors and a broader range of assets, enhancing the robustness and scalability of statistical arbitrage strategies.",
+  "usage": {
+    "prompt_tokens": 66,
+    "completion_tokens": 91
+  }
+}

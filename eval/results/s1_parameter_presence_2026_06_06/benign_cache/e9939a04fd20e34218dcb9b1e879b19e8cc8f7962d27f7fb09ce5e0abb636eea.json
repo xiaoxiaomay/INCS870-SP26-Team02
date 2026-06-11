@@ -1,0 +1,8 @@
+{
+  "query": "What's the median annualized return reported by event-driven hedge funds in the most recent HFR industry survey?",
+  "response": "As of my last knowledge update in October 2023, I do not have access to specific figures from the most recent HFR industry survey. For the latest median annualized return reported by event-driven hedge funds, I recommend checking the latest HFR report directly on their website or through financial news sources that cover hedge fund performance.",
+  "usage": {
+    "prompt_tokens": 58,
+    "completion_tokens": 66
+  }
+}

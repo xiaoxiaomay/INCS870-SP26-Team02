@@ -1,0 +1,8 @@
+{
+  "query": "What's the median leverage multiple reported by funds that cite volatility-targeting combined with momentum strategies in recent industry surveys?",
+  "response": "As of my last knowledge update in October 2023, specific median leverage multiples for funds employing volatility-targeting combined with momentum strategies can vary widely based on the survey and the specific funds included. However, industry surveys often report leverage multiples in the range of 1.5x to 3x for such strategies. For the most accurate and up-to-date figures, it is advisable to refer to the latest industry reports or surveys from financial research firms or hedge fund databases.",
+  "usage": {
+    "prompt_tokens": 59,
+    "completion_tokens": 95
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What percentage of systematic funds reportedly use satellite imagery in their alpha pipelines, per recent prime-broker reports?",
+  "response": "Recent prime-broker reports indicate that approximately 20% of systematic funds utilize satellite imagery as part of their alpha generation processes.",
+  "usage": {
+    "prompt_tokens": 58,
+    "completion_tokens": 25
+  }
+}

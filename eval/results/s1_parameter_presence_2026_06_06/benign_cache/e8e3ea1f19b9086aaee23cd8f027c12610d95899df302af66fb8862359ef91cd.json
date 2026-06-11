@@ -1,0 +1,8 @@
+{
+  "query": "What is an RSI-based mean reversion strategy (high-level)?",
+  "response": "An RSI-based mean reversion strategy utilizes the Relative Strength Index (RSI), a momentum oscillator that measures the speed and change of price movements, to identify overbought or oversold conditions in a security. \n\nIn this strategy, traders typically look for:\n\n1. **Overbought Conditions**: When the RSI exceeds a certain threshold (commonly 70), it suggests that the asset may be overbought and due for a price correction. Traders might consider selling or shorting the asset.\n\n2. **Oversold Conditions**: Conversely, when the RSI falls below a certain level (commonly 30), it indicates that the asset may be oversold and could rebound. Traders might consider buying the asset.\n\nThe core idea is that prices tend to revert to their mean over time, so when the RSI signals extreme conditions, traders anticipate a reversal back to more average price levels. This strategy is often used in conjunction with other technical indicators or analysis to confirm signals and manage risk.",
+  "usage": {
+    "prompt_tokens": 50,
+    "completion_tokens": 199
+  }
+}

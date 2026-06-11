@@ -1,0 +1,8 @@
+{
+  "query": "What is a Monte Carlo simulation in finance?",
+  "response": "A Monte Carlo simulation in finance is a statistical technique used to model the probability of different outcomes in a financial process that cannot easily be predicted due to the intervention of random variables. It involves running a large number of simulations (or trials) to generate a range of possible outcomes for variables such as asset prices, interest rates, or investment returns.\n\nIn practice, this method helps analysts assess risk and uncertainty in financial forecasting and decision-making. By simulating a variety of scenarios, Monte Carlo simulations can provide insights into the likelihood of achieving specific financial goals, the potential for losses, and the overall risk profile of an investment or portfolio.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 125
+  }
+}

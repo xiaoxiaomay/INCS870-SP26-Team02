@@ -1,0 +1,8 @@
+{
+  "query": "Explain RSI and what RSI < 30 usually implies.",
+  "response": "RSI, or Relative Strength Index, is a momentum oscillator that measures the speed and change of price movements. It ranges from 0 to 100 and is typically used to identify overbought or oversold conditions in a market.\n\nAn RSI value below 30 is generally considered to indicate that an asset is oversold, suggesting that it may be undervalued and could be due for a price correction or rebound. Traders often interpret this as a potential buying opportunity, although it is important to consider other factors and indicators before making investment decisions.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 109
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "query": "What is Microsoft's cloud revenue growth rate?",
+  "response": "As of the latest available data in October 2023, Microsoft's cloud revenue, primarily driven by Azure, has been experiencing strong growth. For the fiscal year 2023, Microsoft reported that Azure's revenue grew by approximately 27% year-over-year. However, for the most accurate and up-to-date figures, it's advisable to check Microsoft's latest quarterly earnings reports or financial statements.",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 76
+  }
+}

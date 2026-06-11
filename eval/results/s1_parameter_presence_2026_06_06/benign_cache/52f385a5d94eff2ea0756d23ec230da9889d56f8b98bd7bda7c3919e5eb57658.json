@@ -1,0 +1,8 @@
+{
+  "query": "What is net asset value (NAV) for a fund?",
+  "response": "Net Asset Value (NAV) for a fund is the total value of the fund's assets minus its liabilities, divided by the number of outstanding shares. It represents the per-share value of the fund and is commonly used to determine the price at which shares of mutual funds and exchange-traded funds (ETFs) are bought and sold. NAV is typically calculated at the end of each trading day.",
+  "usage": {
+    "prompt_tokens": 49,
+    "completion_tokens": 79
+  }
+}

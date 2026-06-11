@@ -1,0 +1,8 @@
+{
+  "query": "AAPL revenue segments FY2023",
+  "response": "As of FY2023, Apple's revenue segments primarily include:\n\n1. **iPhone**: The largest revenue contributor, encompassing sales of iPhones.\n2. **Services**: This segment includes revenue from the App Store, Apple Music, iCloud, Apple TV+, and other subscription services.\n3. **Mac**: Revenue from sales of Mac computers.\n4. **iPad**: Revenue generated from iPad sales.\n5. **Wearables, Home, and Accessories**: This includes products like Apple Watch, AirPods, and other accessories.\n\nFor the most accurate and detailed financial figures, it's best to refer to Apple's official financial statements or their annual report for FY2023.",
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 139
+  }
+}

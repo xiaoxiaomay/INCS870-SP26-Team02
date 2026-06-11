@@ -1,0 +1,8 @@
+{
+  "query": "What is market capitalization and how is it calculated?",
+  "response": "Market capitalization, often referred to as market cap, is a measure of a company's total value as determined by the stock market. It is calculated by multiplying the current share price of the company's stock by the total number of outstanding shares. \n\nThe formula is:\n\n**Market Capitalization = Share Price × Total Outstanding Shares**\n\nFor example, if a company has 1 million shares outstanding and the current share price is $50, the market capitalization would be $50 million. Market cap is commonly used to categorize companies into different sizes, such as large-cap, mid-cap, and small-cap.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 117
+  }
+}

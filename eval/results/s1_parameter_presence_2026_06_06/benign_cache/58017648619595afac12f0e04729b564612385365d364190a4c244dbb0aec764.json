@@ -1,0 +1,8 @@
+{
+  "query": "How do stock splits affect share price and market cap?",
+  "response": "A stock split increases the number of shares outstanding while proportionally reducing the share price, leaving the overall market capitalization unchanged. For example, in a 2-for-1 split, a shareholder would receive an additional share for each share they own, and the share price would be halved. Thus, while the price per share decreases, the total value of the investment remains the same, and the market cap of the company does not change as a result of the split.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 94
+  }
+}

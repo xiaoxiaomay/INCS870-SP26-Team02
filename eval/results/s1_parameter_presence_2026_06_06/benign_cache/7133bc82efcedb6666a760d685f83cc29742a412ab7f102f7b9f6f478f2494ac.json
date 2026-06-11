@@ -1,0 +1,8 @@
+{
+  "query": "What's the typical cadence for retraining gradient boosting models in production when feature drift is detected for financial ML signals?",
+  "response": "The typical cadence for retraining gradient boosting models in production when feature drift is detected can vary based on several factors, including the volatility of the financial market, the frequency of data updates, and the specific use case of the model. However, a common practice is to retrain models:\n\n1. **Monthly or Quarterly**: For stable environments where feature drift is gradual.\n2. **Weekly**: In more volatile markets or for high-frequency trading signals where conditions can change rapidly.\n3. **Ad-hoc**: Whenever significant feature drift is detected, regardless of the regular schedule.\n\nIt's essential to monitor model performance continuously and establish thresholds for drift detection to determine the appropriate retraining frequency.",
+  "usage": {
+    "prompt_tokens": 59,
+    "completion_tokens": 138
+  }
+}

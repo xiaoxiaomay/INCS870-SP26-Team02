@@ -1,0 +1,8 @@
+{
+  "query": "What is a rights offering and how does it affect shareholders?",
+  "response": "A rights offering is a way for a company to raise capital by giving existing shareholders the right to purchase additional shares at a specified price, usually at a discount to the current market price. This is typically done to raise funds for expansion, pay down debt, or improve liquidity.\n\nThe effects on shareholders include:\n\n1. **Dilution**: If shareholders do not participate in the rights offering, their ownership percentage in the company may be diluted, as new shares are issued.\n\n2. **Opportunity to Maintain Ownership**: Shareholders who participate can maintain their proportional ownership in the company by purchasing additional shares.\n\n3. **Market Reaction**: The announcement of a rights offering can impact the stock price, often leading to a temporary decline due to concerns about dilution or the reasons for raising capital.\n\n4. **Financial Health Indicator**: A rights offering may signal that a company needs cash, which could be viewed negatively or positively depending on the context.\n\nOverall, rights offerings provide existing shareholders with an opportunity to invest further in the company while also posing risks related to dilution and market perception.",
+  "usage": {
+    "prompt_tokens": 49,
+    "completion_tokens": 215
+  }
+}

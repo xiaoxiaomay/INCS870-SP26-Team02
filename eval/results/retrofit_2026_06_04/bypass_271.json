@@ -1,0 +1,119 @@
+{
+  "task": "bypass_271_per_technique_and_category",
+  "generated_at": "2026-06-04T16:34:14.191055Z",
+  "attack_corpus": "data/attack_prompts_expanded.jsonl",
+  "benign_corpus": "data/benchmark/normal_prompts.jsonl",
+  "secret_index": "data/index/secrets.faiss",
+  "config": "deployed dual-threshold (config.yaml)",
+  "totals": {
+    "attacks": 271,
+    "attack_blocked": 142,
+    "attack_bypass": 129,
+    "pre_gate_bypass_rate": 0.476,
+    "benigns": 100,
+    "benign_blocked": 2,
+    "benign_clean_pass": 83,
+    "benign_flagged_passed": 15,
+    "fpr": 0.02
+  },
+  "blocked_at_counts": {
+    "gate_0a": 55,
+    "gate_0b": 11,
+    "gate_1": 76,
+    "none": 0
+  },
+  "by_evasion_technique": {
+    "unknown": {
+      "total": 70,
+      "bypass": 33,
+      "bypass_rate": 0.4714
+    },
+    "hypothetical_extraction": {
+      "total": 27,
+      "bypass": 7,
+      "bypass_rate": 0.2593
+    },
+    "academic_framing": {
+      "total": 29,
+      "bypass": 16,
+      "bypass_rate": 0.5517
+    },
+    "passive_voice": {
+      "total": 34,
+      "bypass": 16,
+      "bypass_rate": 0.4706
+    },
+    "roleplay_framing": {
+      "total": 30,
+      "bypass": 10,
+      "bypass_rate": 0.3333
+    },
+    "multi_step_decomposition": {
+      "total": 29,
+      "bypass": 17,
+      "bypass_rate": 0.5862
+    },
+    "indirect_reference": {
+      "total": 28,
+      "bypass": 15,
+      "bypass_rate": 0.5357
+    },
+    "synonym_substitution": {
+      "total": 24,
+      "bypass": 15,
+      "bypass_rate": 0.625
+    }
+  },
+  "by_attack_category": {
+    "direct_extraction": {
+      "total": 51,
+      "bypass": 9,
+      "bypass_rate": 0.1765
+    },
+    "indirect_extraction": {
+      "total": 40,
+      "bypass": 26,
+      "bypass_rate": 0.65
+    },
+    "paraphrase_extraction": {
+      "total": 20,
+      "bypass": 15,
+      "bypass_rate": 0.75
+    },
+    "salami_attack": {
+      "total": 33,
+      "bypass": 33,
+      "bypass_rate": 1.0
+    },
+    "social_engineering": {
+      "total": 23,
+      "bypass": 11,
+      "bypass_rate": 0.4783
+    },
+    "encoding_extraction": {
+      "total": 20,
+      "bypass": 12,
+      "bypass_rate": 0.6
+    },
+    "prompt_injection": {
+      "total": 29,
+      "bypass": 8,
+      "bypass_rate": 0.2759
+    },
+    "adversarial_exfil": {
+      "total": 16,
+      "bypass": 4,
+      "bypass_rate": 0.25
+    },
+    "hard_block": {
+      "total": 19,
+      "bypass": 0,
+      "bypass_rate": 0.0
+    },
+    "indirect_injection": {
+      "total": 20,
+      "bypass": 11,
+      "bypass_rate": 0.55
+    }
+  }
+}

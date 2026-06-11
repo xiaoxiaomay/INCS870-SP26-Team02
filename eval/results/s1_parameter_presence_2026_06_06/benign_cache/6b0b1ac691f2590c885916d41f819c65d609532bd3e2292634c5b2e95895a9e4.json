@@ -1,0 +1,8 @@
+{
+  "query": "What is an options call vs put?",
+  "response": "An options call and put are types of financial derivatives that give investors the right, but not the obligation, to buy or sell an underlying asset at a predetermined price before a specified expiration date.\n\n- **Call Option**: This gives the holder the right to buy the underlying asset at the strike price. Investors typically buy call options when they expect the price of the underlying asset to rise.\n\n- **Put Option**: This gives the holder the right to sell the underlying asset at the strike price. Investors typically buy put options when they expect the price of the underlying asset to fall.\n\nIn summary, calls are used for bullish strategies (expecting price increases), while puts are used for bearish strategies (expecting price decreases).",
+  "usage": {
+    "prompt_tokens": 45,
+    "completion_tokens": 144
+  }
+}

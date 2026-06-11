@@ -1,0 +1,8 @@
+{
+  "query": "Are volatility-targeting overlays frequently applied to momentum portfolios to limit drawdowns, and which technical indicators commonly trigger de-risking?",
+  "response": "Yes, volatility-targeting overlays are frequently applied to momentum portfolios to limit drawdowns. These overlays adjust the portfolio's exposure based on the current volatility of the assets, aiming to maintain a consistent risk level.\n\nCommon technical indicators that trigger de-risking in such strategies include:\n\n1. **Moving Averages**: Crossovers (e.g., when a short-term moving average crosses below a long-term moving average) can signal a trend reversal.\n2. **Bollinger Bands**: A price moving outside the bands may indicate increased volatility and potential drawdown.\n3. **Relative Strength Index (RSI)**: An RSI above 70 may suggest overbought conditions, while below 30 may indicate oversold conditions, prompting adjustments.\n4. **Average True Range (ATR)**: A rising ATR can signal increasing volatility, leading to a reduction in exposure.\n5. **Standard Deviation**: A significant increase in the standard deviation of returns can trigger a de-risking response.\n\nThese indicators help manage risk and protect against significant losses in volatile market conditions.",
+  "usage": {
+    "prompt_tokens": 62,
+    "completion_tokens": 213
+  }
+}

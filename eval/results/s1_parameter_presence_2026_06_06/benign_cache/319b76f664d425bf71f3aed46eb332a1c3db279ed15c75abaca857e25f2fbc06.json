@@ -1,0 +1,8 @@
+{
+  "query": "What drove JPM's net interest income growth last quarter?",
+  "response": "JPMorgan Chase's net interest income growth in the last quarter was primarily driven by several factors:\n\n1. **Rising Interest Rates**: The Federal Reserve's interest rate hikes increased the yield on loans, which positively impacted net interest income.\n\n2. **Loan Growth**: An increase in loan demand, particularly in commercial and consumer lending, contributed to higher interest income.\n\n3. **Deposit Mix**: Changes in the deposit mix, with a shift towards higher-yielding accounts, also supported net interest income growth.\n\n4. **Asset Management**: Growth in the bank's asset management and investment banking divisions can indirectly support net interest income through increased client activity and related fees.\n\nThese factors combined to enhance JPMorgan's overall net interest income performance in the last quarter.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 155
+  }
+}

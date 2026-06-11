@@ -1,0 +1,8 @@
+{
+  "query": "How do you calculate debt-to-equity ratio?",
+  "response": "The debt-to-equity ratio is calculated by dividing a company's total liabilities by its total shareholders' equity. The formula is:\n\n**Debt-to-Equity Ratio = Total Liabilities / Total Shareholders' Equity**\n\nThis ratio measures the relative proportion of shareholders' equity and debt used to finance a company's assets, indicating the level of financial leverage.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 69
+  }
+}

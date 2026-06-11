@@ -1,0 +1,8 @@
+{
+  "query": "Summarize NVDA's data center revenue trend.",
+  "response": "As of October 2023, NVIDIA (NVDA) has experienced significant growth in its data center revenue, driven primarily by the increasing demand for artificial intelligence (AI) and machine learning applications. In recent quarters, data center revenue has consistently outperformed expectations, contributing a substantial portion of the company's overall revenue. For example, in the second quarter of fiscal 2024, NVIDIA reported data center revenue of approximately $10.3 billion, reflecting a year-over-year increase of over 100%. This trend highlights the company's strong position in the data center market, particularly with its GPUs being widely adopted for AI workloads. Overall, NVDA's data center revenue trend indicates robust growth and a pivotal role in the company's financial performance.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 145
+  }
+}

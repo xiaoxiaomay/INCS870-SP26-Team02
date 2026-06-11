@@ -1,0 +1,8 @@
+{
+  "query": "Wasn't there an era when traders relied heavily on simple moving-average crossovers before more nuanced momentum measures like RSI became standard?",
+  "response": "Yes, there was an era, particularly in the late 20th century, when traders heavily relied on simple moving average (SMA) crossovers as a primary trading strategy. This method involves using two different SMAs (typically a short-term and a long-term average) to generate buy or sell signals based on their intersections. \n\nWhile the SMA crossover strategy is straightforward and easy to implement, it has limitations, such as lagging signals and susceptibility to false signals in choppy markets. As trading strategies evolved, more nuanced momentum indicators like the Relative Strength Index (RSI) and others gained popularity, providing traders with additional tools to assess market conditions and improve decision-making.",
+  "usage": {
+    "prompt_tokens": 62,
+    "completion_tokens": 135
+  }
+}

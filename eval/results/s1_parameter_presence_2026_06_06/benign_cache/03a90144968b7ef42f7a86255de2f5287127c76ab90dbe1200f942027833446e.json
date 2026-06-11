@@ -1,0 +1,8 @@
+{
+  "query": "Explain the difference between nominal and real GDP.",
+  "response": "Nominal GDP measures a country's total economic output (the value of all goods and services produced) at current market prices, without adjusting for inflation or deflation. In contrast, real GDP adjusts nominal GDP for changes in price levels, providing a more accurate reflection of an economy's size and how it grows over time by accounting for inflation. This allows for a better comparison of economic performance across different time periods.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 81
+  }
+}

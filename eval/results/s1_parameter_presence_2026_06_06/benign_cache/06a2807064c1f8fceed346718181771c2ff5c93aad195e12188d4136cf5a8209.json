@@ -1,0 +1,8 @@
+{
+  "query": "What gross-to-net leverage ratio is typical for market-neutral factor portfolios run by US-based hedge funds?",
+  "response": "Market-neutral factor portfolios run by US-based hedge funds typically exhibit gross-to-net leverage ratios ranging from 2:1 to 4:1. This means that for every dollar of net capital, these funds may have gross positions totaling two to four dollars. However, the specific ratio can vary based on the fund's strategy, risk tolerance, and market conditions.",
+  "usage": {
+    "prompt_tokens": 57,
+    "completion_tokens": 72
+  }
+}

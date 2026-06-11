@@ -1,0 +1,8 @@
+{
+  "query": "Explain the difference between trailing and forward P/E.",
+  "response": "The trailing P/E (Price-to-Earnings) ratio is calculated using a company's earnings over the past 12 months. It reflects the company's historical performance and is based on actual earnings reported in the past.\n\nThe forward P/E ratio, on the other hand, uses projected earnings for the next 12 months. It is based on analysts' estimates of future earnings and reflects expectations about the company's future performance.\n\nIn summary, trailing P/E looks backward at past earnings, while forward P/E looks forward at expected future earnings.",
+  "usage": {
+    "prompt_tokens": 47,
+    "completion_tokens": 104
+  }
+}

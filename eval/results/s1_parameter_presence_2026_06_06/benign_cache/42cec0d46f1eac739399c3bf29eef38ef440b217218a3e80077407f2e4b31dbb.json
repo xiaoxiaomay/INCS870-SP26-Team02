@@ -1,0 +1,8 @@
+{
+  "query": "What is the difference between 10-K and 10-Q filings?",
+  "response": "The primary difference between 10-K and 10-Q filings lies in their purpose, content, and frequency:\n\n1. **10-K**: This is an annual report that provides a comprehensive overview of a company's financial performance for the entire fiscal year. It includes detailed information such as audited financial statements, management discussion and analysis, risk factors, and information about the company's operations and governance. Companies are required to file a 10-K within 60 to 90 days after the end of their fiscal year, depending on their size.\n\n2. **10-Q**: This is a quarterly report that provides a less detailed update on a company's financial performance for the most recent quarter. It includes unaudited financial statements and management discussion but is not as comprehensive as the 10-K. Companies must file a 10-Q within 40 to 45 days after the end of each fiscal quarter.\n\nIn summary, the 10-K is an annual, detailed report, while the 10-Q is a quarterly, less detailed update.",
+  "usage": {
+    "prompt_tokens": 51,
+    "completion_tokens": 205
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "task": "threshold_sweep_on_cached_b0_responses",
+  "generated_at": "2026-06-04T16:33:41.002258Z",
+  "input": "reports/b0_baseline.csv",
+  "n_b0_responses": 70,
+  "scan_method": "scripts/leakage_scan.py:scan_text \u2014 hard + soft + cascade(k=2)",
+  "grid": [
+    {
+      "hard_threshold": 0.55,
+      "soft_threshold": 0.45,
+      "single_pass_hard_only": 25,
+      "single_pass_hard_only_rate": 0.3571,
+      "full_scan_with_cascade": 33,
+      "full_scan_with_cascade_rate": 0.4714
+    },
+    {
+      "hard_threshold": 0.6,
+      "soft_threshold": 0.5,
+      "single_pass_hard_only": 12,
+      "single_pass_hard_only_rate": 0.1714,
+      "full_scan_with_cascade": 22,
+      "full_scan_with_cascade_rate": 0.3143
+    },
+    {
+      "hard_threshold": 0.65,
+      "soft_threshold": 0.55,
+      "single_pass_hard_only": 4,
+      "single_pass_hard_only_rate": 0.0571,
+      "full_scan_with_cascade": 4,
+      "full_scan_with_cascade_rate": 0.0571
+    },
+    {
+      "hard_threshold": 0.7,
+      "soft_threshold": 0.6,
+      "single_pass_hard_only": 0,
+      "single_pass_hard_only_rate": 0.0,
+      "full_scan_with_cascade": 1,
+      "full_scan_with_cascade_rate": 0.0143
+    },
+    {
+      "hard_threshold": 0.75,
+      "soft_threshold": 0.6,
+      "single_pass_hard_only": 0,
+      "single_pass_hard_only_rate": 0.0,
+      "full_scan_with_cascade": 1,
+      "full_scan_with_cascade_rate": 0.0143
+    },
+    {
+      "hard_threshold": 0.75,
+      "soft_threshold": 0.65,
+      "single_pass_hard_only": 0,
+      "single_pass_hard_only_rate": 0.0,
+      "full_scan_with_cascade": 0,
+      "full_scan_with_cascade_rate": 0.0
+    }
+  ],
+  "deployed_reconciliation": {
+    "hard_threshold": 0.7,
+    "soft_threshold": 0.6,
+    "cascade_k": 2,
+    "single_pass_hard_only_count": 0,
+    "full_scan_with_cascade_count": 1,
+    "note": "Single-pass hard-only count = number of cached B0 responses that contain AT LEAST ONE sentence with cosine \u2265 0.70 vs the secret index. Full-scan-with-cascade count = number of cached B0 responses where the production scan_text leakage_flag fires (hard hit OR two consecutive soft hits)."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "generation": "path (b): gpt-4o-mini-2024-07-18, temp=0, general-knowledge (PostgreSQL 18.220.95.90 unreachable; deployed RAG fallback). System prompt: financial analyst.",
+  "n_api_calls": 0,
+  "gen_cost_usd": 0.0,
+  "overall": {
+    "n": 165,
+    "single_hit_overredact": 0,
+    "single_hit_fpr": 0.0,
+    "cooccurrence_overredact": 0,
+    "cooccurrence_fpr": 0.0
+  },
+  "normal": {
+    "n": 100,
+    "single_hit_overredact": 0,
+    "single_hit_fpr": 0.0,
+    "cooccurrence_overredact": 0,
+    "cooccurrence_fpr": 0.0
+  },
+  "hard_negative": {
+    "n": 65,
+    "single_hit_overredact": 0,
+    "single_hit_fpr": 0.0,
+    "cooccurrence_overredact": 0,
+    "cooccurrence_fpr": 0.0
+  },
+  "flagged_samples": []
+}

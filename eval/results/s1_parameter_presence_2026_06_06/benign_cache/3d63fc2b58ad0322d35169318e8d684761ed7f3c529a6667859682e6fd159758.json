@@ -1,0 +1,8 @@
+{
+  "query": "Explain maximum drawdown as a risk measure.",
+  "response": "Maximum drawdown is a risk measure that quantifies the largest peak-to-trough decline in the value of an investment or portfolio over a specified period. It is expressed as a percentage and indicates the maximum loss an investor would have experienced if they had invested at the highest point before the decline and sold at the lowest point during that period.\n\nFor example, if an investment reaches a peak value of $100 and then falls to a trough of $70, the maximum drawdown would be calculated as:\n\n\\[\n\\text{Maximum Drawdown} = \\frac{\\text{Peak Value} - \\text{Trough Value}}{\\text{Peak Value}} \\times 100 = \\frac{100 - 70}{100} \\times 100 = 30\\%\n\\]\n\nMaximum drawdown is important for investors as it helps assess the potential risk of an investment, providing insight into the worst-case scenario in terms of loss. It is particularly useful for comparing the risk profiles of different investments or strategies.",
+  "usage": {
+    "prompt_tokens": 46,
+    "completion_tokens": 202
+  }
+}

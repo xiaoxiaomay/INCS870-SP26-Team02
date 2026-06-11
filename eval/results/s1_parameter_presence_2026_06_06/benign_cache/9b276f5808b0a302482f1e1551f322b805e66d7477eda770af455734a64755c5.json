@@ -1,0 +1,8 @@
+{
+  "query": "Average reported holding period range (in days) for positions driven primarily by momentum indicators across quantitative equity funds?",
+  "response": "The average reported holding period for positions driven primarily by momentum indicators in quantitative equity funds typically ranges from 30 to 90 days. However, this can vary based on the specific strategy employed by the fund and market conditions. Some funds may have shorter holding periods, while others may extend beyond 90 days.",
+  "usage": {
+    "prompt_tokens": 58,
+    "completion_tokens": 61
+  }
+}

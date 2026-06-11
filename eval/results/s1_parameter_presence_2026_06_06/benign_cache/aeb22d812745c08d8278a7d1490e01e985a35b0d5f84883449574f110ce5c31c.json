@@ -1,0 +1,8 @@
+{
+  "query": "How does short selling work and what are the risks?",
+  "response": "Short selling is an investment strategy where an investor borrows shares of a stock and sells them on the market, hoping to buy them back later at a lower price. Here’s how it works:\n\n1. **Borrowing Shares**: The investor borrows shares from a broker.\n2. **Selling Shares**: The investor sells the borrowed shares at the current market price.\n3. **Buying Back Shares**: The investor waits for the stock price to decline and then buys back the same number of shares at the lower price.\n4. **Returning Shares**: The investor returns the borrowed shares to the broker and keeps the difference as profit.\n\n### Risks of Short Selling:\n\n1. **Unlimited Loss Potential**: If the stock price rises instead of falls, the potential losses are unlimited since there is no cap on how high a stock can go.\n2. **Margin Calls**: Short selling typically requires a margin account. If the stock price rises significantly, the broker may issue a margin call, requiring the investor to deposit more funds or close the position at a loss.\n3. **Short Squeeze**: If a heavily shorted stock's price starts to rise, short sellers may rush to buy back shares to cover their positions, driving the price even higher.\n4. **Interest and Fees**: Borrowing shares incurs costs, including interest on the borrowed shares and potential fees, which can eat into profits.\n5. **Market Risk**: Broader market movements can affect stock prices, and unexpected news can lead to rapid price increases.\n\nOverall, while short selling can be profitable, it carries significant risks that require careful consideration and risk management.",
+  "usage": {
+    "prompt_tokens": 48,
+    "completion_tokens": 331
+  }
+}

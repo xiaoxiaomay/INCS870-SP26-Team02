@@ -1,0 +1,8 @@
+{
+  "query": "Reported range of drawdown durations (months) for funds using trend-following or momentum overlays, based on industry performance summaries?",
+  "response": "The reported range of drawdown durations for funds employing trend-following or momentum overlays typically varies, but it can generally be between 3 to 12 months. Some funds may experience shorter drawdowns during market corrections, while others may face prolonged drawdowns during extended sideways or counter-trend market conditions. It's important to note that individual fund performance can vary significantly based on strategy, market conditions, and management.",
+  "usage": {
+    "prompt_tokens": 62,
+    "completion_tokens": 81
+  }
+}
