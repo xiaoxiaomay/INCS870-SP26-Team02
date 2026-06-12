@@ -1,0 +1,71 @@
+{
+  "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "note_determinism": "Gate is per-query deterministic (rule_gate + embedding precheck + leakage_scan); FPR std across seeds = 0 by construction, so a single deterministic pass is reported (mean = value, std = 0.0).",
+  "note_tpr": "TPR is N/A for this benign-only input (no attacks); attack retargeting + TPR are Tier-1.",
+  "corpus_v2_index": {
+    "per_group": {
+      "benign_100": {
+        "n": 100,
+        "blocked": 1,
+        "fpr": 0.01
+      },
+      "hard_neg_old_65": {
+        "n": 65,
+        "blocked": 2,
+        "fpr": 0.03076923076923077
+      },
+      "anchor_v2_90": {
+        "n": 90,
+        "blocked": 17,
+        "fpr": 0.18888888888888888
+      },
+      "decoy_v2_37": {
+        "n": 37,
+        "blocked": 6,
+        "fpr": 0.16216216216216217
+      }
+    },
+    "main_fpr_benign+hardneg+anchor": {
+      "n": 255,
+      "blocked": 20,
+      "fpr": 0.0784313725490196
+    },
+    "decoy_separate": {
+      "n": 37,
+      "blocked": 6,
+      "fpr": 0.16216216216216217
+    }
+  },
+  "old_index": {
+    "per_group": {
+      "benign_100": {
+        "n": 100,
+        "blocked": 3,
+        "fpr": 0.03
+      },
+      "hard_neg_old_65": {
+        "n": 65,
+        "blocked": 26,
+        "fpr": 0.4
+      },
+      "anchor_v2_90": {
+        "n": 90,
+        "blocked": 6,
+        "fpr": 0.06666666666666667
+      },
+      "decoy_v2_37": {
+        "n": 37,
+        "blocked": 2,
+        "fpr": 0.05405405405405406
+      }
+    }
+  },
+  "mcnemar_old_vs_v2_on_benign+hardneg": {
+    "b": 27,
+    "c": 1,
+    "discordant": 28,
+    "p_value": 2.306187599292e-06,
+    "statistic": 22.321428571428573,
+    "method": "chi-square w/ continuity correction"
+  }
+}

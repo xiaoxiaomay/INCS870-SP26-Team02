@@ -1,0 +1,136 @@
+{
+  "encoders": [
+    "minilm",
+    "mpnet",
+    "bge_large",
+    "finlang"
+  ],
+  "grid": {
+    "minilm": {
+      "corpus_v2": {
+        "ndcg@10": 0.8050649279246846,
+        "recall@1": 0.7,
+        "recall@5": 0.8888888888888888,
+        "recall@10": 0.9111111111111111,
+        "mean_rank": 4.055555555555555,
+        "median_rank": 1.0,
+        "probe_kind": "anchor_text (designed public anchor)"
+      },
+      "old_secrets_v2": {
+        "ndcg@10": 0.7790986542572158,
+        "recall@1": 0.5111111111111111,
+        "recall@5": 0.9777777777777777,
+        "recall@10": 0.9888888888888889,
+        "mean_rank": 2.011111111111111,
+        "median_rank": 1.0,
+        "probe_kind": "title (closest intrinsic public probe; no anchor pre-restructure)"
+      }
+    },
+    "mpnet": {
+      "corpus_v2": {
+        "ndcg@10": 0.7587619110597968,
+        "recall@1": 0.5888888888888889,
+        "recall@5": 0.8444444444444444,
+        "recall@10": 0.9111111111111111,
+        "mean_rank": 3.9555555555555557,
+        "median_rank": 1.0,
+        "probe_kind": "anchor_text (designed public anchor)"
+      },
+      "old_secrets_v2": {
+        "ndcg@10": 0.7664438687508437,
+        "recall@1": 0.4777777777777778,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mean_rank": 1.8444444444444446,
+        "median_rank": 2.0,
+        "probe_kind": "title (closest intrinsic public probe; no anchor pre-restructure)"
+      }
+    },
+    "bge_large": {
+      "corpus_v2": {
+        "ndcg@10": 0.7838482891984733,
+        "recall@1": 0.6777777777777778,
+        "recall@5": 0.8555555555555555,
+        "recall@10": 0.8777777777777778,
+        "mean_rank": 5.0777777777777775,
+        "median_rank": 1.0,
+        "probe_kind": "anchor_text (designed public anchor)"
+      },
+      "old_secrets_v2": {
+        "ndcg@10": 0.7647038550159279,
+        "recall@1": 0.4777777777777778,
+        "recall@5": 0.9888888888888889,
+        "recall@10": 1.0,
+        "mean_rank": 1.9111111111111112,
+        "median_rank": 2.0,
+        "probe_kind": "title (closest intrinsic public probe; no anchor pre-restructure)"
+      }
+    },
+    "finlang": {
+      "corpus_v2": {
+        "ndcg@10": 0.6131141461402911,
+        "recall@1": 0.4,
+        "recall@5": 0.7333333333333333,
+        "recall@10": 0.8444444444444444,
+        "mean_rank": 6.855555555555555,
+        "median_rank": 2.0,
+        "probe_kind": "anchor_text (designed public anchor)"
+      },
+      "old_secrets_v2": {
+        "ndcg@10": 0.7552949176962123,
+        "recall@1": 0.5222222222222223,
+        "recall@5": 0.8888888888888888,
+        "recall@10": 1.0,
+        "mean_rank": 2.411111111111111,
+        "median_rank": 1.0,
+        "probe_kind": "title (closest intrinsic public probe; no anchor pre-restructure)"
+      }
+    }
+  },
+  "separability": {
+    "minilm": {
+      "secret_vs_own_anchor_cosine": {
+        "n": 90,
+        "mean": 0.48119707968499925,
+        "median": 0.48870396614074707,
+        "min": 0.2188839167356491,
+        "max": 0.7447499632835388
+      },
+      "cross_pair_rank_violations": 29,
+      "n": 90
+    },
+    "mpnet": {
+      "secret_vs_own_anchor_cosine": {
+        "n": 90,
+        "mean": 0.5073665539423625,
+        "median": 0.510789543390274,
+        "min": 0.20726007223129272,
+        "max": 0.7730103731155396
+      },
+      "cross_pair_rank_violations": 34,
+      "n": 90
+    },
+    "bge_large": {
+      "secret_vs_own_anchor_cosine": {
+        "n": 90,
+        "mean": 0.6394651181168026,
+        "median": 0.6328311562538147,
+        "min": 0.4873587489128113,
+        "max": 0.7956254482269287
+      },
+      "cross_pair_rank_violations": 46,
+      "n": 90
+    },
+    "finlang": {
+      "secret_vs_own_anchor_cosine": {
+        "n": 90,
+        "mean": 0.4593198796113332,
+        "median": 0.45098449289798737,
+        "min": 0.15617187321186066,
+        "max": 0.7427542209625244
+      },
+      "cross_pair_rank_violations": 45,
+      "n": 90
+    }
+  }
+}

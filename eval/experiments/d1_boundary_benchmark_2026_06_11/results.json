@@ -1,0 +1,2078 @@
+{
+  "meta": {
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "st_version": "5.2.2",
+    "python": "3.12.2",
+    "platform": "macOS-14.5-arm64-arm-64bit",
+    "run_date": "2026-06-11",
+    "n_kb": 90,
+    "n_pos": 90,
+    "n_neg_main": 90,
+    "n_neg_stress": 37,
+    "n_protected_literals": 96,
+    "fpr_targets": [
+      0.0,
+      0.01,
+      0.05
+    ]
+  },
+  "mechanisms": {
+    "M1": {
+      "desc": "exact-literal (binary; protected set from parameter_presence.py)",
+      "auc_main": 0.6166666666666667,
+      "operating_points": [
+        {
+          "target_fpr": 0.0,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 1.0,
+          "fpr": 0.011111111111111112,
+          "tpr": 0.24444444444444444,
+          "decoy_fp": 0.0
+        }
+      ],
+      "neg_main_dist": {
+        "n": 90,
+        "mean": 0.011111111111111112,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "decoy_dist": {
+        "n": 37,
+        "mean": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "pos_dist": {
+        "n": 90,
+        "mean": 0.24444444444444444,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "pos_dist_by_type": {
+        "A": {
+          "n": 72,
+          "mean": 0.2361111111111111,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "B": {
+          "n": 18,
+          "mean": 0.2777777777777778,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 1.0
+        }
+      },
+      "slice_type": {
+        "A": {
+          "n_pos": 72,
+          "n_neg": 72,
+          "auc": 0.6111111111111112
+        },
+        "B": {
+          "n_pos": 18,
+          "n_neg": 18,
+          "auc": 0.6388888888888888
+        }
+      },
+      "slice_subset": {
+        "core": {
+          "n_pos": 81,
+          "n_neg": 81,
+          "auc": 0.5987654320987654
+        },
+        "boundary_test": {
+          "n_pos": 9,
+          "n_neg": 9,
+          "auc": 0.7777777777777778
+        }
+      },
+      "slice_domain": {
+        "credit_screening": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "exchange_rule_execution": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.5
+        },
+        "execution_scheduling": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.5
+        },
+        "execution_vwap": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.5
+        },
+        "factor_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "liquidity_management": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "market_making": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        },
+        "portfolio_construction": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "portfolio_insurance": {
+          "n_pos": 4,
+          "n_neg": 4,
+          "auc": 0.75
+        },
+        "position_sizing": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        },
+        "prime_brokerage_margin": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "regulatory_concentration": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.6
+        },
+        "risk_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "settlement_ops": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "stat_arb": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "technical_indicator": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5
+        }
+      }
+    },
+    "M2": {
+      "desc": "max word-4-gram Jaccard vs KB",
+      "auc_main": 0.8279012345679012,
+      "operating_points": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.019230769230769232,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.6666666666666666,
+          "decoy_fp": 0.02702702702702703
+        }
+      ],
+      "neg_main_dist": {
+        "n": 90,
+        "mean": 0.0017886597122085315,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.03636363636363636
+      },
+      "decoy_dist": {
+        "n": 37,
+        "mean": 0.0009009009009009009,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.03333333333333333
+      },
+      "pos_dist": {
+        "n": 90,
+        "mean": 0.06845227071302197,
+        "median": 0.03785714285714285,
+        "min": 0.0,
+        "max": 0.3333333333333333
+      },
+      "pos_dist_by_type": {
+        "A": {
+          "n": 72,
+          "mean": 0.056609579847764296,
+          "median": 0.02667140825035562,
+          "min": 0.0,
+          "max": 0.29411764705882354
+        },
+        "B": {
+          "n": 18,
+          "mean": 0.11582303417405271,
+          "median": 0.09813953488372093,
+          "min": 0.0,
+          "max": 0.3333333333333333
+        }
+      },
+      "slice_type": {
+        "A": {
+          "n_pos": 72,
+          "n_neg": 72,
+          "auc": 0.7914737654320988
+        },
+        "B": {
+          "n_pos": 18,
+          "n_neg": 18,
+          "auc": 0.970679012345679
+        }
+      },
+      "slice_subset": {
+        "core": {
+          "n_pos": 81,
+          "n_neg": 81,
+          "auc": 0.8363054412437129
+        },
+        "boundary_test": {
+          "n_pos": 9,
+          "n_neg": 9,
+          "auc": 0.7530864197530864
+        }
+      },
+      "slice_domain": {
+        "credit_screening": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "exchange_rule_execution": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 1.0
+        },
+        "execution_scheduling": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.9
+        },
+        "execution_vwap": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.64
+        },
+        "factor_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9166666666666666
+        },
+        "liquidity_management": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        },
+        "market_making": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "portfolio_construction": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8055555555555556
+        },
+        "portfolio_insurance": {
+          "n_pos": 4,
+          "n_neg": 4,
+          "auc": 0.625
+        },
+        "position_sizing": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 1.0
+        },
+        "prime_brokerage_margin": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "regulatory_concentration": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.9
+        },
+        "risk_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.7083333333333334
+        },
+        "settlement_ops": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 1.0
+        },
+        "stat_arb": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9166666666666666
+        },
+        "technical_indicator": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        }
+      }
+    },
+    "M3": {
+      "desc": "max cosine vs KB (MiniLM \u2014 deployment gate mechanism)",
+      "auc_main": 0.8787654320987655,
+      "operating_points": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.25555555555555554,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.25555555555555554,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.6695367693901062,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        }
+      ],
+      "neg_main_dist": {
+        "n": 90,
+        "mean": 0.507592526740498,
+        "median": 0.49566197395324707,
+        "min": 0.3506118357181549,
+        "max": 0.7447499632835388
+      },
+      "decoy_dist": {
+        "n": 37,
+        "mean": 0.465167933219188,
+        "median": 0.4699036180973053,
+        "min": 0.26609528064727783,
+        "max": 0.6603626608848572
+      },
+      "pos_dist": {
+        "n": 90,
+        "mean": 0.6706527494721942,
+        "median": 0.6736221015453339,
+        "min": 0.4149092137813568,
+        "max": 0.9220364689826965
+      },
+      "pos_dist_by_type": {
+        "A": {
+          "n": 72,
+          "mean": 0.6617231803635756,
+          "median": 0.6607046723365784,
+          "min": 0.4149092137813568,
+          "max": 0.9220364689826965
+        },
+        "B": {
+          "n": 18,
+          "mean": 0.7063710259066688,
+          "median": 0.7329510450363159,
+          "min": 0.5004627108573914,
+          "max": 0.8138680458068848
+        }
+      },
+      "slice_type": {
+        "A": {
+          "n_pos": 72,
+          "n_neg": 72,
+          "auc": 0.8657407407407407
+        },
+        "B": {
+          "n_pos": 18,
+          "n_neg": 18,
+          "auc": 0.9290123456790124
+        }
+      },
+      "slice_subset": {
+        "core": {
+          "n_pos": 81,
+          "n_neg": 81,
+          "auc": 0.8951379362901997
+        },
+        "boundary_test": {
+          "n_pos": 9,
+          "n_neg": 9,
+          "auc": 0.7654320987654321
+        }
+      },
+      "slice_domain": {
+        "credit_screening": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 1.0
+        },
+        "exchange_rule_execution": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.88
+        },
+        "execution_scheduling": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.88
+        },
+        "execution_vwap": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.72
+        },
+        "factor_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9166666666666666
+        },
+        "liquidity_management": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8055555555555556
+        },
+        "market_making": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8888888888888888
+        },
+        "portfolio_construction": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8888888888888888
+        },
+        "portfolio_insurance": {
+          "n_pos": 4,
+          "n_neg": 4,
+          "auc": 0.8125
+        },
+        "position_sizing": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "prime_brokerage_margin": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.7777777777777778
+        },
+        "regulatory_concentration": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 1.0
+        },
+        "risk_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8611111111111112
+        },
+        "settlement_ops": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9444444444444444
+        },
+        "stat_arb": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9444444444444444
+        },
+        "technical_indicator": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9166666666666666
+        }
+      }
+    },
+    "M4": {
+      "desc": "numeric-token count (trivial baseline)",
+      "auc_main": 0.43265432098765433,
+      "operating_points": [
+        {
+          "target_fpr": 0.0,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 5.0,
+          "fpr": 0.022222222222222223,
+          "tpr": 0.0,
+          "decoy_fp": 0.4594594594594595
+        }
+      ],
+      "neg_main_dist": {
+        "n": 90,
+        "mean": 2.088888888888889,
+        "median": 2.0,
+        "min": 0.0,
+        "max": 7.0
+      },
+      "decoy_dist": {
+        "n": 37,
+        "mean": 3.4594594594594597,
+        "median": 3.0,
+        "min": 0.0,
+        "max": 10.0
+      },
+      "pos_dist": {
+        "n": 90,
+        "mean": 1.8111111111111111,
+        "median": 2.0,
+        "min": 0.0,
+        "max": 3.0
+      },
+      "pos_dist_by_type": {
+        "A": {
+          "n": 72,
+          "mean": 1.8888888888888888,
+          "median": 2.0,
+          "min": 0.0,
+          "max": 3.0
+        },
+        "B": {
+          "n": 18,
+          "mean": 1.5,
+          "median": 2.0,
+          "min": 0.0,
+          "max": 2.0
+        }
+      },
+      "slice_type": {
+        "A": {
+          "n_pos": 72,
+          "n_neg": 72,
+          "auc": 0.45515046296296297
+        },
+        "B": {
+          "n_pos": 18,
+          "n_neg": 18,
+          "auc": 0.3395061728395062
+        }
+      },
+      "slice_subset": {
+        "core": {
+          "n_pos": 81,
+          "n_neg": 81,
+          "auc": 0.42036274958085657
+        },
+        "boundary_test": {
+          "n_pos": 9,
+          "n_neg": 9,
+          "auc": 0.5493827160493827
+        }
+      },
+      "slice_domain": {
+        "credit_screening": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.3333333333333333
+        },
+        "exchange_rule_execution": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.2
+        },
+        "execution_scheduling": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.32
+        },
+        "execution_vwap": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.42
+        },
+        "factor_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "liquidity_management": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.3472222222222222
+        },
+        "market_making": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.4444444444444444
+        },
+        "portfolio_construction": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.375
+        },
+        "portfolio_insurance": {
+          "n_pos": 4,
+          "n_neg": 4,
+          "auc": 0.5
+        },
+        "position_sizing": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.7361111111111112
+        },
+        "prime_brokerage_margin": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.4444444444444444
+        },
+        "regulatory_concentration": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.06
+        },
+        "risk_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.4166666666666667
+        },
+        "settlement_ops": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5
+        },
+        "stat_arb": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5
+        },
+        "technical_indicator": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5555555555555556
+        }
+      }
+    },
+    "M5": {
+      "desc": "marker-vocab hit count",
+      "auc_main": 0.8281481481481482,
+      "operating_points": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 2.0,
+          "fpr": 0.0,
+          "tpr": 0.06666666666666667,
+          "decoy_fp": 0.10810810810810811
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 2.0,
+          "fpr": 0.0,
+          "tpr": 0.06666666666666667,
+          "decoy_fp": 0.10810810810810811
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 1.0,
+          "fpr": 0.011111111111111112,
+          "tpr": 0.6666666666666666,
+          "decoy_fp": 0.2702702702702703
+        }
+      ],
+      "neg_main_dist": {
+        "n": 90,
+        "mean": 0.011111111111111112,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "decoy_dist": {
+        "n": 37,
+        "mean": 0.3783783783783784,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 2.0
+      },
+      "pos_dist": {
+        "n": 90,
+        "mean": 0.7444444444444445,
+        "median": 1.0,
+        "min": 0.0,
+        "max": 3.0
+      },
+      "pos_dist_by_type": {
+        "A": {
+          "n": 72,
+          "mean": 0.7777777777777778,
+          "median": 1.0,
+          "min": 0.0,
+          "max": 2.0
+        },
+        "B": {
+          "n": 18,
+          "mean": 0.6111111111111112,
+          "median": 0.5,
+          "min": 0.0,
+          "max": 3.0
+        }
+      },
+      "slice_type": {
+        "A": {
+          "n_pos": 72,
+          "n_neg": 72,
+          "auc": 0.847704475308642
+        },
+        "B": {
+          "n_pos": 18,
+          "n_neg": 18,
+          "auc": 0.75
+        }
+      },
+      "slice_subset": {
+        "core": {
+          "n_pos": 81,
+          "n_neg": 81,
+          "auc": 0.8276177411979881
+        },
+        "boundary_test": {
+          "n_pos": 9,
+          "n_neg": 9,
+          "auc": 0.8333333333333334
+        }
+      },
+      "slice_domain": {
+        "credit_screening": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "exchange_rule_execution": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.9
+        },
+        "execution_scheduling": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 0.8
+        },
+        "execution_vwap": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 1.0
+        },
+        "factor_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.9166666666666666
+        },
+        "liquidity_management": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "market_making": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        },
+        "portfolio_construction": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "portfolio_insurance": {
+          "n_pos": 4,
+          "n_neg": 4,
+          "auc": 0.875
+        },
+        "position_sizing": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.75
+        },
+        "prime_brokerage_margin": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.6666666666666666
+        },
+        "regulatory_concentration": {
+          "n_pos": 5,
+          "n_neg": 5,
+          "auc": 1.0
+        },
+        "risk_model": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.7638888888888888
+        },
+        "settlement_ops": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.8333333333333334
+        },
+        "stat_arb": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 0.5833333333333334
+        },
+        "technical_indicator": {
+          "n_pos": 6,
+          "n_neg": 6,
+          "auc": 1.0
+        }
+      }
+    }
+  },
+  "prereg": {
+    "i_M3_highest_auc": true,
+    "auc_ranking": [
+      [
+        "M3",
+        0.8787654320987655
+      ],
+      [
+        "M5",
+        0.8281481481481482
+      ],
+      [
+        "M2",
+        0.8279012345679012
+      ],
+      [
+        "M1",
+        0.6166666666666667
+      ],
+      [
+        "M4",
+        0.43265432098765433
+      ]
+    ],
+    "i_M3_AB_median_gap": 0.07224637269973755,
+    "i_M3_A_median": 0.6607046723365784,
+    "i_M3_B_median": 0.7329510450363159,
+    "i_M3_neg_median": 0.49566197395324707,
+    "i_M3_neg_max": 0.7447499632835388,
+    "ii_M4_tpr_at_fpr5": 0.0,
+    "ii_M4_tpr_at_fpr20": 0.0,
+    "ii_M4_tpr_at_fpr50": 0.16666666666666666,
+    "iii_M1_tpr": 0.24444444444444444,
+    "iii_M1_fpr_anchor": 0.011111111111111112,
+    "iii_M1_decoy_fp": 0.0
+  },
+  "protected_literals_sample": [
+    "realized volatility > 1.8x",
+    "0.25x committed revolver",
+    "0.35x fractional kelly",
+    "ewma (lambda = 0.97",
+    "5x its index weight",
+    "4x ebitda and two",
+    "1.5% confirmation",
+    "1.15x capital add",
+    "12x parent weight",
+    "130% utilization",
+    "98.1% confidence",
+    "7% semiannually",
+    "85th percentile",
+    "15th percentile",
+    "92% utilization",
+    "30th percentile",
+    "90th percentile",
+    "97th percentile",
+    "97% affirmation",
+    "80th percentile",
+    "80% utilization",
+    "4x premium paid",
+    "9.5% volatility",
+    "50% diversified",
+    "95th percentile",
+    "99th percentile",
+    "15% obligation",
+    "10% volatility",
+    "20% regulatory",
+    "lambda = 0.89",
+    "10d rsi < 24",
+    "2.5x its pre",
+    "11% equities",
+    "160% ceiling",
+    "gamma = 0.12",
+    "150% trigger",
+    "31% standard",
+    "1.3x its 20",
+    "1.8x its 60",
+    "5% drawdown"
+  ],
+  "per_positive": [
+    {
+      "id": "p0_01",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5723485350608826,
+      "M4": 2.0,
+      "M5": 2.0
+    },
+    {
+      "id": "p0_02",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.018867924528301886,
+      "M3": 0.6260933876037598,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_03",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "regulatory_concentration",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.022222222222222223,
+      "M3": 0.8050752878189087,
+      "M4": 2.0,
+      "M5": 2.0
+    },
+    {
+      "id": "p0_04",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "exchange_rule_execution",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.225,
+      "M3": 0.7511967420578003,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_05",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "position_sizing",
+      "M1_hit": true,
+      "M1_literals": [
+        "0.35x fractional kelly"
+      ],
+      "M2": 0.030303030303030304,
+      "M3": 0.630743682384491,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "p0_06",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": true,
+      "M1_literals": [
+        "lambda = 0.89"
+      ],
+      "M2": 0.0,
+      "M3": 0.4862542152404785,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "p0_07",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_vwap",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.29411764705882354,
+      "M3": 0.7445546984672546,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_08",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.1590909090909091,
+      "M3": 0.7864868640899658,
+      "M4": 1.0,
+      "M5": 3.0
+    },
+    {
+      "id": "p0_09",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5038368701934814,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_10",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.8063564300537109,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_11",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": true,
+      "M1_literals": [
+        "18% gross"
+      ],
+      "M2": 0.018518518518518517,
+      "M3": 0.5704877972602844,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "p0_12",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5454431772232056,
+      "M4": 1.0,
+      "M5": 2.0
+    },
+    {
+      "id": "p0_13",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.034482758620689655,
+      "M3": 0.4963807761669159,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "p0_14",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "portfolio_insurance",
+      "M1_hit": true,
+      "M1_literals": [
+        "m = 4.2"
+      ],
+      "M2": 0.0,
+      "M3": 0.4149092137813568,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "p0_15",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6074608564376831,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_16",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.02040816326530612,
+      "M3": 0.6221973299980164,
+      "M4": 2.0,
+      "M5": 2.0
+    },
+    {
+      "id": "b1_17",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": true,
+      "M1_literals": [
+        "40% book",
+        "25% free",
+        "35% ev"
+      ],
+      "M2": 0.15555555555555556,
+      "M3": 0.7616560459136963,
+      "M4": 3.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_18",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.18181818181818182,
+      "M3": 0.7125358581542969,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_19",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_scheduling",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.06521739130434782,
+      "M3": 0.6367607116699219,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_20",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": true,
+      "M1_literals": [
+        "$250k"
+      ],
+      "M2": 0.044444444444444446,
+      "M3": 0.6915222406387329,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_21",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": true,
+      "M1_literals": [
+        "3% gross"
+      ],
+      "M2": 0.13043478260869565,
+      "M3": 0.8138680458068848,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_22",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": true,
+      "M1_literals": [
+        "85th percentile"
+      ],
+      "M2": 0.23684210526315788,
+      "M3": 0.9220364689826965,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_23",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": true,
+      "M1_literals": [
+        "1% level"
+      ],
+      "M2": 0.061224489795918366,
+      "M3": 0.5732362866401672,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_24",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": true,
+      "M1_literals": [
+        "9.5% volatility"
+      ],
+      "M2": 0.10416666666666667,
+      "M3": 0.6615748405456543,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_25",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5257763862609863,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_26",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": true,
+      "M1_literals": [
+        "0.35x long"
+      ],
+      "M2": 0.041666666666666664,
+      "M3": 0.6181498169898987,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_27",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "exchange_rule_execution",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.05454545454545454,
+      "M3": 0.7314053773880005,
+      "M4": 0.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_28",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "position_sizing",
+      "M1_hit": true,
+      "M1_literals": [
+        "10% volatility"
+      ],
+      "M2": 0.17647058823529413,
+      "M3": 0.8817481994628906,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b1_29",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_insurance",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6023234128952026,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b1_30",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.034482758620689655,
+      "M3": 0.6616107225418091,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b2_31",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.20512820512820512,
+      "M3": 0.7809217572212219,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_32",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "exchange_rule_execution",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.03571428571428571,
+      "M3": 0.7845098376274109,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b2_33",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": true,
+      "M1_literals": [
+        "$0.0011"
+      ],
+      "M2": 0.3333333333333333,
+      "M3": 0.793732762336731,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_34",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "regulatory_concentration",
+      "M1_hit": true,
+      "M1_literals": [
+        "75% test"
+      ],
+      "M2": 0.023809523809523808,
+      "M3": 0.8694211840629578,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b2_35",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.06666666666666667,
+      "M3": 0.7036752700805664,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_36",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.22727272727272727,
+      "M3": 0.698647141456604,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_37",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.06521739130434782,
+      "M3": 0.6398610472679138,
+      "M4": 3.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_38",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": true,
+      "M1_literals": [
+        "2.5% around"
+      ],
+      "M2": 0.0975609756097561,
+      "M3": 0.7307556867599487,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_39",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": true,
+      "M1_literals": [
+        "31% floor"
+      ],
+      "M2": 0.02631578947368421,
+      "M3": 0.7164000272750854,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_40",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.02040816326530612,
+      "M3": 0.7447601556777954,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_41",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.07894736842105263,
+      "M3": 0.5825660228729248,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b2_42",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "position_sizing",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.02702702702702703,
+      "M3": 0.64830482006073,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_43",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_insurance",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.021739130434782608,
+      "M3": 0.6856334805488586,
+      "M4": 3.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b2_44",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_vwap",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.15217391304347827,
+      "M3": 0.7561990022659302,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b2_45",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_scheduling",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.7234358787536621,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b3_46",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "regulatory_concentration",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.04,
+      "M3": 0.7193781137466431,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_47",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_vwap",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5658127665519714,
+      "M4": 0.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_48",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_scheduling",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.08888888888888889,
+      "M3": 0.7153968811035156,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_49",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5607976913452148,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_50",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.15,
+      "M3": 0.7636508345603943,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_51",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6567941904067993,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_52",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.7099446058273315,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_53",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.020833333333333332,
+      "M3": 0.6127719283103943,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_54",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": true,
+      "M1_literals": [
+        "15% obligation"
+      ],
+      "M2": 0.0,
+      "M3": 0.7458945512771606,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_55",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.022727272727272728,
+      "M3": 0.709007740020752,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_56",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "portfolio_insurance",
+      "M1_hit": true,
+      "M1_literals": [
+        "12% out"
+      ],
+      "M2": 0.2222222222222222,
+      "M3": 0.801833987236023,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_57",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.043478260869565216,
+      "M3": 0.6405351161956787,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_58",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "position_sizing",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.07142857142857142,
+      "M3": 0.7991685271263123,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b3_59",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": true,
+      "M1_literals": [
+        "$150m"
+      ],
+      "M2": 0.11627906976744186,
+      "M3": 0.6216379404067993,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b3_60",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.608829915523529,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b4_61",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "regulatory_concentration",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.03278688524590164,
+      "M3": 0.6936929225921631,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_62",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "exchange_rule_execution",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.05454545454545454,
+      "M3": 0.7344967126846313,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_63",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_vwap",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5704342722892761,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_64",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_scheduling",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.16666666666666666,
+      "M3": 0.45621344447135925,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_65",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.7923164367675781,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_66",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6196544170379639,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_67",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.4698733389377594,
+      "M4": 2.0,
+      "M5": 2.0
+    },
+    {
+      "id": "b4_68",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6246331334114075,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_69",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.11538461538461539,
+      "M3": 0.6611474752426147,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b4_70",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.2222222222222222,
+      "M3": 0.7791993618011475,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_71",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.5678055286407471,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_72",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6613680124282837,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b4_73",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "position_sizing",
+      "M1_hit": true,
+      "M1_literals": [
+        "3.4% at",
+        "4.8% at"
+      ],
+      "M2": 0.15,
+      "M3": 0.6940804719924927,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_74",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.08,
+      "M3": 0.691716194152832,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b4_75",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.17307692307692307,
+      "M3": 0.7949292659759521,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b5_76",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "regulatory_concentration",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6890196800231934,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_77",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "exchange_rule_execution",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.06976744186046512,
+      "M3": 0.5004627108573914,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b5_78",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "execution_vwap",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.8419243097305298,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_79",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "execution_scheduling",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.02040816326530612,
+      "M3": 0.7177056074142456,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_80",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "technical_indicator",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.06976744186046512,
+      "M3": 0.7195965051651001,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_81",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "factor_model",
+      "M1_hit": true,
+      "M1_literals": [
+        "top 7%"
+      ],
+      "M2": 0.045454545454545456,
+      "M3": 0.6524822115898132,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_82",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "risk_model",
+      "M1_hit": true,
+      "M1_literals": [
+        "97th percentile"
+      ],
+      "M2": 0.08695652173913043,
+      "M3": 0.6026332378387451,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_83",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "credit_screening",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.623129665851593,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_84",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "stat_arb",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.6934838891029358,
+      "M4": 1.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b5_85",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "market_making",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0851063829787234,
+      "M3": 0.5217945575714111,
+      "M4": 2.0,
+      "M5": 0.0
+    },
+    {
+      "id": "b5_86",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "portfolio_construction",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.13513513513513514,
+      "M3": 0.7815971374511719,
+      "M4": 1.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_87",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "liquidity_management",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.08695652173913043,
+      "M3": 0.660261869430542,
+      "M4": 3.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_88",
+      "offset_type": "A",
+      "subset": "core",
+      "domain": "position_sizing",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.16216216216216217,
+      "M3": 0.623935341835022,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_89",
+      "offset_type": "B",
+      "subset": "core",
+      "domain": "settlement_ops",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.13725490196078433,
+      "M3": 0.6150670051574707,
+      "M4": 2.0,
+      "M5": 1.0
+    },
+    {
+      "id": "b5_90",
+      "offset_type": "A",
+      "subset": "boundary_test",
+      "domain": "prime_brokerage_margin",
+      "M1_hit": false,
+      "M1_literals": [],
+      "M2": 0.0,
+      "M3": 0.449783593416214,
+      "M4": 2.0,
+      "M5": 1.0
+    }
+  ]
+}

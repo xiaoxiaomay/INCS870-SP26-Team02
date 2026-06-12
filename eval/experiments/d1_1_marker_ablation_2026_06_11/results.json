@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "st_version": "5.2.2",
+    "python": "3.12.2",
+    "platform": "macOS-14.5-arm64-arm-64bit",
+    "run_date": "2026-06-11",
+    "n_pos": 90,
+    "n_neg_main": 90,
+    "n_neg_stress": 37,
+    "n_kb": 90,
+    "n_pos_with_marker_before": 60,
+    "residual_marker_ids": []
+  },
+  "mechanisms": {
+    "M2": {
+      "auc_orig": 0.8279012345679012,
+      "auc_neut": 0.8218518518518518,
+      "ops_orig": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.019230769230769232,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.6666666666666666,
+          "decoy_fp": 0.02702702702702703
+        }
+      ],
+      "ops_neut": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.4888888888888889,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.04,
+          "fpr": 0.0,
+          "tpr": 0.4888888888888889,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.019230769230769232,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.6555555555555556,
+          "decoy_fp": 0.02702702702702703
+        }
+      ],
+      "delta_auc": 0.0060493827160493785
+    },
+    "M3": {
+      "auc_orig": 0.8787654320987655,
+      "auc_neut": 0.8535802469135803,
+      "ops_orig": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.25555555555555554,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.25555555555555554,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.6695370078086853,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.5,
+          "decoy_fp": 0.0
+        }
+      ],
+      "ops_neut": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.18888888888888888,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 0.7447601556777954,
+          "fpr": 0.0,
+          "tpr": 0.18888888888888888,
+          "decoy_fp": 0.0
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 0.6695370078086853,
+          "fpr": 0.044444444444444446,
+          "tpr": 0.4777777777777778,
+          "decoy_fp": 0.0
+        }
+      ],
+      "delta_auc": 0.0251851851851852
+    },
+    "M5": {
+      "auc_orig": 0.8281481481481482,
+      "auc_neut": 0.49444444444444446,
+      "ops_orig": [
+        {
+          "target_fpr": 0.0,
+          "threshold": 2.0,
+          "fpr": 0.0,
+          "tpr": 0.06666666666666667,
+          "decoy_fp": 0.10810810810810811
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": 2.0,
+          "fpr": 0.0,
+          "tpr": 0.06666666666666667,
+          "decoy_fp": 0.10810810810810811
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 1.0,
+          "fpr": 0.011111111111111112,
+          "tpr": 0.6666666666666666,
+          "decoy_fp": 0.2702702702702703
+        }
+      ],
+      "ops_neut": [
+        {
+          "target_fpr": 0.0,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.01,
+          "threshold": null,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "decoy_fp": null
+        },
+        {
+          "target_fpr": 0.05,
+          "threshold": 1.0,
+          "fpr": 0.011111111111111112,
+          "tpr": 0.0,
+          "decoy_fp": 0.2702702702702703
+        }
+      ],
+      "delta_auc": 0.3337037037037037
+    }
+  },
+  "prereg": {
+    "a_M5_collapse": {
+      "auc_orig": 0.8281481481481482,
+      "auc_neut": 0.49444444444444446
+    },
+    "b_M3_decompose": {
+      "auc_orig": 0.8787654320987655,
+      "auc_neut": 0.8535802469135803,
+      "style_contribution_delta": 0.0251851851851852,
+      "content_contribution_above_0.5": 0.35358024691358025
+    },
+    "c_M2_small_drop": {
+      "auc_orig": 0.8279012345679012,
+      "auc_neut": 0.8218518518518518,
+      "delta": 0.0060493827160493785
+    }
+  }
+}

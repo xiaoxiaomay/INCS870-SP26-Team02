@@ -81,3 +81,5 @@ data/processed/
 data/index/secrets.faiss
 data/index/secrets_meta.pkl
 CLAUDE.md
+eval/rerun_phase2/mini_pilot_*/
+eval/rerun_phase2/cache_c/

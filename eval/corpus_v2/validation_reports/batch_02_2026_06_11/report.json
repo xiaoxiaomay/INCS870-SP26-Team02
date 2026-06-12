@@ -1,0 +1,2022 @@
+{
+  "meta": {
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "st_version": "5.2.2",
+    "python": "3.12.2",
+    "platform": "macOS-14.5-arm64-arm-64bit",
+    "run_date": "2026-06-11",
+    "corpus_files": [
+      {
+        "path": "eval/corpus_v2/corpus_batch_seed.jsonl",
+        "lines": 15
+      },
+      {
+        "path": "eval/corpus_v2/corpus_batch_01.jsonl",
+        "lines": 15
+      },
+      {
+        "path": "eval/corpus_v2/corpus_batch_02.jsonl",
+        "lines": 15
+      }
+    ],
+    "hn_file": {
+      "path": "eval/corpus_v2/hard_negatives_v2.jsonl",
+      "lines": 78
+    },
+    "hn_anchor": 45,
+    "hn_decoy": 33,
+    "quota_base": 45
+  },
+  "check1_quota": {
+    "n_secrets": 45,
+    "dimensions": {
+      "domain": {
+        "technical_indicator": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "factor_model": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "exchange_rule_execution": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "position_sizing": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "risk_model": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "settlement_ops": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "portfolio_construction": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "liquidity_management": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "prime_brokerage_margin": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "market_making": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "stat_arb": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "portfolio_insurance": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "credit_screening": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "regulatory_concentration": {
+          "count": 2,
+          "share": 0.044444444444444446
+        },
+        "execution_vwap": {
+          "count": 2,
+          "share": 0.044444444444444446
+        },
+        "execution_scheduling": {
+          "count": 2,
+          "share": 0.044444444444444446
+        }
+      },
+      "offset_type": {
+        "A": {
+          "count": 36,
+          "share": 0.8
+        },
+        "B": {
+          "count": 9,
+          "share": 0.2
+        }
+      },
+      "subset": {
+        "core": {
+          "count": 41,
+          "share": 0.9111111111111111
+        },
+        "boundary_test": {
+          "count": 4,
+          "share": 0.08888888888888889
+        }
+      },
+      "marker_style": {
+        "none": {
+          "count": 17,
+          "share": 0.37777777777777777
+        },
+        "internal": {
+          "count": 8,
+          "share": 0.17777777777777778
+        },
+        "desk": {
+          "count": 7,
+          "share": 0.15555555555555556
+        },
+        "our": {
+          "count": 4,
+          "share": 0.08888888888888889
+        },
+        "production": {
+          "count": 4,
+          "share": 0.08888888888888889
+        },
+        "ops": {
+          "count": 3,
+          "share": 0.06666666666666667
+        },
+        "firm": {
+          "count": 2,
+          "share": 0.044444444444444446
+        }
+      }
+    },
+    "type_b": {
+      "count": 9,
+      "share": 0.2
+    },
+    "boundary_test": {
+      "count": 4,
+      "share": 0.08888888888888889
+    },
+    "policy_quota_tag": {
+      "count": 4,
+      "share": 0.08888888888888889
+    },
+    "marker_style_top": {
+      "value": "none",
+      "share": 0.37777777777777777
+    },
+    "deviations": [
+      "boundary_test share 4/45=0.089 vs ref ~0.10"
+    ]
+  },
+  "check2_b1_ngrams": [
+    {
+      "ngram": "capped at",
+      "secret_doc_count": 7,
+      "hn_occurrence": 2,
+      "hn_rate": 0.02564102564102564
+    },
+    {
+      "ngram": "of nav",
+      "secret_doc_count": 6,
+      "hn_occurrence": 2,
+      "hn_rate": 0.02564102564102564
+    },
+    {
+      "ngram": "at 1",
+      "secret_doc_count": 5,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "5 day",
+      "secret_doc_count": 4,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "at 0",
+      "secret_doc_count": 4,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "held under",
+      "secret_doc_count": 4,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "of adv",
+      "secret_doc_count": 4,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "with a",
+      "secret_doc_count": 4,
+      "hn_occurrence": 3,
+      "hn_rate": 0.038461538461538464
+    },
+    {
+      "ngram": "60 40 with",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "exposure capped at",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "0 5",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "0 6",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "1 4",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "1 5x",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "1 8x",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "10 day",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "2 of",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "3 5",
+      "secret_doc_count": 3,
+      "hn_occurrence": 2,
+      "hn_rate": 0.02564102564102564
+    },
+    {
+      "ngram": "40 with",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "60 40",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "add on",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "at 2",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "at 28",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "at the",
+      "secret_doc_count": 3,
+      "hn_occurrence": 6,
+      "hn_rate": 0.07692307692307693
+    },
+    {
+      "ngram": "desk rule",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "exit at",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "exposure capped",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "half life",
+      "secret_doc_count": 3,
+      "hn_occurrence": 2,
+      "hn_rate": 0.02564102564102564
+    },
+    {
+      "ngram": "is under",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "of book",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "on a",
+      "secret_doc_count": 3,
+      "hn_occurrence": 1,
+      "hn_rate": 0.01282051282051282
+    },
+    {
+      "ngram": "only when",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    },
+    {
+      "ngram": "realized vol",
+      "secret_doc_count": 3,
+      "hn_occurrence": 0,
+      "hn_rate": 0.0
+    }
+  ],
+  "check2_b2_heuristics": {
+    "vocab:our": {
+      "tp": 4,
+      "fp": 4,
+      "fn": 41,
+      "precision": 0.5,
+      "recall": 0.08888888888888889,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 4,
+      "fp_decoy_rate": 0.12121212121212122,
+      "alarm_high_pr": false
+    },
+    "vocab:internal": {
+      "tp": 9,
+      "fp": 4,
+      "fn": 36,
+      "precision": 0.6923076923076923,
+      "recall": 0.2,
+      "fp_anchor": 1,
+      "fp_anchor_rate": 0.022222222222222223,
+      "fp_decoy": 3,
+      "fp_decoy_rate": 0.09090909090909091,
+      "alarm_high_pr": false
+    },
+    "vocab:desk": {
+      "tp": 13,
+      "fp": 4,
+      "fn": 32,
+      "precision": 0.7647058823529411,
+      "recall": 0.28888888888888886,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 4,
+      "fp_decoy_rate": 0.12121212121212122,
+      "alarm_high_pr": false
+    },
+    "vocab:proprietary": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 45,
+      "precision": 0.0,
+      "recall": 0.0,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 1,
+      "fp_decoy_rate": 0.030303030303030304,
+      "alarm_high_pr": false
+    },
+    "vocab:production": {
+      "tp": 4,
+      "fp": 1,
+      "fn": 41,
+      "precision": 0.8,
+      "recall": 0.08888888888888889,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 1,
+      "fp_decoy_rate": 0.030303030303030304,
+      "alarm_high_pr": false
+    },
+    "vocab:firm": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 44,
+      "precision": 0.5,
+      "recall": 0.022222222222222223,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 1,
+      "fp_decoy_rate": 0.030303030303030304,
+      "alarm_high_pr": false
+    },
+    "vocab:ops": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 42,
+      "precision": 1.0,
+      "recall": 0.06666666666666667,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 0,
+      "fp_decoy_rate": 0.0,
+      "alarm_high_pr": false
+    },
+    "vocab:ANY": {
+      "tp": 30,
+      "fp": 11,
+      "fn": 15,
+      "precision": 0.7317073170731707,
+      "recall": 0.6666666666666666,
+      "fp_anchor": 1,
+      "fp_anchor_rate": 0.022222222222222223,
+      "fp_decoy": 10,
+      "fp_decoy_rate": 0.30303030303030304,
+      "alarm_high_pr": false
+    },
+    "struct:num>=1": {
+      "tp": 45,
+      "fp": 59,
+      "fn": 0,
+      "precision": 0.4326923076923077,
+      "recall": 1.0,
+      "fp_anchor": 33,
+      "fp_anchor_rate": 0.7333333333333333,
+      "fp_decoy": 26,
+      "fp_decoy_rate": 0.7878787878787878,
+      "alarm_high_pr": false
+    },
+    "struct:num>=3": {
+      "tp": 45,
+      "fp": 34,
+      "fn": 0,
+      "precision": 0.569620253164557,
+      "recall": 1.0,
+      "fp_anchor": 16,
+      "fp_anchor_rate": 0.35555555555555557,
+      "fp_decoy": 18,
+      "fp_decoy_rate": 0.5454545454545454,
+      "alarm_high_pr": false
+    },
+    "struct:semicolon>=2": {
+      "tp": 42,
+      "fp": 10,
+      "fn": 3,
+      "precision": 0.8076923076923077,
+      "recall": 0.9333333333333333,
+      "fp_anchor": 0,
+      "fp_anchor_rate": 0.0,
+      "fp_decoy": 10,
+      "fp_decoy_rate": 0.30303030303030304,
+      "alarm_high_pr": false
+    }
+  },
+  "check2_b3_numeric_density": {
+    "secret": {
+      "stats": {
+        "n": 45,
+        "mean": 5.288888888888889,
+        "median": 5,
+        "p25": 4.0,
+        "p75": 6.0,
+        "min": 3,
+        "max": 9
+      },
+      "hist": {
+        "3": 6,
+        "4": 7,
+        "5": 12,
+        "6": 11,
+        "7": 7,
+        "8": 1,
+        "9": 1
+      }
+    },
+    "anchor": {
+      "stats": {
+        "n": 45,
+        "mean": 1.7555555555555555,
+        "median": 2,
+        "p25": 0.0,
+        "p75": 3.0,
+        "min": 0,
+        "max": 4
+      },
+      "hist": {
+        "0": 12,
+        "1": 8,
+        "2": 9,
+        "3": 11,
+        "4": 5
+      }
+    },
+    "decoy": {
+      "stats": {
+        "n": 33,
+        "mean": 3.0303030303030303,
+        "median": 3,
+        "p25": 1.0,
+        "p75": 5.0,
+        "min": 0,
+        "max": 7
+      },
+      "hist": {
+        "0": 7,
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 1,
+        "5": 8,
+        "6": 3,
+        "7": 2
+      }
+    }
+  },
+  "check3_embedding": {
+    "own_cosine_overall": {
+      "n": 45,
+      "mean": 0.46804531084166634,
+      "median": 0.48894941806793213,
+      "p25": 0.3891279399394989,
+      "p75": 0.5466061234474182,
+      "min": 0.2188839167356491,
+      "max": 0.7234731316566467
+    },
+    "own_cosine_by_type": {
+      "A": {
+        "n": 36,
+        "mean": 0.4720548656251695,
+        "median": 0.4787023663520813,
+        "p25": 0.398305743932724,
+        "p75": 0.5747077763080597,
+        "min": 0.2188839167356491,
+        "max": 0.7234731316566467
+      },
+      "B": {
+        "n": 9,
+        "mean": 0.45200709170765346,
+        "median": 0.49802693724632263,
+        "p25": 0.3836604952812195,
+        "p75": 0.5177685022354126,
+        "min": 0.3012489080429077,
+        "max": 0.5459924936294556
+      }
+    },
+    "own_cosine_by_domain": {
+      "technical_indicator": {
+        "n": 3,
+        "mean": 0.499693642059962,
+        "median": 0.49329695105552673,
+        "p25": 0.4762374013662338,
+        "p75": 0.5199515372514725,
+        "min": 0.4591778516769409,
+        "max": 0.5466061234474182
+      },
+      "factor_model": {
+        "n": 3,
+        "mean": 0.532009114821752,
+        "median": 0.5026966333389282,
+        "p25": 0.470512256026268,
+        "p75": 0.578849732875824,
+        "min": 0.4383278787136078,
+        "max": 0.6550028324127197
+      },
+      "regulatory_concentration": {
+        "n": 2,
+        "mean": 0.6062569618225098,
+        "median": 0.6062569618225098,
+        "p25": 0.5910420119762421,
+        "p75": 0.6214719116687775,
+        "min": 0.5758270621299744,
+        "max": 0.6366868615150452
+      },
+      "exchange_rule_execution": {
+        "n": 3,
+        "mean": 0.4113847613334656,
+        "median": 0.4151368737220764,
+        "p25": 0.35819289088249207,
+        "p75": 0.4664526879787445,
+        "min": 0.3012489080429077,
+        "max": 0.5177685022354126
+      },
+      "position_sizing": {
+        "n": 3,
+        "mean": 0.5837739706039429,
+        "median": 0.5869940519332886,
+        "p25": 0.5437666177749634,
+        "p75": 0.6253913640975952,
+        "min": 0.5005391836166382,
+        "max": 0.6637886762619019
+      },
+      "risk_model": {
+        "n": 3,
+        "mean": 0.41059036056200665,
+        "median": 0.42834189534187317,
+        "p25": 0.35129956901073456,
+        "p75": 0.478756919503212,
+        "min": 0.27425724267959595,
+        "max": 0.5291719436645508
+      },
+      "execution_vwap": {
+        "n": 2,
+        "mean": 0.42075401544570923,
+        "median": 0.42075401544570923,
+        "p25": 0.3439636826515198,
+        "p75": 0.4975443482398987,
+        "min": 0.2671733498573303,
+        "max": 0.5743346810340881
+      },
+      "settlement_ops": {
+        "n": 3,
+        "mean": 0.4144728084405263,
+        "median": 0.3836604952812195,
+        "p25": 0.3726957440376282,
+        "p75": 0.44084371626377106,
+        "min": 0.36173099279403687,
+        "max": 0.49802693724632263
+      },
+      "portfolio_construction": {
+        "n": 3,
+        "mean": 0.46619370579719543,
+        "median": 0.499713271856308,
+        "p25": 0.4192197173833847,
+        "p75": 0.5299274772405624,
+        "min": 0.3387261629104614,
+        "max": 0.5601416826248169
+      },
+      "liquidity_management": {
+        "n": 3,
+        "mean": 0.5102345248063406,
+        "median": 0.43047475814819336,
+        "p25": 0.40361522138118744,
+        "p75": 0.57697394490242,
+        "min": 0.3767556846141815,
+        "max": 0.7234731316566467
+      },
+      "prime_brokerage_margin": {
+        "n": 3,
+        "mean": 0.5301637053489685,
+        "median": 0.528770923614502,
+        "p25": 0.522249311208725,
+        "p75": 0.5373817086219788,
+        "min": 0.515727698802948,
+        "max": 0.5459924936294556
+      },
+      "market_making": {
+        "n": 3,
+        "mean": 0.42631464699904126,
+        "median": 0.42843782901763916,
+        "p25": 0.32843800634145737,
+        "p75": 0.5252528786659241,
+        "min": 0.22843818366527557,
+        "max": 0.622067928314209
+      },
+      "stat_arb": {
+        "n": 3,
+        "mean": 0.37258683641751605,
+        "median": 0.3669048547744751,
+        "p25": 0.3471291661262512,
+        "p75": 0.39520351588726044,
+        "min": 0.32735347747802734,
+        "max": 0.4235021770000458
+      },
+      "portfolio_insurance": {
+        "n": 3,
+        "mean": 0.40087831517060596,
+        "median": 0.4013650119304657,
+        "p25": 0.3101244643330574,
+        "p75": 0.4918755143880844,
+        "min": 0.2188839167356491,
+        "max": 0.5823860168457031
+      },
+      "credit_screening": {
+        "n": 3,
+        "mean": 0.48694339394569397,
+        "median": 0.48894941806793213,
+        "p25": 0.4390386790037155,
+        "p75": 0.5358511209487915,
+        "min": 0.3891279399394989,
+        "max": 0.5827528238296509
+      },
+      "execution_scheduling": {
+        "n": 2,
+        "mean": 0.43614883720874786,
+        "median": 0.43614883720874786,
+        "p25": 0.41999559849500656,
+        "p75": 0.45230207592248917,
+        "min": 0.40384235978126526,
+        "max": 0.46845531463623047
+      }
+    },
+    "cross_pair_rank_violations": [
+      {
+        "id": "p0_04",
+        "own_cosine": 0.3012489080429077,
+        "anchor_rank": 5,
+        "nearest_anchor_id": "b1_19",
+        "nearest_anchor_cosine": 0.4490450620651245
+      },
+      {
+        "id": "p0_08",
+        "own_cosine": 0.36173105239868164,
+        "anchor_rank": 6,
+        "nearest_anchor_id": "b2_40",
+        "nearest_anchor_cosine": 0.4799894094467163
+      },
+      {
+        "id": "p0_09",
+        "own_cosine": 0.33872637152671814,
+        "anchor_rank": 3,
+        "nearest_anchor_id": "p0_14",
+        "nearest_anchor_cosine": 0.3813628852367401
+      },
+      {
+        "id": "p0_12",
+        "own_cosine": 0.22843824326992035,
+        "anchor_rank": 10,
+        "nearest_anchor_id": "b2_41",
+        "nearest_anchor_cosine": 0.3251003623008728
+      },
+      {
+        "id": "p0_14",
+        "own_cosine": 0.21888397634029388,
+        "anchor_rank": 17,
+        "nearest_anchor_id": "p0_07",
+        "nearest_anchor_cosine": 0.35145604610443115
+      },
+      {
+        "id": "p0_15",
+        "own_cosine": 0.3891279101371765,
+        "anchor_rank": 2,
+        "nearest_anchor_id": "b2_35",
+        "nearest_anchor_cosine": 0.4040443003177643
+      },
+      {
+        "id": "b1_16",
+        "own_cosine": 0.4591779112815857,
+        "anchor_rank": 2,
+        "nearest_anchor_id": "b2_41",
+        "nearest_anchor_cosine": 0.5283058881759644
+      },
+      {
+        "id": "b1_18",
+        "own_cosine": 0.2742573320865631,
+        "anchor_rank": 6,
+        "nearest_anchor_id": "p0_02",
+        "nearest_anchor_cosine": 0.30957144498825073
+      },
+      {
+        "id": "b1_20",
+        "own_cosine": 0.3836604952812195,
+        "anchor_rank": 4,
+        "nearest_anchor_id": "p0_11",
+        "nearest_anchor_cosine": 0.4362429976463318
+      },
+      {
+        "id": "b1_24",
+        "own_cosine": 0.49971339106559753,
+        "anchor_rank": 2,
+        "nearest_anchor_id": "b1_28",
+        "nearest_anchor_cosine": 0.5332067012786865
+      },
+      {
+        "id": "b2_37",
+        "own_cosine": 0.3273535370826721,
+        "anchor_rank": 6,
+        "nearest_anchor_id": "p0_01",
+        "nearest_anchor_cosine": 0.38060641288757324
+      },
+      {
+        "id": "b2_39",
+        "own_cosine": 0.3767557144165039,
+        "anchor_rank": 2,
+        "nearest_anchor_id": "b2_40",
+        "nearest_anchor_cosine": 0.4348452091217041
+      },
+      {
+        "id": "b2_44",
+        "own_cosine": 0.26717329025268555,
+        "anchor_rank": 9,
+        "nearest_anchor_id": "b2_41",
+        "nearest_anchor_cosine": 0.38203999400138855
+      }
+    ],
+    "anchor_crosstalk_gt080": [],
+    "atomic_pairs": [
+      {
+        "id": "p0_01",
+        "offset_type": "A",
+        "bundle_cosine": 0.49329695105552673,
+        "atomic_cosine": 0.9155451059341431,
+        "delta": 0.42224815487861633,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_02",
+        "offset_type": "A",
+        "bundle_cosine": 0.6550028324127197,
+        "atomic_cosine": 0.7330746650695801,
+        "delta": 0.07807183265686035,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_03",
+        "offset_type": "A",
+        "bundle_cosine": 0.6366868615150452,
+        "atomic_cosine": 0.6450104713439941,
+        "delta": 0.008323609828948975,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_04",
+        "offset_type": "B",
+        "bundle_cosine": 0.3012489080429077,
+        "atomic_cosine": 0.29247650504112244,
+        "delta": -0.008772403001785278,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "p0_05",
+        "offset_type": "A",
+        "bundle_cosine": 0.5869940519332886,
+        "atomic_cosine": 0.606635332107544,
+        "delta": 0.01964128017425537,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_06",
+        "offset_type": "A",
+        "bundle_cosine": 0.42834189534187317,
+        "atomic_cosine": 0.8530552983283997,
+        "delta": 0.4247134029865265,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_07",
+        "offset_type": "A",
+        "bundle_cosine": 0.5743346810340881,
+        "atomic_cosine": 0.6776614785194397,
+        "delta": 0.10332679748535156,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_08",
+        "offset_type": "B",
+        "bundle_cosine": 0.36173099279403687,
+        "atomic_cosine": 0.3327029049396515,
+        "delta": -0.029028087854385376,
+        "atomic_rank": 2,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "p0_09",
+        "offset_type": "A",
+        "bundle_cosine": 0.3387261629104614,
+        "atomic_cosine": 0.6691815257072449,
+        "delta": 0.33045536279678345,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_10",
+        "offset_type": "A",
+        "bundle_cosine": 0.7234731316566467,
+        "atomic_cosine": 0.8053861260414124,
+        "delta": 0.08191299438476562,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_11",
+        "offset_type": "B",
+        "bundle_cosine": 0.515727698802948,
+        "atomic_cosine": 0.5706474781036377,
+        "delta": 0.0549197793006897,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "p0_12",
+        "offset_type": "A",
+        "bundle_cosine": 0.22843818366527557,
+        "atomic_cosine": 0.8044427037239075,
+        "delta": 0.5760045200586319,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_13",
+        "offset_type": "A",
+        "bundle_cosine": 0.4235021770000458,
+        "atomic_cosine": 0.6950058937072754,
+        "delta": 0.2715037167072296,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_14",
+        "offset_type": "A",
+        "bundle_cosine": 0.2188839167356491,
+        "atomic_cosine": 0.9260877370834351,
+        "delta": 0.707203820347786,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "p0_15",
+        "offset_type": "A",
+        "bundle_cosine": 0.3891279399394989,
+        "atomic_cosine": 0.3930012881755829,
+        "delta": 0.0038733482360839844,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_16",
+        "offset_type": "A",
+        "bundle_cosine": 0.4591778516769409,
+        "atomic_cosine": 0.8680251836776733,
+        "delta": 0.4088473320007324,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_17",
+        "offset_type": "A",
+        "bundle_cosine": 0.5026966333389282,
+        "atomic_cosine": 0.5313704013824463,
+        "delta": 0.028673768043518066,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_18",
+        "offset_type": "A",
+        "bundle_cosine": 0.27425724267959595,
+        "atomic_cosine": 0.473036527633667,
+        "delta": 0.19877928495407104,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_19",
+        "offset_type": "A",
+        "bundle_cosine": 0.46845531463623047,
+        "atomic_cosine": 0.42631199955940247,
+        "delta": -0.042143315076828,
+        "atomic_rank": 1,
+        "violation": true,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_20",
+        "offset_type": "B",
+        "bundle_cosine": 0.3836604952812195,
+        "atomic_cosine": 0.32981181144714355,
+        "delta": -0.05384868383407593,
+        "atomic_rank": 2,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b1_21",
+        "offset_type": "B",
+        "bundle_cosine": 0.528770923614502,
+        "atomic_cosine": 0.6581078767776489,
+        "delta": 0.12933695316314697,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b1_22",
+        "offset_type": "A",
+        "bundle_cosine": 0.42843782901763916,
+        "atomic_cosine": 0.4296523630619049,
+        "delta": 0.001214534044265747,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_23",
+        "offset_type": "A",
+        "bundle_cosine": 0.3669048547744751,
+        "atomic_cosine": 0.5267661809921265,
+        "delta": 0.15986132621765137,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_24",
+        "offset_type": "A",
+        "bundle_cosine": 0.499713271856308,
+        "atomic_cosine": 0.6411231160163879,
+        "delta": 0.14140984416007996,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_25",
+        "offset_type": "A",
+        "bundle_cosine": 0.43047475814819336,
+        "atomic_cosine": 0.8280924558639526,
+        "delta": 0.3976176977157593,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_26",
+        "offset_type": "A",
+        "bundle_cosine": 0.48894941806793213,
+        "atomic_cosine": 0.7061007618904114,
+        "delta": 0.21715134382247925,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_27",
+        "offset_type": "B",
+        "bundle_cosine": 0.4151368737220764,
+        "atomic_cosine": 0.31171464920043945,
+        "delta": -0.10342222452163696,
+        "atomic_rank": 2,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b1_28",
+        "offset_type": "A",
+        "bundle_cosine": 0.6637886762619019,
+        "atomic_cosine": 0.7063578367233276,
+        "delta": 0.04256916046142578,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_29",
+        "offset_type": "A",
+        "bundle_cosine": 0.5823860168457031,
+        "atomic_cosine": 0.9260414838790894,
+        "delta": 0.34365546703338623,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b1_30",
+        "offset_type": "A",
+        "bundle_cosine": 0.4383278787136078,
+        "atomic_cosine": 0.6544176340103149,
+        "delta": 0.21608975529670715,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_31",
+        "offset_type": "B",
+        "bundle_cosine": 0.49802693724632263,
+        "atomic_cosine": 0.475007563829422,
+        "delta": -0.023019373416900635,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b2_32",
+        "offset_type": "B",
+        "bundle_cosine": 0.5177685022354126,
+        "atomic_cosine": 0.457487016916275,
+        "delta": -0.06028148531913757,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b2_33",
+        "offset_type": "A",
+        "bundle_cosine": 0.622067928314209,
+        "atomic_cosine": 0.5660269856452942,
+        "delta": -0.056040942668914795,
+        "atomic_rank": 1,
+        "violation": true,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_34",
+        "offset_type": "A",
+        "bundle_cosine": 0.5758270621299744,
+        "atomic_cosine": 0.5461941361427307,
+        "delta": -0.029632925987243652,
+        "atomic_rank": 1,
+        "violation": true,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_35",
+        "offset_type": "A",
+        "bundle_cosine": 0.5291719436645508,
+        "atomic_cosine": 0.4339798390865326,
+        "delta": -0.09519210457801819,
+        "atomic_rank": 2,
+        "violation": true,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_36",
+        "offset_type": "A",
+        "bundle_cosine": 0.5827528238296509,
+        "atomic_cosine": 0.7699045538902283,
+        "delta": 0.1871517300605774,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_37",
+        "offset_type": "A",
+        "bundle_cosine": 0.32735347747802734,
+        "atomic_cosine": 0.5459389090538025,
+        "delta": 0.21858543157577515,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_38",
+        "offset_type": "A",
+        "bundle_cosine": 0.5601416826248169,
+        "atomic_cosine": 0.5735680460929871,
+        "delta": 0.013426363468170166,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_39",
+        "offset_type": "A",
+        "bundle_cosine": 0.3767556846141815,
+        "atomic_cosine": 0.5438634157180786,
+        "delta": 0.1671077311038971,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_40",
+        "offset_type": "B",
+        "bundle_cosine": 0.5459924936294556,
+        "atomic_cosine": 0.5769264698028564,
+        "delta": 0.03093397617340088,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type B: rank<=3 attribution check only"
+      },
+      {
+        "id": "b2_41",
+        "offset_type": "A",
+        "bundle_cosine": 0.5466061234474182,
+        "atomic_cosine": 0.8985015153884888,
+        "delta": 0.35189539194107056,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_42",
+        "offset_type": "A",
+        "bundle_cosine": 0.5005391836166382,
+        "atomic_cosine": 0.6763119101524353,
+        "delta": 0.17577272653579712,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_43",
+        "offset_type": "A",
+        "bundle_cosine": 0.4013650119304657,
+        "atomic_cosine": 0.6159974932670593,
+        "delta": 0.21463248133659363,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_44",
+        "offset_type": "A",
+        "bundle_cosine": 0.2671733498573303,
+        "atomic_cosine": 0.3821774125099182,
+        "delta": 0.11500406265258789,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      },
+      {
+        "id": "b2_45",
+        "offset_type": "A",
+        "bundle_cosine": 0.40384235978126526,
+        "atomic_cosine": 0.4818989932537079,
+        "delta": 0.07805663347244263,
+        "atomic_rank": 1,
+        "violation": false,
+        "criterion": "Type A: rank==1 & delta>0"
+      }
+    ],
+    "atomic_summary": {
+      "n": 45,
+      "delta_pos": 35,
+      "delta_neg": 10,
+      "delta_zero": 0,
+      "delta_mean": 0.14263533486260307,
+      "delta_min": -0.10342222452163696,
+      "delta_max": 0.707203820347786,
+      "violations": [
+        "b1_19",
+        "b2_33",
+        "b2_34",
+        "b2_35"
+      ]
+    }
+  },
+  "check4_overlap": {
+    "legacy_overlap": {
+      "secrets.jsonl": {
+        "status": "OK",
+        "n_rows": 60,
+        "exact_overlap": [],
+        "near_dup_gt095": []
+      },
+      "attack_271": {
+        "status": "OK",
+        "n_rows": 271,
+        "exact_overlap": [],
+        "near_dup_gt095": []
+      },
+      "normal_100": {
+        "status": "OK",
+        "n_rows": 100,
+        "exact_overlap": [],
+        "near_dup_gt095": []
+      },
+      "hard_neg_65": {
+        "status": "OK",
+        "n_rows": 65,
+        "exact_overlap": [],
+        "near_dup_gt095": []
+      }
+    },
+    "decoy_anchor_exact": [],
+    "decoy_anchor_near_gt095": [],
+    "prereg_pairs": [
+      {
+        "decoy": "d3_04",
+        "anchor": "hn_p0_02",
+        "cosine": 0.6669444441795349,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d3_02",
+        "anchor": "hn_p0_01",
+        "cosine": 0.7255609035491943,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d3_06",
+        "anchor": "hn_p0_13",
+        "cosine": 0.43043792247772217,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d2_02",
+        "anchor": "hn_p0_11",
+        "cosine": 0.6144304275512695,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d1_05",
+        "anchor": "hn_p0_03",
+        "cosine": 0.5836431980133057,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d2_10",
+        "anchor": "hn_b2_39",
+        "cosine": 0.6823735237121582,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d3_08",
+        "anchor": "hn_p0_03",
+        "cosine": 0.6408094167709351,
+        "exceeds_095": false
+      },
+      {
+        "decoy": "d3_09",
+        "anchor": "hn_b2_42",
+        "cosine": 0.6811308264732361,
+        "exceeds_095": false
+      }
+    ],
+    "secret_secret_exact_dup": []
+  },
+  "check5_secret_nn": {
+    "n_secrets": 45,
+    "same_domain_nn": 17,
+    "same_domain_nn_share": 0.37777777777777777,
+    "cross_domain_nn_share": 0.6222222222222222,
+    "nn_all": [
+      {
+        "id": "p0_01",
+        "domain": "technical_indicator",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.602776050567627,
+        "same_domain": true
+      },
+      {
+        "id": "p0_02",
+        "domain": "factor_model",
+        "nn_id": "b1_30",
+        "nn_domain": "factor_model",
+        "cosine": 0.46280214190483093,
+        "same_domain": true
+      },
+      {
+        "id": "p0_03",
+        "domain": "regulatory_concentration",
+        "nn_id": "p0_10",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.5061465501785278,
+        "same_domain": false
+      },
+      {
+        "id": "p0_04",
+        "domain": "exchange_rule_execution",
+        "nn_id": "b2_32",
+        "nn_domain": "exchange_rule_execution",
+        "cosine": 0.46408611536026,
+        "same_domain": true
+      },
+      {
+        "id": "p0_05",
+        "domain": "position_sizing",
+        "nn_id": "p0_03",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.4840909540653229,
+        "same_domain": false
+      },
+      {
+        "id": "p0_06",
+        "domain": "risk_model",
+        "nn_id": "b1_18",
+        "nn_domain": "risk_model",
+        "cosine": 0.5333866477012634,
+        "same_domain": true
+      },
+      {
+        "id": "p0_07",
+        "domain": "execution_vwap",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.4708743095397949,
+        "same_domain": false
+      },
+      {
+        "id": "p0_08",
+        "domain": "settlement_ops",
+        "nn_id": "b2_40",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.5870104432106018,
+        "same_domain": false
+      },
+      {
+        "id": "p0_09",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_29",
+        "nn_domain": "portfolio_insurance",
+        "cosine": 0.38986146450042725,
+        "same_domain": false
+      },
+      {
+        "id": "p0_10",
+        "domain": "liquidity_management",
+        "nn_id": "p0_03",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.5061465501785278,
+        "same_domain": false
+      },
+      {
+        "id": "p0_11",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "b1_20",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.4848237931728363,
+        "same_domain": false
+      },
+      {
+        "id": "p0_12",
+        "domain": "market_making",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.5219937562942505,
+        "same_domain": false
+      },
+      {
+        "id": "p0_13",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.5950287580490112,
+        "same_domain": false
+      },
+      {
+        "id": "p0_14",
+        "domain": "portfolio_insurance",
+        "nn_id": "b1_28",
+        "nn_domain": "position_sizing",
+        "cosine": 0.5179506540298462,
+        "same_domain": false
+      },
+      {
+        "id": "p0_15",
+        "domain": "credit_screening",
+        "nn_id": "b1_26",
+        "nn_domain": "credit_screening",
+        "cosine": 0.4672998785972595,
+        "same_domain": true
+      },
+      {
+        "id": "b1_16",
+        "domain": "technical_indicator",
+        "nn_id": "p0_01",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.602776050567627,
+        "same_domain": true
+      },
+      {
+        "id": "b1_17",
+        "domain": "factor_model",
+        "nn_id": "b1_30",
+        "nn_domain": "factor_model",
+        "cosine": 0.5183070302009583,
+        "same_domain": true
+      },
+      {
+        "id": "b1_18",
+        "domain": "risk_model",
+        "nn_id": "p0_06",
+        "nn_domain": "risk_model",
+        "cosine": 0.5333866477012634,
+        "same_domain": true
+      },
+      {
+        "id": "b1_19",
+        "domain": "execution_scheduling",
+        "nn_id": "p0_13",
+        "nn_domain": "stat_arb",
+        "cosine": 0.5950287580490112,
+        "same_domain": false
+      },
+      {
+        "id": "b1_20",
+        "domain": "settlement_ops",
+        "nn_id": "p0_08",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.5603771805763245,
+        "same_domain": true
+      },
+      {
+        "id": "b1_21",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "b2_35",
+        "nn_domain": "risk_model",
+        "cosine": 0.52433180809021,
+        "same_domain": false
+      },
+      {
+        "id": "b1_22",
+        "domain": "market_making",
+        "nn_id": "b1_21",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.43721580505371094,
+        "same_domain": false
+      },
+      {
+        "id": "b1_23",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.45869988203048706,
+        "same_domain": false
+      },
+      {
+        "id": "b1_24",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_28",
+        "nn_domain": "position_sizing",
+        "cosine": 0.5565383434295654,
+        "same_domain": false
+      },
+      {
+        "id": "b1_25",
+        "domain": "liquidity_management",
+        "nn_id": "b2_39",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.5953829288482666,
+        "same_domain": true
+      },
+      {
+        "id": "b1_26",
+        "domain": "credit_screening",
+        "nn_id": "b1_25",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.4880419373512268,
+        "same_domain": false
+      },
+      {
+        "id": "b1_27",
+        "domain": "exchange_rule_execution",
+        "nn_id": "p0_01",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.4287053942680359,
+        "same_domain": false
+      },
+      {
+        "id": "b1_28",
+        "domain": "position_sizing",
+        "nn_id": "b1_24",
+        "nn_domain": "portfolio_construction",
+        "cosine": 0.5565383434295654,
+        "same_domain": false
+      },
+      {
+        "id": "b1_29",
+        "domain": "portfolio_insurance",
+        "nn_id": "p0_06",
+        "nn_domain": "risk_model",
+        "cosine": 0.5269491672515869,
+        "same_domain": false
+      },
+      {
+        "id": "b1_30",
+        "domain": "factor_model",
+        "nn_id": "b1_17",
+        "nn_domain": "factor_model",
+        "cosine": 0.5183070302009583,
+        "same_domain": true
+      },
+      {
+        "id": "b2_31",
+        "domain": "settlement_ops",
+        "nn_id": "b1_20",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.418342649936676,
+        "same_domain": true
+      },
+      {
+        "id": "b2_32",
+        "domain": "exchange_rule_execution",
+        "nn_id": "p0_04",
+        "nn_domain": "exchange_rule_execution",
+        "cosine": 0.46408611536026,
+        "same_domain": true
+      },
+      {
+        "id": "b2_33",
+        "domain": "market_making",
+        "nn_id": "b1_22",
+        "nn_domain": "market_making",
+        "cosine": 0.4160550832748413,
+        "same_domain": true
+      },
+      {
+        "id": "b2_34",
+        "domain": "regulatory_concentration",
+        "nn_id": "b2_36",
+        "nn_domain": "credit_screening",
+        "cosine": 0.5375221371650696,
+        "same_domain": false
+      },
+      {
+        "id": "b2_35",
+        "domain": "risk_model",
+        "nn_id": "b1_21",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.52433180809021,
+        "same_domain": false
+      },
+      {
+        "id": "b2_36",
+        "domain": "credit_screening",
+        "nn_id": "b2_34",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.5375221371650696,
+        "same_domain": false
+      },
+      {
+        "id": "b2_37",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.4998106062412262,
+        "same_domain": false
+      },
+      {
+        "id": "b2_38",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_17",
+        "nn_domain": "factor_model",
+        "cosine": 0.4664541184902191,
+        "same_domain": false
+      },
+      {
+        "id": "b2_39",
+        "domain": "liquidity_management",
+        "nn_id": "b1_25",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.5953829288482666,
+        "same_domain": true
+      },
+      {
+        "id": "b2_40",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "p0_08",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.5870104432106018,
+        "same_domain": false
+      },
+      {
+        "id": "b2_41",
+        "domain": "technical_indicator",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.4639596939086914,
+        "same_domain": true
+      },
+      {
+        "id": "b2_42",
+        "domain": "position_sizing",
+        "nn_id": "b1_28",
+        "nn_domain": "position_sizing",
+        "cosine": 0.40786096453666687,
+        "same_domain": true
+      },
+      {
+        "id": "b2_43",
+        "domain": "portfolio_insurance",
+        "nn_id": "b1_30",
+        "nn_domain": "factor_model",
+        "cosine": 0.40243345499038696,
+        "same_domain": false
+      },
+      {
+        "id": "b2_44",
+        "domain": "execution_vwap",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.5040126442909241,
+        "same_domain": false
+      },
+      {
+        "id": "b2_45",
+        "domain": "execution_scheduling",
+        "nn_id": "p0_11",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.43160098791122437,
+        "same_domain": false
+      }
+    ],
+    "cross_domain_nn_pairs": [
+      {
+        "id": "p0_03",
+        "domain": "regulatory_concentration",
+        "nn_id": "p0_10",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.5061465501785278
+      },
+      {
+        "id": "p0_05",
+        "domain": "position_sizing",
+        "nn_id": "p0_03",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.4840909540653229
+      },
+      {
+        "id": "p0_07",
+        "domain": "execution_vwap",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.4708743095397949
+      },
+      {
+        "id": "p0_08",
+        "domain": "settlement_ops",
+        "nn_id": "b2_40",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.5870104432106018
+      },
+      {
+        "id": "p0_09",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_29",
+        "nn_domain": "portfolio_insurance",
+        "cosine": 0.38986146450042725
+      },
+      {
+        "id": "p0_10",
+        "domain": "liquidity_management",
+        "nn_id": "p0_03",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.5061465501785278
+      },
+      {
+        "id": "p0_11",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "b1_20",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.4848237931728363
+      },
+      {
+        "id": "p0_12",
+        "domain": "market_making",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.5219937562942505
+      },
+      {
+        "id": "p0_13",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.5950287580490112
+      },
+      {
+        "id": "p0_14",
+        "domain": "portfolio_insurance",
+        "nn_id": "b1_28",
+        "nn_domain": "position_sizing",
+        "cosine": 0.5179506540298462
+      },
+      {
+        "id": "b1_19",
+        "domain": "execution_scheduling",
+        "nn_id": "p0_13",
+        "nn_domain": "stat_arb",
+        "cosine": 0.5950287580490112
+      },
+      {
+        "id": "b1_21",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "b2_35",
+        "nn_domain": "risk_model",
+        "cosine": 0.52433180809021
+      },
+      {
+        "id": "b1_22",
+        "domain": "market_making",
+        "nn_id": "b1_21",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.43721580505371094
+      },
+      {
+        "id": "b1_23",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.45869988203048706
+      },
+      {
+        "id": "b1_24",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_28",
+        "nn_domain": "position_sizing",
+        "cosine": 0.5565383434295654
+      },
+      {
+        "id": "b1_26",
+        "domain": "credit_screening",
+        "nn_id": "b1_25",
+        "nn_domain": "liquidity_management",
+        "cosine": 0.4880419373512268
+      },
+      {
+        "id": "b1_27",
+        "domain": "exchange_rule_execution",
+        "nn_id": "p0_01",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.4287053942680359
+      },
+      {
+        "id": "b1_28",
+        "domain": "position_sizing",
+        "nn_id": "b1_24",
+        "nn_domain": "portfolio_construction",
+        "cosine": 0.5565383434295654
+      },
+      {
+        "id": "b1_29",
+        "domain": "portfolio_insurance",
+        "nn_id": "p0_06",
+        "nn_domain": "risk_model",
+        "cosine": 0.5269491672515869
+      },
+      {
+        "id": "b2_34",
+        "domain": "regulatory_concentration",
+        "nn_id": "b2_36",
+        "nn_domain": "credit_screening",
+        "cosine": 0.5375221371650696
+      },
+      {
+        "id": "b2_35",
+        "domain": "risk_model",
+        "nn_id": "b1_21",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.52433180809021
+      },
+      {
+        "id": "b2_36",
+        "domain": "credit_screening",
+        "nn_id": "b2_34",
+        "nn_domain": "regulatory_concentration",
+        "cosine": 0.5375221371650696
+      },
+      {
+        "id": "b2_37",
+        "domain": "stat_arb",
+        "nn_id": "b1_19",
+        "nn_domain": "execution_scheduling",
+        "cosine": 0.4998106062412262
+      },
+      {
+        "id": "b2_38",
+        "domain": "portfolio_construction",
+        "nn_id": "b1_17",
+        "nn_domain": "factor_model",
+        "cosine": 0.4664541184902191
+      },
+      {
+        "id": "b2_40",
+        "domain": "prime_brokerage_margin",
+        "nn_id": "p0_08",
+        "nn_domain": "settlement_ops",
+        "cosine": 0.5870104432106018
+      },
+      {
+        "id": "b2_43",
+        "domain": "portfolio_insurance",
+        "nn_id": "b1_30",
+        "nn_domain": "factor_model",
+        "cosine": 0.40243345499038696
+      },
+      {
+        "id": "b2_44",
+        "domain": "execution_vwap",
+        "nn_id": "b1_16",
+        "nn_domain": "technical_indicator",
+        "cosine": 0.5040126442909241
+      },
+      {
+        "id": "b2_45",
+        "domain": "execution_scheduling",
+        "nn_id": "p0_11",
+        "nn_domain": "prime_brokerage_margin",
+        "cosine": 0.43160098791122437
+      }
+    ],
+    "top10_cosine": [
+      {
+        "a": "p0_01",
+        "b": "b1_16",
+        "a_domain": "technical_indicator",
+        "b_domain": "technical_indicator",
+        "cosine": 0.602776050567627
+      },
+      {
+        "a": "b1_25",
+        "b": "b2_39",
+        "a_domain": "liquidity_management",
+        "b_domain": "liquidity_management",
+        "cosine": 0.5953829288482666
+      },
+      {
+        "a": "p0_13",
+        "b": "b1_19",
+        "a_domain": "stat_arb",
+        "b_domain": "execution_scheduling",
+        "cosine": 0.5950287580490112
+      },
+      {
+        "a": "p0_08",
+        "b": "b2_40",
+        "a_domain": "settlement_ops",
+        "b_domain": "prime_brokerage_margin",
+        "cosine": 0.5870104432106018
+      },
+      {
+        "a": "p0_08",
+        "b": "b1_20",
+        "a_domain": "settlement_ops",
+        "b_domain": "settlement_ops",
+        "cosine": 0.5603771805763245
+      },
+      {
+        "a": "b1_24",
+        "b": "b1_28",
+        "a_domain": "portfolio_construction",
+        "b_domain": "position_sizing",
+        "cosine": 0.5565383434295654
+      },
+      {
+        "a": "b2_34",
+        "b": "b2_36",
+        "a_domain": "regulatory_concentration",
+        "b_domain": "credit_screening",
+        "cosine": 0.5375221371650696
+      },
+      {
+        "a": "p0_06",
+        "b": "b1_18",
+        "a_domain": "risk_model",
+        "b_domain": "risk_model",
+        "cosine": 0.5333866477012634
+      },
+      {
+        "a": "p0_06",
+        "b": "b1_29",
+        "a_domain": "risk_model",
+        "b_domain": "portfolio_insurance",
+        "cosine": 0.5269491672515869
+      },
+      {
+        "a": "b1_21",
+        "b": "b2_35",
+        "a_domain": "prime_brokerage_margin",
+        "b_domain": "risk_model",
+        "cosine": 0.52433180809021
+      }
+    ]
+  }
+}
