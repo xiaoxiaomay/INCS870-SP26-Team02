@@ -1,0 +1,9 @@
+{
+  "model": "gpt-4o-mini-2024-07-18",
+  "n_rows": 90,
+  "b0_cost_usd": 0.018198,
+  "b2_cost_usd": 0.01372,
+  "total_cost_usd": 0.031917,
+  "n_bypass": 65,
+  "n_blocked": 25
+}

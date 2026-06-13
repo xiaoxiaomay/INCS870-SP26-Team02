@@ -1,0 +1,7 @@
+{
+  "defender_model": "gpt-4o-mini-2024-07-18",
+  "judge_model": "gpt-4o-2024-08-06",
+  "defender_cost_usd": 0.005386,
+  "judge_cost_usd": 0.0515,
+  "total_cost_usd": 0.056886
+}

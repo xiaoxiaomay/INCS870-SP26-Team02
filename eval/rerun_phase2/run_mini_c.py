@@ -80,7 +80,15 @@ def cache_put(k, obj):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-cost", type=float, default=0.15)
+    ap.add_argument("--dir", default=None, help="mini_pilot/full_eval dir (default: mini_pilot_<date>)")
     args = ap.parse_args()
+
+    global OUT_DIR, PER_PROMPT, CACHE_DIR
+    if args.dir:
+        OUT_DIR = args.dir if os.path.isabs(args.dir) else os.path.join(REPO_ROOT, args.dir)
+        PER_PROMPT = os.path.join(OUT_DIR, "per_prompt.jsonl")
+        CACHE_DIR = os.path.join(OUT_DIR, "cache_c")
+    print(f"[C] dir={OUT_DIR}")
 
     if not os.path.exists(PER_PROMPT):
         print(f"ERROR: {PER_PROMPT} not found — run step B first.")

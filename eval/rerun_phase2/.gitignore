@@ -1,0 +1,20 @@
+# B0 = UNDEFENDED model output that emits real proprietary/secret content.
+# These per-prompt response artifacts (and the judge's disclosed_items) must
+# NEVER be committed or pushed. Aggregate report tables (rates/CIs) are safe.
+mini_pilot_*/per_prompt.jsonl
+mini_pilot_*/per_prompt_judge.jsonl
+mini_pilot_*/per_prompt_results.jsonl
+mini_pilot_*/cache_c/
+mini_pilot_*/self_check.jsonl
+full_eval_*/per_prompt.jsonl
+full_eval_*/per_prompt_judge.jsonl
+full_eval_*/per_prompt_results.jsonl
+full_eval_*/cache_c/
+full_eval_*/self_check.jsonl
+full_eval_*/selfcheck_cache/
+# Salami multi-turn: per-turn B0 cumulative leakage outputs — never commit/push
+salami_eval_*/per_turn_results.jsonl
+salami_eval_*/per_turn.jsonl
+salami_eval_*/cache/
+salami_eval_*/cache_c/
+salami_eval_*/judge_cache/

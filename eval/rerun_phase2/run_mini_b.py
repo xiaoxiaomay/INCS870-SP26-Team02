@@ -124,12 +124,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run-gates", action="store_true", help="offline gate decisions only (NO API)")
     ap.add_argument("--max-cost", type=float, default=0.20)
+    ap.add_argument("--attacks", default=MINI, help="ratified attack jsonl (default: mini)")
+    ap.add_argument("--out", default=OUT_DIR, help="output dir (default: mini_pilot_<date>)")
     args = ap.parse_args()
+    out_dir = args.out
 
     cfg = load_config(os.path.join(REPO_ROOT, "config.yaml"))
     model = cfg.get("openai_model") or "gpt-4o-mini-2024-07-18"
-    attacks = load_jsonl(MINI)
-    assert len(attacks) == 27, f"expected 27 attacks, got {len(attacks)}"
+    attacks = load_jsonl(args.attacks)
+    assert len(attacks) > 0, "no attacks loaded"
+    print(f"[B] attacks={len(attacks)} from {os.path.basename(args.attacks)} -> {out_dir}")
     secrets = load_corpus()
     by_id = {s["id"]: s for s in secrets}
 
@@ -143,17 +147,18 @@ def main():
         _, qv = retrieve(q, embed_model, idx, secrets)
         blocked, at = gate_decision(cfg, q, embed_model, idx, meta, qv)
         gate_rows.append((a, blocked, at))
+    N = len(attacks)
     n_bypass = sum(1 for _, b, _ in gate_rows if not b)
-    n_blocked = 27 - n_bypass
-    n_llm_calls = 27 + n_bypass  # B0 all 27 + B2 bypass
+    n_blocked = N - n_bypass
+    n_llm_calls = N + n_bypass  # B0 all N + B2 bypass
     est_in = n_llm_calls * 350   # ~context+query
     est_out = n_llm_calls * 180
     est_cost = est_in * PRICE_IN / 1e6 + est_out * PRICE_OUT / 1e6
 
     if args.dry_run_gates:
         print("=== B dry-run (offline gates; NO API) ===")
-        print(f"attacks: 27 | B2 blocked at gate: {n_blocked} | B2 bypass (-> LLM): {n_bypass}")
-        print(f"LLM calls (B0 27 + B2 bypass {n_bypass}) = {n_llm_calls}")
+        print(f"attacks: {N} | B2 blocked at gate: {n_blocked} | B2 bypass (-> LLM): {n_bypass}")
+        print(f"LLM calls (B0 {N} + B2 bypass {n_bypass}) = {n_llm_calls}")
         print(f"est tokens ~{est_in} in / ~{est_out} out ; est cost ~${est_cost:.4f} (gpt-4o-mini)")
         print("blocked-at breakdown:", {at: sum(1 for _, b, a2 in gate_rows if a2 == at)
                                         for at in set(a2 for _, _, a2 in gate_rows if a2)})
@@ -165,7 +170,7 @@ def main():
         print("ERROR: OPENAI_API_KEY not set; aborting (no API attempted).")
         sys.exit(2)
     client = OpenAI()
-    os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
 
     rows = []
     cum_cost = 0.0
@@ -217,15 +222,15 @@ def main():
             print(f"HALT: an arm exceeded $0.10 (B0=${b0_cost:.4f}, B2=${b2_cost:.4f})")
             break
 
-    with open(os.path.join(OUT_DIR, "per_prompt.jsonl"), "w") as f:
+    with open(os.path.join(out_dir, "per_prompt.jsonl"), "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
     cost = {"model": model, "n_rows": len(rows), "b0_cost_usd": round(b0_cost, 6),
             "b2_cost_usd": round(b2_cost, 6), "total_cost_usd": round(cum_cost, 6),
             "n_bypass": n_bypass, "n_blocked": n_blocked}
-    json.dump(cost, open(os.path.join(OUT_DIR, "b_cost.json"), "w"), indent=2)
+    json.dump(cost, open(os.path.join(out_dir, "b_cost.json"), "w"), indent=2)
     print(f"[B] rows={len(rows)} | B0=${b0_cost:.4f} B2=${b2_cost:.4f} total=${cum_cost:.4f}")
-    print(f"wrote: {OUT_DIR}/per_prompt.jsonl ; b_cost.json")
+    print(f"wrote: {out_dir}/per_prompt.jsonl ; b_cost.json")
 
 
 if __name__ == "__main__":
